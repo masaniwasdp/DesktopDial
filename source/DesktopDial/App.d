@@ -40,7 +40,7 @@ public:
     }
 
 private:
-    static immutable interval_ = 500; ///< メインループのインターバル。
+    static immutable interval_ = 100; ///< メインループのインターバル。
 
     /// @brief 時計盤描画オブジェクトのパラメタ。
     static immutable GraphDefinition graphDefinition_ =
@@ -60,10 +60,7 @@ private:
     /// @throws DateTimeException 日時の取得に失敗した場合。
     void update()
     {
-        if(!tuneFPS)
-        {
-            return;
-        }
+        tuneFPS;
 
         immutable time = Clock.currTime;
         graph_.Draw(time);
@@ -115,24 +112,18 @@ private:
         }
     }
 
-    /// @brief  FPSを調整する。
-    /// @retval true  次のフレームに進む。
-    /// @retval false 次のフレームに進まない。
-    bool tuneFPS() nothrow
+    /// @brief FPSを調整する。
+    void tuneFPS() nothrow
     {
         immutable current = SDL_GetTicks();
-        immutable difference = current - last_;
+        immutable elapsed = current - last_;
 
-        if(difference < interval_)
+        if(elapsed < interval_)
         {
-            SDL_Delay((interval_ - difference) / 2);
-
-            return false;
+            SDL_Delay(interval_ - elapsed);
         }
 
         last_ = current;
-
-        return true;
     }
 
     bool continuation_; ///< メインループを続行するかどうか。

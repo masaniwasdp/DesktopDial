@@ -8,15 +8,14 @@
 
 module DesktopDial.Graph;
 
-import std.datetime,
-       std.exception,
-       std.string,
-       std.typecons;
+import std.datetime;
 
 import derelict.sdl2.sdl;
 
-import DesktopDial.Exception,
-       DesktopDial.Hand;
+import DesktopDial.Clock,
+       DesktopDial.Exception,
+       DesktopDial.Hand,
+       DesktopDial.SDLUtil;
 
 /// @brief   時計盤の描画を扱うクラス。
 /// @details 利用前にSDLを初期化、利用後にSDLを終了する必要がある。
@@ -28,15 +27,8 @@ public:
     /// @throws CreationException オブジェクトの生成に失敗した場合。
     this(const ref GraphDefinition definition)
     {
-        window_ =
-            SDL_CreateWindow(
-                    definition.Name.toStringz, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                    definition.Width, definition.Height, SDL_WINDOW_ALWAYS_ON_TOP)
-            .enforceEx!(CreationException)(failedToCreateWindow_);
-
-        renderer_ =
-            window_.SDL_CreateRenderer(-1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED)
-            .enforceEx!(CreationException)(failedToCreateRenderer_);
+        window_ = CreateWindow(definition.Name, definition.Width, definition.Height);
+        renderer_ = window_.CreateRenderer;
 
         immutable SDL_Rect region = {w: definition.Width, h: definition.Height};
 
@@ -54,7 +46,7 @@ public:
     {
         if(window_ !is null)
         {
-            SDL_DestroyWindow(window_);
+            window_.SDL_DestroyWindow;
         }
 
         if(renderer_ !is null)
@@ -67,21 +59,29 @@ public:
     /// @param time 時刻。
     void Draw(const ref SysTime time) nothrow
     {
-        renderer_.SDL_SetRenderDrawColor(255, 255, 255, 255);
-        renderer_.SDL_RenderClear;
-
-        immutable angle = CalcAngle(time);
-
-        hour_.Draw(angle[0]);
-        minute_.Draw(angle[1]);
-        second_.Draw(angle[2]);
-
+        clear;
+        drawHands(time);
         renderer_.SDL_RenderPresent;
     }
 
 private:
-    static immutable failedToCreateWindow_ = "Failed to create window object.";     ///< ウィンドウの生成に失敗したエラーメッセージ。
-    static immutable failedToCreateRenderer_ = "Failed to create renderer object."; ///< レンダラの生成に失敗したエラーメッセージ。
+    /// @brief レンダラを消去する。
+    void clear() nothrow
+    {
+        renderer_.SDL_SetRenderDrawColor(255, 255, 255, 255);
+        renderer_.SDL_RenderClear;
+    }
+
+    /// @brief 針を描画する。
+    /// @param time 時刻。
+    void drawHands(const ref SysTime time) nothrow
+    {
+        immutable angle = time.CalcHandAngle;
+
+        hour_.Draw(angle.Hour);
+        minute_.Draw(angle.Minute);
+        second_.Draw(angle.Second);
+    }
 
     SDL_Window *window_;      ///< ウィンドウ。
     SDL_Renderer *renderer_;  ///< レンダラ。
@@ -106,20 +106,4 @@ struct GraphDefinition
     HandColor HourColor;   ///< 時針の色。
     HandColor MinuteColor; ///< 分針の色。
     HandColor SecondColor; ///< 秒針の色。
-}
-
-/// @brief  時計の針の角度を計算する。
-/// @param  時刻。
-/// @return 針の角度の入ったタプル。時間,分,秒の順。
-Tuple!(double, double, double) CalcAngle(const ref SysTime time) @safe nothrow
-{
-    static immutable anglePerHour = 360 / 12.0;
-    static immutable anglePerMinute = 360 / 60.0;
-    static immutable anglePerSecond = 360 / 60.0;
-
-    auto hour = time.hour + (time.minute / 60.0) + (time.second / 3600.0);
-    auto minute = time.minute + (time.second / 60.0);
-    auto second = time.second;
-
-    return typeof(return)(hour * anglePerHour, minute * anglePerMinute, second * anglePerSecond);
 }

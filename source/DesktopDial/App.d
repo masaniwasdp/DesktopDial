@@ -13,7 +13,8 @@ import std.datetime,
 
 import derelict.sdl2.sdl;
 
-import DesktopDial.Dial;
+import DesktopDial.Dial,
+       DesktopDial.Loading;
 
 /// @brief   アプリケーションクラス。
 /// @details 利用前にSDLを初期化、利用後にSDLを終了する必要がある。
@@ -25,7 +26,9 @@ public:
     this()
     {
         continuation_ = true;
-        dial_ = new Dial(dialDefinition_);
+
+        immutable definition = LoadDialDefinition(dialDefinitionPath_);
+        dial_ = new Dial(definition);
     }
 
     /// @brief  アプリケーションを実行する。
@@ -42,46 +45,7 @@ public:
 private:
     static immutable interval_ = 100; ///< メインループのインターバル。
 
-    /// @brief 時計盤描画オブジェクトのパラメタ。
-    static immutable DialDefinition dialDefinition_ =
-    {
-        Name: "DesktopDial",
-        Width: 256,
-        Height: 256,
-        Background:
-        {
-            Red: 255,
-            Green: 255,
-            Blue: 255
-        },
-        Hour:
-        {
-            Size:
-            {
-                Width: 3,
-                LongLength: 80,
-                ShortLength: 10
-            }
-        },
-        Minute:
-        {
-            Size:
-            {
-                Width: 3,
-                LongLength: 100,
-                ShortLength: 10
-            }
-        },
-        Second:
-        {
-            Size:
-            {
-                Width: 3,
-                LongLength: 120,
-                ShortLength: 10
-            }
-        },
-    };
+    static immutable dialDefinitionPath_ = "res/DialDefinition.json"; ///< 時計盤定義ファイルのパス。
 
     /// @brief  FPSを考慮して時計盤を更新する。
     /// @throws DateTimeException 日時の取得に失敗した場合。

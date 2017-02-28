@@ -37,7 +37,9 @@ public:
     /// @throws CreationException    オブジェクト生成に失敗した場合。
     this(SDL_Renderer *renderer, const ref SDL_Rect region, const ref HandVisual visual)
     {
-        renderer_ = renderer.enforceEx!(NullPointerException)(rendererWasNull_);
+        static immutable error = "Renderer object was null.";
+
+        renderer_ = renderer.enforceEx!(NullPointerException)(error);
         region_ = region;
 
         immutable SDL_Rect rect =
@@ -48,7 +50,7 @@ public:
             h: visual.Size.LongLength + visual.Size.ShortLength
         };
 
-        auto surface = CreateSurface(region.w, region.h, depth_);
+        auto surface = CreateSurface(region.w, region.h);
         scope(exit) surface.SDL_FreeSurface;
 
         immutable background = surface.format.SDL_MapRGB(visual.Color.AlphaR, visual.Color.AlphaG, visual.Color.AlphaB);
@@ -71,17 +73,13 @@ public:
     }
 
     /// @brief 針を描画する。
-    /// @param angle 針の回転角。
+    /// @param angle 針の角度。
     void Draw(in double angle) nothrow
     {
         renderer_.SDL_RenderCopyEx(texture_, null, &region_, angle, null, SDL_FLIP_NONE);
     }
 
 private:
-    static immutable depth_ = 32; ///< ビット深度。
-
-    static immutable rendererWasNull_ = "Renderer object was null."; ///< レンダラがnullだったエラーメッセージ。
-
     immutable SDL_Rect region_; ///< 時計盤の領域。
 
     SDL_Renderer *renderer_;  ///< 使用するレンダラ。
@@ -119,7 +117,7 @@ struct HandColor
     ubyte Green; ///< 緑の明度。
     ubyte Blue;  ///< 青の明度。
 
-    ubyte AlphaR = 255; ///< 透過色の赤の明度。
-    ubyte AlphaG = 255; ///< 透過色の緑の明度。
-    ubyte AlphaB = 255; ///< 透過色の青の明度。
+    ubyte AlphaR; ///< 透過色の赤の明度。
+    ubyte AlphaG; ///< 透過色の緑の明度。
+    ubyte AlphaB; ///< 透過色の青の明度。
 }

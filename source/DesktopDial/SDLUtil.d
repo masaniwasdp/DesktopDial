@@ -8,8 +8,8 @@
 
 module DesktopDial.SDLUtil;
 
-import std.string,
-       std.exception;
+import std.exception,
+       std.string;
 
 import derelict.sdl2.sdl;
 
@@ -24,9 +24,11 @@ import DesktopDial.Exception;
 /// @details ウィンドウ使用後はSDL_DestroyWindow()で破棄する必要がある。
 SDL_Window *CreateWindow(in string name, in ushort width, in ushort height)
 {
-    return
-        SDL_CreateWindow(name.toStringz, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_ALWAYS_ON_TOP)
-        .enforceEx!(CreationException)(failedToCreateWindow);
+    static immutable error = "Failed to create window object.";
+
+    auto window = SDL_CreateWindow(name.toStringz, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_ALWAYS_ON_TOP);
+
+    return window.enforceEx!(CreationException)(error);
 }
 
 /// @brief   ウィンドウのレンダラを生成する。
@@ -36,23 +38,26 @@ SDL_Window *CreateWindow(in string name, in ushort width, in ushort height)
 /// @details レンダラ使用後はSDL_DestroyRenderer()で破棄する必要がある。
 SDL_Renderer *CreateRenderer(SDL_Window *window)
 {
-    return
-        window.SDL_CreateRenderer(-1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED)
-        .enforceEx!(CreationException)(failedToCreateRenderer);
+    static immutable error = "Failed to create renderer object.";
+
+    auto renderer = window.SDL_CreateRenderer(-1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+
+    return renderer.enforceEx!(CreationException)(error);
 }
 
 /// @brief   サーフェスを生成する。
 /// @param   width  幅。
 /// @param   height 高さ。
-/// @param   depth  ビット深度。
 /// @return  生成したサーフェス。
 /// @throws  CreationException サーフェス生成に失敗した場合。
 /// @details サーフェス使用後はSDL_FreeSurface()で解放する必要がある。
-SDL_Surface *CreateSurface(in uint width, in uint height, in uint depth)
+SDL_Surface *CreateSurface(in uint width, in uint height)
 {
-    return
-        SDL_CreateRGBSurface(0, width, height, depth, 0, 0, 0, 0)
-        .enforceEx!(CreationException)(failedToCreateSurface);
+    static immutable error = "Failed to create surface object.";
+
+    auto surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+
+    return surface.enforceEx!(CreationException)(error);
 }
 
 /// @brief   サーフェスをテクスチャに変換する。
@@ -63,12 +68,9 @@ SDL_Surface *CreateSurface(in uint width, in uint height, in uint depth)
 /// @details テクスチャ使用後はSDL_DestroyTexture()で破棄する必要がある。
 SDL_Texture *ConvertToTexture(SDL_Renderer *renderer, SDL_Surface *surface)
 {
-    return
-        renderer.SDL_CreateTextureFromSurface(surface)
-        .enforceEx!(CreationException)(failedToCreateTexture);
-}
+    static immutable error = "Failed to create texture object.";
 
-private immutable failedToCreateWindow = "Failed to create window object.";     ///< ウィンドウの生成に失敗したエラーメッセージ。
-private immutable failedToCreateRenderer = "Failed to create renderer object."; ///< レンダラの生成に失敗したエラーメッセージ。
-private immutable failedToCreateSurface = "Failed to create surface object.";   ///< サーフェス作成に失敗したエラーメッセージ。
-private immutable failedToCreateTexture = "Failed to create texture object.";   ///< テクスチャ作成に失敗したエラーメッセージ。
+    auto texture = renderer.SDL_CreateTextureFromSurface(surface);
+
+    return texture.enforceEx!(CreationException)(error);
+}

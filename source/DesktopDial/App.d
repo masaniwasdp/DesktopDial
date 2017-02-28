@@ -13,7 +13,7 @@ import std.datetime,
 
 import derelict.sdl2.sdl;
 
-import DesktopDial.Graph;
+import DesktopDial.Dial;
 
 /// @brief   アプリケーションクラス。
 /// @details 利用前にSDLを初期化、利用後にSDLを終了する必要がある。
@@ -25,7 +25,7 @@ public:
     this()
     {
         continuation_ = true;
-        graph_ = new Graph(graphDefinition_);
+        dial_ = new Dial(dialDefinition_);
     }
 
     /// @brief  アプリケーションを実行する。
@@ -43,17 +43,44 @@ private:
     static immutable interval_ = 100; ///< メインループのインターバル。
 
     /// @brief 時計盤描画オブジェクトのパラメタ。
-    static immutable GraphDefinition graphDefinition_ =
+    static immutable DialDefinition dialDefinition_ =
     {
         Name: "DesktopDial",
         Width: 256,
         Height: 256,
-        HourSize: {Width: 3, LongLength: 80, ShortLength: 10},
-        MinuteSize: {Width: 3, LongLength: 100, ShortLength: 10},
-        SecondSize: {Width: 3, LongLength: 120, ShortLength: 10},
-        HourColor: {Red: 255},
-        MinuteColor: {Green: 255},
-        SecondColor: {Blue: 255}
+        Background:
+        {
+            Red: 255,
+            Green: 255,
+            Blue: 255
+        },
+        Hour:
+        {
+            Size:
+            {
+                Width: 3,
+                LongLength: 80,
+                ShortLength: 10
+            }
+        },
+        Minute:
+        {
+            Size:
+            {
+                Width: 3,
+                LongLength: 100,
+                ShortLength: 10
+            }
+        },
+        Second:
+        {
+            Size:
+            {
+                Width: 3,
+                LongLength: 120,
+                ShortLength: 10
+            }
+        },
     };
 
     /// @brief  FPSを考慮して時計盤を更新する。
@@ -63,7 +90,7 @@ private:
         tuneFPS;
 
         immutable time = Clock.currTime;
-        graph_.Draw(time);
+        dial_.Draw(time);
     }
 
     /// @brief キューに溜まったイベントを扱う。
@@ -81,32 +108,7 @@ private:
     /// @param event イベントオブジェクト。
     void handleEvent(const ref SDL_Event event) @safe nothrow pure
     {
-        immutable type = event.type;
-
-        if(type == SDL_QUIT)
-        {
-            handleQuitEvent(event);
-        }
-        else if(type == SDL_KEYDOWN)
-        {
-            handleKeyDownEvent(event);
-        }
-    }
-
-    /// @brief 終了イベントを扱う。
-    /// @param event イベントオブジェクト。
-    void handleQuitEvent(const ref SDL_Event event) @safe nothrow pure
-    {
-        continuation_ = false;
-    }
-
-    /// @brief キーダウンイベントを扱う。
-    /// @param event イベントオブジェクト。
-    void handleKeyDownEvent(const ref SDL_Event event) @safe nothrow pure
-    {
-        immutable symbol = event.key.keysym.sym;
-
-        if(symbol == SDLK_ESCAPE)
+        if(event.type == SDL_QUIT)
         {
             continuation_ = false;
         }
@@ -128,5 +130,5 @@ private:
 
     bool continuation_; ///< メインループを続行するかどうか。
     uint last_;         ///< 最後にフレームを更新した時刻。
-    Graph graph_;       ///< 時計盤描画オブジェクト。
+    Dial dial_;         ///< 時計盤描画オブジェクト。
 }

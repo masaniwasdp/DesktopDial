@@ -12,7 +12,8 @@ import std.exception;
 
 import derelict.sdl2.sdl;
 
-import DesktopDial.Exception;
+import DesktopDial.Exception,
+       DesktopDial.SDLUtil;
 
 /// @brief   時計盤の針の描画を扱うクラス。
 /// @details 利用前にSDLを初期化、利用後にSDLを終了する必要がある。
@@ -25,32 +26,39 @@ public:
     /// @throws CreationException    オブジェクト生成に失敗した場合。
     this(ref HandDefinition definition)
     {
-        renderer_ = definition.Renderer.enforceEx!(NullPointerException)(rendererWasNull_);
-        region_ = definition.Region;
+        this(definition.Renderer, definition.Region, definition.Visual);
+    }
+
+    /// @brief  コンストラクタ。
+    /// @param  renderer 使用するレンダラ。
+    /// @param  region   時計盤の領域。
+    /// @param  visual   針の見た目。
+    /// @throws NullPointerException レンダラがnullだった場合。
+    /// @throws CreationException    オブジェクト生成に失敗した場合。
+    this(SDL_Renderer *renderer, const ref SDL_Rect region, const ref HandVisual visual)
+    {
+        renderer_ = renderer.enforceEx!(NullPointerException)(rendererWasNull_);
+        region_ = region;
 
         immutable SDL_Rect rect =
         {
-            x: (region_.w / 2) - (definition.Size.Width / 2),
-            y: (region_.h / 2) - definition.Size.LongLength,
-            w: definition.Size.Width,
-            h: definition.Size.LongLength + definition.Size.ShortLength
+            x: (region.w / 2) - (visual.Size.Width / 2),
+            y: (region.h / 2) - visual.Size.LongLength,
+            w: visual.Size.Width,
+            h: visual.Size.LongLength + visual.Size.ShortLength
         };
 
-        auto surface =
-            SDL_CreateRGBSurface(0, region_.w, region_.h, depth_, 0, 0, 0, 0)
-            .enforceEx!(CreationException)(failedToCreateSurface_);
-
+        auto surface = CreateSurface(region.w, region.h, depth_);
         scope(exit) surface.SDL_FreeSurface;
 
-        immutable background = surface.format.SDL_MapRGB(definition.Color.AlphaR, definition.Color.AlphaG, definition.Color.AlphaB);
+        immutable background = surface.format.SDL_MapRGB(visual.Color.AlphaR, visual.Color.AlphaG, visual.Color.AlphaB);
         surface.SDL_SetColorKey(SDL_TRUE, background);
+        surface.SDL_FillRect(&region, background);
 
-        immutable foreground = surface.format.SDL_MapRGB(definition.Color.Red, definition.Color.Green, definition.Color.Blue);
+        immutable foreground = surface.format.SDL_MapRGB(visual.Color.Red, visual.Color.Green, visual.Color.Blue);
         surface.SDL_FillRect(&rect, foreground);
 
-        texture_ =
-            renderer_.SDL_CreateTextureFromSurface(surface)
-            .enforceEx!(CreationException)(failedToCreateTexture_);
+        texture_ = ConvertToTexture(renderer, surface);
     }
 
     /// @デストラクタ。
@@ -72,9 +80,7 @@ public:
 private:
     static immutable depth_ = 32; ///< ビット深度。
 
-    static immutable rendererWasNull_ = "Renderer object was null.";              ///< レンダラがnullだったエラーメッセージ。
-    static immutable failedToCreateSurface_ = "Failed to create surface object."; ///< サーフェス作成に失敗したエラーメッセージ。
-    static immutable failedToCreateTexture_ = "Failed to create texture object."; ///< テクスチャ作成に失敗したエラーメッセージ。
+    static immutable rendererWasNull_ = "Renderer object was null."; ///< レンダラがnullだったエラーメッセージ。
 
     immutable SDL_Rect region_; ///< 時計盤の領域。
 
@@ -87,12 +93,18 @@ struct HandDefinition
 {
     SDL_Renderer *Renderer = null; ///< 使用するレンダラ。
 
-    SDL_Rect Region; ///< 時計盤の領域。
-    HandSize Size;   ///< 針のサイズ。
-    HandColor Color; ///< 針の色。
+    SDL_Rect Region;   ///< 時計盤の領域。
+    HandVisual Visual; ///< 針の見た目。
 }
 
-/// @brief 針のサイズを示す構造体。
+/// @brief 針の見た目を表す構造体。
+struct HandVisual
+{
+    HandSize Size;   ///< サイズ。
+    HandColor Color; ///< 色。
+}
+
+/// @brief 針のサイズを表す構造体。
 struct HandSize
 {
     ushort Width;       ///< 幅。
@@ -100,14 +112,14 @@ struct HandSize
     ushort ShortLength; ///< 短い方の中心からの長さ。
 }
 
-/// @brief 針の色を示す構造体。
+/// @brief 針の色を表す構造体。
 struct HandColor
 {
     ubyte Red;   ///< 赤の明度。
     ubyte Green; ///< 緑の明度。
     ubyte Blue;  ///< 青の明度。
 
-    ubyte AlphaR; ///< 透過色の赤の明度。
-    ubyte AlphaG; ///< 透過色の緑の明度。
-    ubyte AlphaB; ///< 透過色の青の明度。
+    ubyte AlphaR = 255; ///< 透過色の赤の明度。
+    ubyte AlphaG = 255; ///< 透過色の緑の明度。
+    ubyte AlphaB = 255; ///< 透過色の青の明度。
 }

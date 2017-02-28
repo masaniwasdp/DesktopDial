@@ -1,44 +1,45 @@
 ///
-/// @file      Graph.d
+/// @file      Dial.d
 /// @brief     時計盤の描画を扱うモジュール。
 /// @author    masaniwa
 /// @date      2017/2/26
 /// @copyright (c) 2017 masaniwa
 ///
 
-module DesktopDial.Graph;
+module DesktopDial.Dial;
 
 import std.datetime;
 
 import derelict.sdl2.sdl;
 
-import DesktopDial.Clock,
-       DesktopDial.Exception,
+import DesktopDial.Exception,
        DesktopDial.Hand,
+       DesktopDial.HandsAngle,
        DesktopDial.SDLUtil;
 
 /// @brief   時計盤の描画を扱うクラス。
 /// @details 利用前にSDLを初期化、利用後にSDLを終了する必要がある。
-class Graph
+class Dial
 {
 public:
     /// @brief  コンストラクタ。
     /// @param  definition        時計盤の定義。
     /// @throws CreationException オブジェクトの生成に失敗した場合。
-    this(const ref GraphDefinition definition)
+    this(const ref DialDefinition definition)
     {
+        background_ = definition.Background;
         window_ = CreateWindow(definition.Name, definition.Width, definition.Height);
         renderer_ = window_.CreateRenderer;
 
-        immutable SDL_Rect region = {w: definition.Width, h: definition.Height};
+        immutable SDL_Rect region =
+        {
+            w: definition.Width,
+            h: definition.Height
+        };
 
-        HandDefinition hour = {Renderer: renderer_, Region: region, Size: definition.HourSize, Color: definition.HourColor};
-        HandDefinition minute = {Renderer: renderer_, Region: region, Size: definition.MinuteSize, Color: definition.MinuteColor};
-        HandDefinition second = {Renderer: renderer_, Region: region, Size: definition.SecondSize, Color: definition.SecondColor};
-
-        hour_ = new Hand(hour);
-        minute_ = new Hand(minute);
-        second_ = new Hand(second);
+        hour_ = new Hand(renderer_, region, definition.Hour);
+        minute_ = new Hand(renderer_, region, definition.Minute);
+        second_ = new Hand(renderer_, region, definition.Second);
     }
 
     /// @デストラクタ。
@@ -65,10 +66,12 @@ public:
     }
 
 private:
+    immutable BackgroundColor background_; ///< 背景色。
+
     /// @brief レンダラを消去する。
     void clear() nothrow
     {
-        renderer_.SDL_SetRenderDrawColor(255, 255, 255, 255);
+        renderer_.SDL_SetRenderDrawColor(background_.Red, background_.Green, background_.Blue, SDL_ALPHA_OPAQUE);
         renderer_.SDL_RenderClear;
     }
 
@@ -76,7 +79,7 @@ private:
     /// @param time 時刻。
     void drawHands(const ref SysTime time) nothrow
     {
-        immutable angle = time.CalcHandAngle;
+        auto angle = new HandsAngle(time);
 
         hour_.Draw(angle.Hour);
         minute_.Draw(angle.Minute);
@@ -92,18 +95,24 @@ private:
 }
 
 /// @brief 時計盤を定義する構造体。
-struct GraphDefinition
+struct DialDefinition
 {
     string Name; ///< ウィンドウの名前。
 
     ushort Width;  ///< ウィンドウの幅。
     ushort Height; ///< ウィンドウの高さ。
 
-    HandSize HourSize;   ///< 時針のサイズ。
-    HandSize MinuteSize; ///< 分針のサイズ。
-    HandSize SecondSize; ///< 秒針のサイズ。
+    BackgroundColor Background; ///< 背景色。
 
-    HandColor HourColor;   ///< 時針の色。
-    HandColor MinuteColor; ///< 分針の色。
-    HandColor SecondColor; ///< 秒針の色。
+    HandVisual Hour;   ///< 時針。
+    HandVisual Minute; ///< 分針。
+    HandVisual Second; ///< 秒針。
+}
+
+/// @brief 背景色を表す構造体。
+struct BackgroundColor
+{
+    ubyte Red;   ///< 赤の明度。
+    ubyte Green; ///< 青の明度。
+    ubyte Blue;  ///< 緑の明度。
 }

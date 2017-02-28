@@ -10,8 +10,6 @@ module DesktopDial.Exception;
 
 import std.exception;
 
-import derelict.sdl2.sdl;
-
 /// @brief nullポインタに関する例外クラス。
 class NullPointerException: Exception
 {

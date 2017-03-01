@@ -22,12 +22,15 @@ class App
 {
 public:
     /// @brief  コンストラクタ。
+    /// @throws FileException     ファイルの読み込みに失敗した場合。
+    /// @throws UtfException      UTFデコードに失敗した場合。
+    /// @throws JSONException     jsonの変換に失敗した場合。
     /// @throws CreationException オブジェクトの生成に失敗した場合。
     this()
     {
         continuation_ = true;
 
-        immutable definition = LoadDialDefinition(dialDefinitionPath_);
+        immutable definition = dialDefinitionPath_.LoadDialDefinition;
         dial_ = new Dial(definition);
     }
 
@@ -52,9 +55,7 @@ private:
     void update()
     {
         tuneFPS;
-
-        immutable time = Clock.currTime;
-        dial_.Draw(time);
+        dial_.Draw(Clock.currTime);
     }
 
     /// @brief キューに溜まったイベントを扱う。
@@ -70,7 +71,7 @@ private:
 
     /// @brief イベントを扱う。
     /// @param event イベントオブジェクト。
-    void handleEvent(const ref SDL_Event event) @safe nothrow pure
+    void handleEvent(in ref SDL_Event event) @safe nothrow pure
     {
         if(event.type == SDL_QUIT)
         {

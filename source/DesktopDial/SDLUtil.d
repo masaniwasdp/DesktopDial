@@ -8,7 +8,8 @@
 
 module DesktopDial.SDLUtil;
 
-import std.exception,
+import std.conv,
+       std.exception,
        std.string;
 
 import derelict.sdl2.sdl;
@@ -21,28 +22,44 @@ import DesktopDial.Exception;
 /// @param   height 高さ。
 /// @return  生成したウィンドウ。
 /// @throws  CreationException   ウィンドウ生成に失敗した場合。
-/// @details ウィンドウ使用後はSDL_DestroyWindow()で破棄する必要がある。
+/// @details ウィンドウ使用後はDestroy()で破棄する必要がある。
 SDL_Window *CreateWindow(in string name, in ushort width, in ushort height)
 {
-    static immutable error = "Failed to create window object.";
-
-    auto window = SDL_CreateWindow(name.toStringz, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_ALWAYS_ON_TOP);
-
-    return window.enforceEx!(CreationException)(error);
+    return
+        SDL_CreateWindow(name.toStringz, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_ALWAYS_ON_TOP)
+        .enforceEx!CreationException(SDL_GetError().to!string);
 }
 
-/// @brief   ウィンドウのレンダラを生成する。
+/// @brief ウィンドウを破棄する。
+/// @param window 破棄するウィンドウ。
+void Destroy(SDL_Window *window) nothrow
+{
+    if(window !is null)
+    {
+        window.SDL_DestroyWindow;
+    }
+}
+
+/// @brief   レンダラを生成する。
 /// @param   window ウィンドウ。
 /// @return  生成したレンダラ。
 /// @throws  CreationException レンダラ生成に失敗した場合。
-/// @details レンダラ使用後はSDL_DestroyRenderer()で破棄する必要がある。
+/// @details レンダラ使用後はDestroy()で破棄する必要がある。
 SDL_Renderer *CreateRenderer(SDL_Window *window)
 {
-    static immutable error = "Failed to create renderer object.";
+    return
+        window.SDL_CreateRenderer(-1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED)
+        .enforceEx!CreationException(SDL_GetError().to!string);
+}
 
-    auto renderer = window.SDL_CreateRenderer(-1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
-
-    return renderer.enforceEx!(CreationException)(error);
+/// @brief レンダラを破棄する。
+/// @param renderer 破棄するレンダラ。
+void Destroy(SDL_Renderer *renderer) nothrow
+{
+    if(renderer !is null)
+    {
+        renderer.SDL_DestroyRenderer;
+    }
 }
 
 /// @brief   サーフェスを生成する。
@@ -50,14 +67,48 @@ SDL_Renderer *CreateRenderer(SDL_Window *window)
 /// @param   height 高さ。
 /// @return  生成したサーフェス。
 /// @throws  CreationException サーフェス生成に失敗した場合。
-/// @details サーフェス使用後はSDL_FreeSurface()で解放する必要がある。
+/// @details サーフェス使用後はFree()で解放する必要がある。
 SDL_Surface *CreateSurface(in uint width, in uint height)
 {
-    static immutable error = "Failed to create surface object.";
+    return
+        SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0)
+        .enforceEx!CreationException(SDL_GetError().to!string);
+}
 
-    auto surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+/// @brief サーフェスを解放する。
+/// @param surface 解放するサーフェス。
+void Free(SDL_Surface *surface) nothrow
+{
+    if(surface !is null)
+    {
+        surface.SDL_FreeSurface;
+    }
+}
 
-    return surface.enforceEx!(CreationException)(error);
+/// @brief サーフェスを透過色で塗りつぶす。
+/// @param surface 塗りつぶすサーフェス。
+/// @param red     透過色の赤の明度。
+/// @param green   透過色の緑の明度。
+/// @param blue    透過色の青の明度。
+void FillAlpha(SDL_Surface *surface, in ubyte red, in ubyte green, in ubyte blue) nothrow
+{
+    immutable map = surface.format.SDL_MapRGB(red, green, blue);
+
+    surface.SDL_SetColorKey(SDL_TRUE, map);
+    surface.SDL_FillRect(null, map);
+}
+
+/// @brief サーフェスに矩形を描画する。
+/// @param surface 描画するサーフェス。
+/// @param rect    描画する矩形。
+/// @param red     矩形の赤の明度。
+/// @param green   矩形の緑の明度。
+/// @param blue    矩形の青の明度。
+void FillRect(SDL_Surface *surface, in SDL_Rect rect, in ubyte red, in ubyte green, in ubyte blue) nothrow
+{
+    immutable map = surface.format.SDL_MapRGB(red, green, blue);
+
+    surface.SDL_FillRect(&rect, map);
 }
 
 /// @brief   サーフェスをテクスチャに変換する。
@@ -65,12 +116,20 @@ SDL_Surface *CreateSurface(in uint width, in uint height)
 /// @param   surface  変換するサーフェス。
 /// @return  生成したテクスチャ。
 /// @throws  CreationException テクスチャ生成に失敗した場合。
-/// @details テクスチャ使用後はSDL_DestroyTexture()で破棄する必要がある。
+/// @details テクスチャ使用後はDestroy()で破棄する必要がある。
 SDL_Texture *ConvertToTexture(SDL_Renderer *renderer, SDL_Surface *surface)
 {
-    static immutable error = "Failed to create texture object.";
+    return
+        renderer.SDL_CreateTextureFromSurface(surface)
+        .enforceEx!CreationException(SDL_GetError().to!string);
+}
 
-    auto texture = renderer.SDL_CreateTextureFromSurface(surface);
-
-    return texture.enforceEx!(CreationException)(error);
+/// @brief テクスチャを破棄する。
+/// @param texture 破棄するテクスチャ。
+void Destroy(SDL_Texture *texture) nothrow
+{
+    if(texture !is null)
+    {
+        texture.SDL_DestroyTexture;
+    }
 }

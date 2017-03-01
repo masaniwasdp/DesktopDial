@@ -22,8 +22,8 @@ class Hand
 public:
     /// @brief  コンストラクタ。
     /// @param  definition 針の定義。
-    /// @throws NullPointerException レンダラがnullだった場合。
-    /// @throws CreationException    オブジェクト生成に失敗した場合。
+    /// @throws InvalidParamException レンダラが無効だった場合。
+    /// @throws CreationException     オブジェクト生成に失敗した場合。
     this(ref HandDefinition definition)
     {
         this(definition.Renderer, definition.Region, definition.Visual);
@@ -33,43 +33,28 @@ public:
     /// @param  renderer 使用するレンダラ。
     /// @param  region   時計盤の領域。
     /// @param  visual   針の見た目。
-    /// @throws NullPointerException レンダラがnullだった場合。
-    /// @throws CreationException    オブジェクト生成に失敗した場合。
-    this(SDL_Renderer *renderer, const ref SDL_Rect region, const ref HandVisual visual)
+    /// @throws InvalidParamException レンダラが無効だった場合。
+    /// @throws CreationException     オブジェクト生成に失敗した場合。
+    this(SDL_Renderer *renderer, in SDL_Rect region, in HandVisual visual)
     {
-        static immutable error = "Renderer object was null.";
-
-        renderer_ = renderer.enforceEx!(NullPointerException)(error);
+        renderer_ = renderer.enforceEx!InvalidParamException(invalidRendererError_);
         region_ = region;
 
-        immutable SDL_Rect rect =
-        {
-            x: (region.w / 2) - (visual.Size.Width / 2),
-            y: (region.h / 2) - visual.Size.LongLength,
-            w: visual.Size.Width,
-            h: visual.Size.LongLength + visual.Size.ShortLength
-        };
-
         auto surface = CreateSurface(region.w, region.h);
-        scope(exit) surface.SDL_FreeSurface;
+        scope(exit) surface.Free;
 
-        immutable background = surface.format.SDL_MapRGB(visual.Color.AlphaR, visual.Color.AlphaG, visual.Color.AlphaB);
-        surface.SDL_SetColorKey(SDL_TRUE, background);
-        surface.SDL_FillRect(&region, background);
+        immutable shape = calcShape(region, visual.Size);
 
-        immutable foreground = surface.format.SDL_MapRGB(visual.Color.Red, visual.Color.Green, visual.Color.Blue);
-        surface.SDL_FillRect(&rect, foreground);
+        surface.FillAlpha(visual.Color.AlphaR, visual.Color.AlphaG, visual.Color.AlphaB);
+        surface.FillRect(shape, visual.Color.Red, visual.Color.Green, visual.Color.Blue);
 
-        texture_ = ConvertToTexture(renderer, surface);
+        texture_ = renderer.ConvertToTexture(surface);
     }
 
     /// @デストラクタ。
     ~this()
     {
-        if(texture_ !is null)
-        {
-            texture_.SDL_DestroyTexture;
-        }
+        texture_.Destroy;
     }
 
     /// @brief 針を描画する。
@@ -80,6 +65,25 @@ public:
     }
 
 private:
+    static immutable invalidRendererError_ = "Renderer object was invalid."; ///< レンダラが無効だったメッセージ。
+
+    /// @brief  針の形を計算する。
+    /// @param  region 時計盤の領域。
+    /// @param  size   針のサイズ。
+    /// @return 計算した針の形。
+    static SDL_Rect calcShape(in SDL_Rect region, in HandSize size) @safe nothrow pure
+    {
+        immutable SDL_Rect shape =
+        {
+            x: (region.w / 2) - (size.Width / 2),
+            y: (region.h / 2) - size.LongLength,
+            w: size.Width,
+            h: size.LongLength + size.ShortLength
+        };
+
+        return shape;
+    }
+
     immutable SDL_Rect region_; ///< 時計盤の領域。
 
     SDL_Renderer *renderer_;  ///< 使用するレンダラ。
@@ -89,10 +93,9 @@ private:
 /// @brief 針を定義する構造体。
 struct HandDefinition
 {
-    SDL_Renderer *Renderer = null; ///< 使用するレンダラ。
-
-    SDL_Rect Region;   ///< 時計盤の領域。
-    HandVisual Visual; ///< 針の見た目。
+    SDL_Renderer *Renderer; ///< 使用するレンダラ。
+    SDL_Rect Region;        ///< 時計盤の領域。
+    HandVisual Visual;      ///< 針の見た目。
 }
 
 /// @brief 針の見た目を表す構造体。

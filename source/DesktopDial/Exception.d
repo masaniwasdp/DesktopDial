@@ -10,14 +10,14 @@ module DesktopDial.Exception;
 
 import std.exception;
 
-/// @brief nullポインタに関する例外クラス。
-class NullPointerException: Exception
+/// @brief 無効なパラメタに関する例外クラス。
+class InvalidParamException: Exception
 {
     /// @brief コンストラクタ。
     /// @param message エラーメッセージ。
     /// @param file    例外が発生したファイル名。
     /// @param line    例外が発生した行。
-    this(string message, string file = __FILE__, ulong line = __LINE__)
+    this(in string message, in string file = __FILE__, in ulong line = __LINE__)
     {
         super(message, file, line);
     }
@@ -30,7 +30,7 @@ class CreationException: Exception
     /// @param message エラーメッセージ。
     /// @param file    例外が発生したファイル名。
     /// @param line    例外が発生した行。
-    this(string message, string file = __FILE__, ulong line = __LINE__)
+    this(in string message, in string file = __FILE__, in ulong line = __LINE__)
     {
         super(message, file, line);
     }

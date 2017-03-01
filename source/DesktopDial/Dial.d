@@ -25,7 +25,7 @@ public:
     /// @brief  コンストラクタ。
     /// @param  definition        時計盤の定義。
     /// @throws CreationException オブジェクトの生成に失敗した場合。
-    this(const ref DialDefinition definition)
+    this(in ref DialDefinition definition)
     {
         background_ = definition.Background;
         window_ = CreateWindow(definition.Name, definition.Width, definition.Height);
@@ -45,20 +45,13 @@ public:
     /// @デストラクタ。
     ~this()
     {
-        if(window_ !is null)
-        {
-            window_.SDL_DestroyWindow;
-        }
-
-        if(renderer_ !is null)
-        {
-            renderer_.SDL_DestroyRenderer;
-        }
+        window_.Destroy;
+        renderer_.Destroy;
     }
 
     /// @brief 時計盤を描画する。
     /// @param time 時刻。
-    void Draw(const ref SysTime time) nothrow
+    void Draw(in SysTime time) nothrow
     {
         clear;
         drawHands(time);
@@ -77,7 +70,7 @@ private:
 
     /// @brief 針を描画する。
     /// @param time 時刻。
-    void drawHands(const ref SysTime time) nothrow
+    void drawHands(in SysTime time) nothrow
     {
         auto angle = new HandsAngle(time);
 

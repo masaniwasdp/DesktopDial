@@ -20,10 +20,9 @@ public:
 
     /// @brief コンストラクタ。
     /// @param time 時刻。
-    this(const ref SysTime time) @safe nothrow
+    this(in SysTime time) @safe nothrow
     {
-        immutable msecond = time.fracSecs.total!("msecs");
-        immutable second = time.second + (msecond / 1000.0);
+        immutable second = time.second + (time.fracSecs.total!"msecs" / 1000.0);
         immutable minute = time.minute + (second / 60.0);
         immutable hour = time.hour + (minute / 60.0);
 
@@ -33,7 +32,7 @@ public:
     }
 
 private:
-    immutable hourAngleUnit_ = 360 / 12.0;   ///< 時針1時間の角度。
-    immutable minuteAngleUnit_ = 360 / 60.0; ///< 分針1分の角度。
-    immutable secondAngleUnit_ = 360 / 60.0; ///< 秒針1秒の角度。
+    static immutable hourAngleUnit_ = 360 / 12.0;   ///< 時針1時の角度。
+    static immutable minuteAngleUnit_ = 360 / 60.0; ///< 分針1分の角度。
+    static immutable secondAngleUnit_ = 360 / 60.0; ///< 秒針1秒の角度。
 }

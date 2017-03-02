@@ -17,7 +17,7 @@ class InvalidParamException: Exception
     /// @param message エラーメッセージ。
     /// @param file    例外が発生したファイル名。
     /// @param line    例外が発生した行。
-    this(in string message, in string file = __FILE__, in ulong line = __LINE__)
+    this(in string message, in string file = __FILE__, in ulong line = __LINE__) @safe nothrow pure
     {
         super(message, file, line);
     }
@@ -30,7 +30,7 @@ class CreationException: Exception
     /// @param message エラーメッセージ。
     /// @param file    例外が発生したファイル名。
     /// @param line    例外が発生した行。
-    this(in string message, in string file = __FILE__, in ulong line = __LINE__)
+    this(in string message, in string file = __FILE__, in ulong line = __LINE__) @safe nothrow pure
     {
         super(message, file, line);
     }

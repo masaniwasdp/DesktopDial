@@ -2,6 +2,10 @@
 	"fileVersion": 1,
 	"versions": {
 		"derelict-sdl2": "2.1.0",
-		"derelict-util": "2.0.6"
+		"derelict-util": "2.0.6",
+		"dunit": "1.0.14",
+		"jsonserialized": "0.2.1",
+		"std_data_json": "0.18.2",
+		"taggedalgebraic": "0.10.5"
 	}
 }

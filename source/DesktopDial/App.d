@@ -9,7 +9,9 @@
 module DesktopDial.App;
 
 import std.datetime,
-       std.exception;
+       std.exception,
+       std.file,
+       std.path;
 
 import derelict.sdl2.sdl;
 
@@ -22,15 +24,16 @@ class App
 {
 public:
     /// @brief  コンストラクタ。
-    /// @throws FileException     ファイルの読み込みに失敗した場合。
-    /// @throws UtfException      UTFデコードに失敗した場合。
-    /// @throws JSONException     jsonの変換に失敗した場合。
-    /// @throws CreationException オブジェクトの生成に失敗した場合。
+    /// @throws FileException         ファイルの読み込みに失敗した場合。
+    /// @throws InvalidParamException jsonファイルの形式が誤っている場合。
+    /// @throws ConvOverflowException 値の型変換でオーバーフローした場合。
+    /// @throws CreationException     オブジェクトの生成に失敗した場合。
+    /// @throws Exception             実行ファイルのパスを取得できなかった場合。
     this()
     {
         continuation_ = true;
 
-        immutable definition = dialDefinitionPath_.LoadDialDefinition;
+        immutable definition = (thisExePath.dirName ~ dirSeparator ~ dialDefinitionPath_).LoadDialDefinition;
         dial_ = new Dial(definition);
     }
 

@@ -72,7 +72,7 @@ private:
     /// @param time 時刻。
     void drawHands(in SysTime time) nothrow
     {
-        auto angle = new HandsAngle(time);
+        immutable angle = CalcHandsAngle(time);
 
         hour_.Draw(angle.Hour);
         minute_.Draw(angle.Minute);

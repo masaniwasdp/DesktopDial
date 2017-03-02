@@ -4,7 +4,8 @@
         "masaniwa"
     ],
     "dependencies": {
-        "derelict-sdl2": "~>2.1.0"
+        "derelict-sdl2": "~>2.1.0",
+        "jsonserialized": "~>0.2.1"
     },
     "description": "A clock dial for desktop.",
     "copyright": "Copyright © 2017, masaniwa",

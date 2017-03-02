@@ -23,10 +23,13 @@ class Dial
 {
 public:
     /// @brief  コンストラクタ。
-    /// @param  definition        時計盤の定義。
-    /// @throws CreationException オブジェクトの生成に失敗した場合。
+    /// @param  definition 時計盤の定義。
+    /// @throws InvalidParamException   定義が無効だった場合。
+    /// @throws CreationException       オブジェクトの生成に失敗した場合。
     this(in ref DialDefinition definition)
     {
+        validateDefinition(definition);
+
         background_ = definition.Background;
         window_ = CreateWindow(definition.Name, definition.Width, definition.Height);
         renderer_ = window_.CreateRenderer;
@@ -59,7 +62,28 @@ public:
     }
 
 private:
+    static immutable tooSmallWindowError_ = "Window size was too small."; ///< ウィンドウが小さすぎたメッセージ。
+    static immutable tooLargeWindowError_ = "Window size was too large."; ///< ウィンドウが大きすぎたメッセージ。
+
+    static immutable minWindowSize_ = 1;    ///< 最低のウィンドウサイズ。
+    static immutable maxWindowSize_ = 1024; ///< 最大のウィンドウサイズ。
+
     immutable BackgroundColor background_; ///< 背景色。
+
+    /// @brief  時計盤の定義が有効かどうか検証する。
+    /// @param  definition 調べる定義。
+    /// @throws InvalidParamException 定義が無効だった場合。
+    static void validateDefinition(in ref DialDefinition definition) @safe pure
+    {
+        if(definition.Width < minWindowSize_ || definition.Height < minWindowSize_)
+        {
+            throw new InvalidParamException(tooSmallWindowError_);
+        }
+        else if(definition.Width > maxWindowSize_ || definition.Height > maxWindowSize_)
+        {
+            throw new InvalidParamException(tooLargeWindowError_);
+        }
+    }
 
     /// @brief レンダラを消去する。
     void clear() nothrow

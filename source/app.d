@@ -6,7 +6,8 @@
 /// @copyright (c) 2017 masaniwa
 ///
 
-import std.conv;
+import std.conv,
+       std.stdio;
 
 import derelict.sdl2.sdl;
 
@@ -15,18 +16,32 @@ import DesktopDial.App;
 /// @brief メインエントリ。
 void main()
 {
-    DerelictSDL2.load;
-
-    if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
+    try
     {
-        throw new Exception(SDL_GetError().to!string);
+        DerelictSDL2.load;
+
+        if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
+        {
+            throw new Exception(SDL_GetError().to!string);
+        }
+
+        scope(exit) SDL_Quit();
+
+        configureSDL;
+
+        (new App).Run;
     }
-
-    scope(exit) SDL_Quit();
-
-    configureSDL;
-
-    (new App).Run;
+    catch(Exception e)
+    {
+        debug
+        {
+            throw e;
+        }
+        else
+        {
+            (e.file ~ "(" ~ e.line.to!string ~ "):\n\t" ~ e.msg).writefln;
+        }
+    }
 }
 
 /// @brief SDLの設定を行う。

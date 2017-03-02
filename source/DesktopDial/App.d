@@ -9,13 +9,14 @@
 module DesktopDial.App;
 
 import std.datetime,
-       std.exception,
+       std.conv,
        std.file,
        std.path;
 
 import derelict.sdl2.sdl;
 
 import DesktopDial.Dial,
+       DesktopDial.Exception,
        DesktopDial.Loading;
 
 /// @brief   アプリケーションクラス。
@@ -24,22 +25,22 @@ class App
 {
 public:
     /// @brief  コンストラクタ。
-    /// @throws FileException         ファイルの読み込みに失敗した場合。
-    /// @throws InvalidParamException jsonファイルの形式が誤っている場合。
-    /// @throws ConvOverflowException 値の型変換でオーバーフローした場合。
-    /// @throws CreationException     オブジェクトの生成に失敗した場合。
+    /// @throws FileException         定義ファイルの読み込みに失敗した場合。
+    /// @throws InvalidParamException 定義ファイルが無効な場合。
     /// @throws Exception             実行ファイルのパスを取得できなかった場合。
+    /// @throws CreationException     オブジェクトの生成に失敗した場合。
     this()
     {
         continuation_ = true;
 
-        immutable definition = (thisExePath.dirName ~ dirSeparator ~ dialDefinitionPath_).LoadDialDefinition;
+        immutable path = thisExePath.dirName ~ dirSeparator ~ dialDefinitionPath_;
+        immutable definition = path.LoadDialDefinition;
+
         dial_ = new Dial(definition);
     }
 
-    /// @brief  アプリケーションを実行する。
-    /// @throws DateTimeException 日時の取得に失敗した場合。
-    void Run()
+    /// @brief アプリケーションを実行する。
+    void Run() nothrow
     {
         while(continuation_)
         {
@@ -53,12 +54,19 @@ private:
 
     static immutable dialDefinitionPath_ = "res/DialDefinition.json"; ///< 時計盤定義ファイルのパス。
 
-    /// @brief  FPSを考慮して時計盤を更新する。
-    /// @throws DateTimeException 日時の取得に失敗した場合。
-    void update()
+    /// @brief FPSを考慮して時計盤を更新する。
+    void update() nothrow
     {
         tuneFPS;
-        dial_.Draw(Clock.currTime);
+
+        try
+        {
+            dial_.Draw(Clock.currTime);
+        }
+        catch(Exception e)
+        {
+            return;
+        }
     }
 
     /// @brief キューに溜まったイベントを扱う。

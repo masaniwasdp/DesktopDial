@@ -32,7 +32,7 @@ SDL_Window *CreateWindow(in string name, in ushort width, in ushort height)
 
 /// @brief ウィンドウを破棄する。
 /// @param window 破棄するウィンドウ。
-void Destroy(SDL_Window *window) nothrow
+void Destroy(SDL_Window *window) nothrow @nogc
 {
     if(window !is null)
     {
@@ -54,7 +54,7 @@ SDL_Renderer *CreateRenderer(SDL_Window *window)
 
 /// @brief レンダラを破棄する。
 /// @param renderer 破棄するレンダラ。
-void Destroy(SDL_Renderer *renderer) nothrow
+void Destroy(SDL_Renderer *renderer) nothrow @nogc
 {
     if(renderer !is null)
     {
@@ -77,7 +77,7 @@ SDL_Surface *CreateSurface(in uint width, in uint height)
 
 /// @brief サーフェスを解放する。
 /// @param surface 解放するサーフェス。
-void Free(SDL_Surface *surface) nothrow
+void Free(SDL_Surface *surface) nothrow @nogc
 {
     if(surface !is null)
     {
@@ -90,7 +90,7 @@ void Free(SDL_Surface *surface) nothrow
 /// @param red     透過色の赤の明度。
 /// @param green   透過色の緑の明度。
 /// @param blue    透過色の青の明度。
-void FillAlpha(SDL_Surface *surface, in ubyte red, in ubyte green, in ubyte blue) nothrow
+void FillAlpha(SDL_Surface *surface, in ubyte red, in ubyte green, in ubyte blue) nothrow @nogc
 {
     immutable map = surface.format.SDL_MapRGB(red, green, blue);
 
@@ -104,7 +104,7 @@ void FillAlpha(SDL_Surface *surface, in ubyte red, in ubyte green, in ubyte blue
 /// @param red     矩形の赤の明度。
 /// @param green   矩形の緑の明度。
 /// @param blue    矩形の青の明度。
-void FillRect(SDL_Surface *surface, in SDL_Rect rect, in ubyte red, in ubyte green, in ubyte blue) nothrow
+void FillRect(SDL_Surface *surface, in SDL_Rect rect, in ubyte red, in ubyte green, in ubyte blue) nothrow @nogc
 {
     immutable map = surface.format.SDL_MapRGB(red, green, blue);
 
@@ -126,7 +126,7 @@ SDL_Texture *ConvertToTexture(SDL_Renderer *renderer, SDL_Surface *surface)
 
 /// @brief テクスチャを破棄する。
 /// @param texture 破棄するテクスチャ。
-void Destroy(SDL_Texture *texture) nothrow
+void Destroy(SDL_Texture *texture) nothrow @nogc
 {
     if(texture !is null)
     {

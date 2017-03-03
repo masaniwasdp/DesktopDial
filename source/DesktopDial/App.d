@@ -31,11 +31,19 @@ public:
     /// @throws CreationException     オブジェクトの生成に失敗した場合。
     this()
     {
+        this(thisExePath.dirName ~ dirSeparator ~ dialDefinitionPath_);
+    }
+
+    /// @brief  コンストラクタ。
+    /// @param  path 定義ファイルのパス。
+    /// @throws FileException           定義ファイルの読み込みに失敗した場合。
+    /// @throws InvalidParamException   定義ファイルが無効な場合。
+    /// @throws CreationException       オブジェクトの生成に失敗した場合。
+    this(in string path)
+    {
         continuation_ = true;
 
-        immutable path = thisExePath.dirName ~ dirSeparator ~ dialDefinitionPath_;
         immutable definition = path.LoadDialDefinition;
-
         dial_ = new Dial(definition);
     }
 
@@ -52,7 +60,7 @@ public:
 private:
     static immutable interval_ = 100; ///< メインループのインターバル。
 
-    static immutable dialDefinitionPath_ = "res/DialDefinition.json"; ///< 時計盤定義ファイルのパス。
+    static immutable dialDefinitionPath_ = "res/DialDefinition.json"; ///< 定義ファイルのパス。
 
     /// @brief FPSを考慮して時計盤を更新する。
     void update() nothrow
@@ -70,7 +78,7 @@ private:
     }
 
     /// @brief キューに溜まったイベントを扱う。
-    void handleEvents() nothrow
+    void handleEvents() nothrow @nogc
     {
         SDL_Event event;
 
@@ -82,7 +90,7 @@ private:
 
     /// @brief イベントを扱う。
     /// @param event イベントオブジェクト。
-    void handleEvent(in ref SDL_Event event) @safe nothrow pure
+    void handleEvent(in ref SDL_Event event) @safe nothrow pure @nogc
     {
         if(event.type == SDL_QUIT)
         {
@@ -91,7 +99,7 @@ private:
     }
 
     /// @brief FPSを調整する。
-    void tuneFPS() nothrow
+    void tuneFPS() nothrow @nogc
     {
         immutable current = SDL_GetTicks();
         immutable elapsed = current - last_;

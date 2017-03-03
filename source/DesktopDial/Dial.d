@@ -46,7 +46,7 @@ public:
     }
 
     /// @デストラクタ。
-    ~this()
+    ~this() nothrow @nogc
     {
         window_.Destroy;
         renderer_.Destroy;
@@ -86,7 +86,7 @@ private:
     }
 
     /// @brief レンダラを消去する。
-    void clear() nothrow
+    void clear() nothrow @nogc
     {
         renderer_.SDL_SetRenderDrawColor(background_.Red, background_.Green, background_.Blue, SDL_ALPHA_OPAQUE);
         renderer_.SDL_RenderClear;

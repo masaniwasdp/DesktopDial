@@ -41,7 +41,7 @@ HandsAngle CalcHandsAngle(in SysTime time) @safe nothrow
 /// @param  value 換算する値。
 /// @param  units 上の単位に上がる値。
 /// @return 上の単位で換算した値。
-private double upUnit(in double value, in double units) @safe nothrow pure
+private double upUnit(in double value, in double units) @safe nothrow pure @nogc
 {
     return value / units;
 }

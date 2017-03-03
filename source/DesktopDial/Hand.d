@@ -52,14 +52,14 @@ public:
     }
 
     /// @デストラクタ。
-    ~this()
+    ~this() nothrow @nogc
     {
         texture_.Destroy;
     }
 
     /// @brief 針を描画する。
     /// @param angle 針の角度。
-    void Draw(in double angle) nothrow
+    void Draw(in double angle) nothrow @nogc
     {
         renderer_.SDL_RenderCopyEx(texture_, null, &region_, angle, null, SDL_FLIP_NONE);
     }
@@ -71,7 +71,7 @@ private:
     /// @param  region 時計盤の領域。
     /// @param  size   針のサイズ。
     /// @return 計算した針の形。
-    static SDL_Rect calcShape(in SDL_Rect region, in HandSize size) @safe nothrow pure
+    static SDL_Rect calcShape(in SDL_Rect region, in HandSize size) @safe nothrow pure @nogc
     {
         immutable SDL_Rect shape =
         {

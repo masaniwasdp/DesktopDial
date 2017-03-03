@@ -11,8 +11,8 @@ DesktopDial
 
 ## 依存
 + [dmd](https://dlang.org/download.html#dmd)
-+ [dub](https://code.dlang.org/download.html)
-+ [SDL2.0.5](https://www.libsdl.org/download-2.0.php)
++ [dub](https://code.dlang.org)
++ [SDL2.0.5](https://www.libsdl.org)
 
 ## インストール
 
@@ -23,7 +23,7 @@ $ cd DesktopDial
 $ dub --build=release
 ```
 
-SDLのダイナミックライブラリをパスの通っている場所か、`bin/`に置く必要があります。
+SDLのダイナミックリンクライブラリをパスの通っている場所か、`bin/`に置く必要があります。
 
 ## 実行
 

@@ -12,6 +12,7 @@ DesktopDial
 ## 依存
 + [dmd](https://dlang.org/download.html#dmd)
 + [dub](https://code.dlang.org/download.html)
++ [SDL2.0.5](https://www.libsdl.org/download-2.0.php)
 
 ## インストール
 
@@ -22,6 +23,8 @@ $ cd DesktopDial
 $ dub --build=release
 ```
 
+SDLのダイナミックライブラリをパスの通っている場所か、`bin/`に置く必要があります。
+
 ## 実行
 
 ``` bash
@@ -29,7 +32,7 @@ $ cd ~/DesktopDial
 $ bin/desktopdial [path]
 ```
 
-+ path: 設定ファイルのパスです。省略時はbin/res/DialDefinition.jsonとなります。
++ `path`: 設定ファイルのパスです。省略時は`bin/res/DialDefinition.json`となります。
 
 ## アンインストール
 

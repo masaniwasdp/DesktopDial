@@ -29,7 +29,7 @@ $ cd ~/DesktopDial
 $ bin/desktopdial [path]
 ```
 
-path: 設定ファイルのパスです。省略時はbin/res/DialDefinition.jsonとなります。
++ path: 設定ファイルのパスです。省略時はbin/res/DialDefinition.jsonとなります。
 
 ## アンインストール
 

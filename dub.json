@@ -13,5 +13,8 @@
     "targetPath": "$PACKAGE_DIR/bin/",
     "copyFiles": [
         "$PACKAGE_DIR/res"
+    ],
+    "lflags-windows": [
+        "-L/exet:nt/su:windows:4.0"
     ]
 }

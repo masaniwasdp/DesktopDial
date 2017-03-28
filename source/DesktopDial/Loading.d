@@ -20,6 +20,8 @@ import jsonserialized.deserialization,
 import DesktopDial.Dial,
        DesktopDial.Exception;
 
+public:
+
 /// @brief  jsonファイルから時計盤の定義を読み込む。
 /// @param  path jsonファイルのパス。
 /// @return 読み込んだ時計盤の定義。
@@ -50,6 +52,8 @@ DialDefinition LoadDialDefinition(in string path) @safe
     }
 }
 
-private immutable wrongEncodingError = "Definition file encoding should be Unicode."; ///< 無効なファイルエンコーディングであるメッセージ。
-private immutable wrongFormatError = "JSON string was wrong format.";                 ///< json文字列の形式が誤っているメッセージ。
-private immutable valueOverflowError = "Definition value was too larger or smaller."; ///< 定義の値がオーバーフローしたメッセージ。
+private:
+
+immutable wrongEncodingError = "Definition file encoding should be Unicode."; ///< 無効なファイルエンコーディングであるメッセージ。
+immutable wrongFormatError = "JSON string was wrong format.";                 ///< json文字列の形式が誤っているメッセージ。
+immutable valueOverflowError = "Definition value was too larger or smaller."; ///< 定義の値がオーバーフローしたメッセージ。

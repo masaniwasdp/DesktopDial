@@ -16,6 +16,8 @@ import derelict.sdl2.sdl;
 
 import DesktopDial.Exception;
 
+public:
+
 /// @brief   ウィンドウを生成する。
 /// @param   name   名前。
 /// @param   width  幅。

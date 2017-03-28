@@ -10,11 +10,9 @@ DesktopDial
 X11環境では時計盤は常に最前面に表示されます。
 
 ## 依存
-+ [dmd](https://dlang.org/download.html#dmd)
-+ [dub](https://code.dlang.org)
 + [SDL2.0.5](https://www.libsdl.org)
 
-## インストール
+## ビルド
 
 ``` bash
 $ cd ~
@@ -23,23 +21,14 @@ $ cd DesktopDial
 $ dub --build=release
 ```
 
-SDLのダイナミックリンクライブラリをパスの通っている場所にインストールするか、`bin/`に置く必要があります。
-
 ## 実行
 
 ``` bash
 $ cd ~/DesktopDial
-$ bin/desktopdial [path]
+$ build/desktopdial [path]
 ```
 
-+ `path`: 設定ファイルのパスです。省略時は`bin/res/DialDefinition.json`となります。
-
-## アンインストール
-
-``` bash
-$ cd ~
-$ rm -rf DesktopDial
-```
++ `path`: 設定ファイルのパスです。省略時は`build/resource/DialDefinition.json`となります。
 
 ## ライセンス
 [MITライセンス](https://github.com/masaniwasdp/DesktopDial/blob/master/Licence.txt)が適用されます。

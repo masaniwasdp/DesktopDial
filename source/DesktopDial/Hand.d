@@ -15,6 +15,8 @@ import derelict.sdl2.sdl;
 import DesktopDial.Exception,
        DesktopDial.SDLUtil;
 
+public:
+
 /// @brief   時計盤の針の描画を扱うクラス。
 /// @details 利用前にSDLを初期化、利用後にSDLを終了する必要がある。
 class Hand
@@ -71,7 +73,7 @@ private:
     /// @param  region 時計盤の領域。
     /// @param  size   針のサイズ。
     /// @return 計算した針の形。
-    static SDL_Rect calcShape(in SDL_Rect region, in HandSize size) @safe nothrow pure @nogc
+    static SDL_Rect calcShape(in SDL_Rect region, in HandSize size) nothrow pure @safe @nogc
     {
         immutable SDL_Rect shape =
         {

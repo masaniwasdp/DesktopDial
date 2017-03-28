@@ -17,6 +17,8 @@ import DesktopDial.Exception,
        DesktopDial.HandsAngle,
        DesktopDial.SDLUtil;
 
+public:
+
 /// @brief   時計盤の描画を扱うクラス。
 /// @details 利用前にSDLを初期化、利用後にSDLを終了する必要がある。
 class Dial
@@ -73,7 +75,7 @@ private:
     /// @brief  時計盤の定義が有効かどうか検証する。
     /// @param  definition 調べる定義。
     /// @throws InvalidParamException 定義が無効だった場合。
-    static void validateDefinition(in ref DialDefinition definition) @safe pure
+    static void validateDefinition(in ref DialDefinition definition) pure @safe
     {
         if(definition.Width < minWindowSize_ || definition.Height < minWindowSize_)
         {

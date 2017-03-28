@@ -10,6 +10,8 @@ module DesktopDial.Exception;
 
 import std.exception;
 
+public:
+
 /// @brief 無効なパラメタに関する例外クラス。
 class InvalidParamException: Exception
 {
@@ -17,7 +19,7 @@ class InvalidParamException: Exception
     /// @param message エラーメッセージ。
     /// @param file    例外が発生したファイル名。
     /// @param line    例外が発生した行。
-    this(in string message, in string file = __FILE__, in ulong line = __LINE__) @safe nothrow pure @nogc
+    this(in string message, in string file = __FILE__, in ulong line = __LINE__) nothrow pure @safe @nogc
     {
         super(message, file, cast(uint)line);
     }
@@ -30,7 +32,7 @@ class CreationException: Exception
     /// @param message エラーメッセージ。
     /// @param file    例外が発生したファイル名。
     /// @param line    例外が発生した行。
-    this(in string message, in string file = __FILE__, in ulong line = __LINE__) @safe nothrow pure @nogc
+    this(in string message, in string file = __FILE__, in ulong line = __LINE__) nothrow pure @safe @nogc
     {
         super(message, file, cast(uint)line);
     }

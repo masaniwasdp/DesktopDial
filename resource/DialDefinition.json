@@ -1,37 +1,42 @@
 {
-    "Name": "DesktopDial",
-    "Width": 256,
+    "Name":   "DesktopDial",
+    "Width":  256,
     "Height": 256,
+
     "Background": {
-        "Red": 255,
+        "Red":   255,
         "Green": 255,
-        "Blue": 255
+        "Blue":  255
     },
+
     "Hour": {
         "Size": {
-            "Width": 3,
-            "LongLength": 80,
+            "Width":       3,
+            "LongLength":  80,
             "ShortLength": 10
         },
+
         "Color": {
-            "Red": 0,
-            "Green": 0,
-            "Blue": 0,
+            "Red":    0,
+            "Green":  0,
+            "Blue":   0,
             "AlphaR": 255,
             "AlphaG": 255,
             "AlphaB": 255
         }
     },
+
     "Minute": {
         "Size": {
-            "Width": 3,
-            "LongLength": 100,
+            "Width":       3,
+            "LongLength":  100,
             "ShortLength": 10
         },
+
         "Color": {
-            "Red": 0,
-            "Green": 0,
-            "Blue": 0,
+            "Red":    0,
+            "Green":  0,
+            "Blue":   0,
             "AlphaR": 255,
             "AlphaG": 255,
             "AlphaB": 255
@@ -39,14 +44,15 @@
     },
     "Second": {
         "Size": {
-            "Width": 3,
-            "LongLength": 120,
+            "Width":       3,
+            "LongLength":  120,
             "ShortLength": 10
         },
+
         "Color": {
-            "Red": 0,
-            "Green": 0,
-            "Blue": 0,
+            "Red":    0,
+            "Green":  0,
+            "Blue":   0,
             "AlphaR": 255,
             "AlphaG": 255,
             "AlphaB": 255

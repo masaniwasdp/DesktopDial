@@ -19,6 +19,8 @@ import DesktopDial.Dial,
        DesktopDial.Exception,
        DesktopDial.Loading;
 
+public:
+
 /// @brief   アプリケーションクラス。
 /// @details 利用前にSDLを初期化、利用後にSDLを終了する必要がある。
 class App
@@ -44,6 +46,7 @@ public:
         continuation_ = true;
 
         immutable definition = path.LoadDialDefinition;
+
         dial_ = new Dial(definition);
     }
 
@@ -60,7 +63,7 @@ public:
 private:
     static immutable interval_ = 100; ///< メインループのインターバル。
 
-    static immutable dialDefinitionPath_ = "res/DialDefinition.json"; ///< 定義ファイルのパス。
+    static immutable dialDefinitionPath_ = "resource/DialDefinition.json"; ///< 定義ファイルのパス。
 
     /// @brief FPSを考慮して時計盤を更新する。
     void update() nothrow
@@ -90,7 +93,7 @@ private:
 
     /// @brief イベントを扱う。
     /// @param event イベントオブジェクト。
-    void handleEvent(in ref SDL_Event event) @safe nothrow pure @nogc
+    void handleEvent(in ref SDL_Event event) nothrow pure @safe @nogc
     {
         if(event.type == SDL_QUIT)
         {

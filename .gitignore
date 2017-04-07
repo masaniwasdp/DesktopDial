@@ -5,5 +5,4 @@ __dummy.html
 *.obj
 __test__*__
 *.swp
-desktopdial
 build

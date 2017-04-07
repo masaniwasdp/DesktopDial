@@ -6,12 +6,16 @@
 /// @copyright (c) 2017 masaniwa
 ///
 
-import std.conv,
-       std.stdio;
+import std.conv:
+    to;
 
-import derelict.sdl2.sdl;
+import std.stdio:
+    readln, writefln;
 
-import DesktopDial.App;
+import desktopdial.app:
+    App;
+
+import sdl = derelict.sdl2.sdl;
 
 public:
 
@@ -19,15 +23,15 @@ void main(string[] args)
 {
     try
     {
-        DerelictSDL2.load;
+        sdl.DerelictSDL2.load;
 
-        if(SDL_Init(SDL_INIT_EVERYTHING) < 0) throw new Exception(SDL_GetError().to!string);
+        if(sdl.SDL_Init(sdl.SDL_INIT_EVERYTHING) < 0) throw new Exception(sdl.SDL_GetError().to!string);
 
-        scope(exit) SDL_Quit();
+        scope(exit) sdl.SDL_Quit();
 
         configureSDL;
 
-        (args.length > 1 ? new App(args[1]) : new App).Run;
+        (args.length > 1 ? new App(args[1]) : new App).run;
     }
     catch(Exception e)
     {
@@ -48,9 +52,9 @@ private:
 /// @brief SDLの設定を行う。
 void configureSDL() nothrow @nogc
 {
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "liner");
-    SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, "1");
-    SDL_SetHint(SDL_HINT_NO_SIGNAL_HANDLERS, "0");
+    sdl.SDL_SetHint(sdl.SDL_HINT_RENDER_SCALE_QUALITY, "liner");
+    sdl.SDL_SetHint(sdl.SDL_HINT_VIDEO_ALLOW_SCREENSAVER, "1");
+    sdl.SDL_SetHint(sdl.SDL_HINT_NO_SIGNAL_HANDLERS, "0");
 }
 
 immutable error = "An error occurred.\n%s(%d):\n\t%s\nPress any key..."; ///< エラーメッセージのフォーマット。

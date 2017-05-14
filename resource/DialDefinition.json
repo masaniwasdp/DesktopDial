@@ -1,55 +1,87 @@
 {
-    "Name": "DesktopDial",
-    "Width": 256,
-    "Height": 256,
-    "Background": {
-        "Red": 255,
-        "Green": 255,
-        "Blue": 255
+    "name": "DesktopDial",
+    "width": 256,
+    "height": 256,
+    "background": {
+        "r": 255,
+        "g": 255,
+        "b": 255
     },
-    "Hour": {
-        "Size": {
-            "Width": 3,
-            "LongLength": 80,
-            "ShortLength": 10
+    "face": {
+        "large": {
+            "size": {
+                "width": 5,
+                "start": 80,
+                "length": 20
+            },
+            "color": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "alphaR": 255,
+                "alphaG": 255,
+                "alphaB": 255
+            }
         },
-        "Color": {
-            "Red": 0,
-            "Green": 0,
-            "Blue": 0,
-            "AlphaR": 255,
-            "AlphaG": 255,
-            "AlphaB": 255
+        "small": {
+            "size": {
+                "width": 3,
+                "start": 90,
+                "length": 10
+            },
+            "color": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "alphaR": 255,
+                "alphaG": 255,
+                "alphaB": 255
+            }
         }
     },
-    "Minute": {
-        "Size": {
-            "Width": 3,
-            "LongLength": 100,
-            "ShortLength": 10
+    "hour": {
+        "size": {
+            "width": 3,
+            "longLength": 80,
+            "shortLength": 10
         },
-        "Color": {
-            "Red": 0,
-            "Green": 0,
-            "Blue": 0,
-            "AlphaR": 255,
-            "AlphaG": 255,
-            "AlphaB": 255
+        "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "alphaR": 255,
+            "alphaG": 255,
+            "alphaB": 255
         }
     },
-    "Second": {
-        "Size": {
-            "Width": 3,
-            "LongLength": 120,
-            "ShortLength": 10
+    "minute": {
+        "size": {
+            "width": 3,
+            "longLength": 100,
+            "shortLength": 10
         },
-        "Color": {
-            "Red": 0,
-            "Green": 0,
-            "Blue": 0,
-            "AlphaR": 255,
-            "AlphaG": 255,
-            "AlphaB": 255
+        "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "alphaR": 255,
+            "alphaG": 255,
+            "alphaB": 255
+        }
+    },
+    "second": {
+        "size": {
+            "width": 3,
+            "longLength": 120,
+            "shortLength": 10
+        },
+        "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "alphaR": 255,
+            "alphaG": 255,
+            "alphaB": 255
         }
     }
 }

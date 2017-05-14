@@ -10,7 +10,7 @@ import std.conv:
     to;
 
 import std.stdio:
-    readln, writefln;
+    readln, writeln;
 
 import desktopdial.app:
     App;
@@ -41,7 +41,7 @@ void main(string[] args)
         }
         else
         {
-            error.writefln(e.file, e.line, e.msg);
+            e.error.writeln;
             readln;
         }
     }
@@ -57,4 +57,10 @@ void configureSDL() nothrow @nogc
     sdl.SDL_SetHint(sdl.SDL_HINT_NO_SIGNAL_HANDLERS, "0");
 }
 
-immutable error = "An error occurred.\n%s(%d):\n\t%s\nPress any key..."; ///< エラーメッセージのフォーマット。
+/// @brief  例外発生時のエラーメッセージ。
+/// @param  e 発生した例外。
+/// @return 生成したメッセージ。
+string error(in Exception e) nothrow pure @safe
+{
+    return "An error occurred.\n" ~ e.file ~ "(" ~ e.line.to!string ~ "):\n\t" ~ e.msg ~ "\nPress any key...";
+}

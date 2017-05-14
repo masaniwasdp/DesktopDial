@@ -33,25 +33,17 @@ class App
 {
 public:
     /// @brief  コンストラクタ。
-    /// @throws FileException         定義ファイルの読み込みに失敗した場合。
-    /// @throws InvalidParamException 定義ファイルが無効な場合。
-    /// @throws Exception             実行ファイルのパスを取得できなかった場合。
-    /// @throws CreationException     オブジェクトの生成に失敗した場合。
-    this()
-    {
-        this(thisExePath.dirName ~ dirSeparator ~ dialDefinitionPath);
-    }
-
-    /// @brief  コンストラクタ。
     /// @param  path 定義ファイルのパス。
     /// @throws FileException           定義ファイルの読み込みに失敗した場合。
     /// @throws InvalidParamException   定義ファイルが無効な場合。
+    /// @throws Exception               実行ファイルのパスを取得できなかった場合。
     /// @throws CreationException       オブジェクトの生成に失敗した場合。
-    this(in string path)
+    this(in string path = null)
     {
         continuation = true;
 
-        immutable definition = path.loadDialDefinition;
+        immutable file = path ? path : thisExePath.dirName ~ dirSeparator ~ Path.dialDefinition;
+        immutable definition = file.loadDialDefinition;
 
         dial = new Dial(definition);
     }
@@ -109,9 +101,9 @@ private:
         immutable current = sdl.SDL_GetTicks();
         immutable elapsed = current - last;
 
-        if(elapsed < interval)
+        if(elapsed < Time.interval)
         {
-            sdl.SDL_Delay(interval - elapsed);
+            sdl.SDL_Delay(Time.interval - elapsed);
         }
 
         last = current;
@@ -124,6 +116,14 @@ private:
 
 private:
 
-static immutable interval = 100; ///< メインループのインターバル。
+/// @brief 時間に関する定数。
+enum Time
+{
+    interval = 100 ///< メインループのインターバル。
+}
 
-static immutable dialDefinitionPath = "resource/DialDefinition.json"; ///< 定義ファイルのパス。
+/// @brief パス。
+enum Path
+{
+    dialDefinition = "resource/DialDefinition.json" ///< 定義ファイル。
+}

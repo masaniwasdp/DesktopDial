@@ -52,20 +52,24 @@ DialDefinition loadDialDefinition(in string path) @safe
     }
     catch(JSONException e)
     {
-        throw new InvalidParamException(wrongFormatError);
+        throw new InvalidParamException(Error.wrongFormat);
     }
     catch(UTFException e)
     {
-        throw new InvalidParamException(wrongEncodingError);
+        throw new InvalidParamException(Error.wrongEncoding);
     }
     catch(ConvOverflowException e)
     {
-        throw new InvalidParamException(valueOverflowError);
+        throw new InvalidParamException(Error.valueOverflow);
     }
 }
 
 private:
 
-immutable wrongEncodingError = "Definition file encoding should be Unicode."; ///< 無効なファイルエンコーディングであるメッセージ。
-immutable wrongFormatError = "JSON string was wrong format.";                 ///< json文字列の形式が誤っているメッセージ。
-immutable valueOverflowError = "Definition value was too larger or smaller."; ///< 定義の値がオーバーフローしたメッセージ。
+/// @brief エラーメッセージ。
+enum Error
+{
+    wrongEncoding = "Definition file encoding should be Unicode.", ///< 無効なファイルエンコーディングであるメッセージ。
+    wrongFormat = "JSON string was wrong format.",                 ///< json文字列の形式が誤っているメッセージ。
+    valueOverflow = "Definition value was too larger or smaller."  ///< 定義の値がオーバーフローしたメッセージ。
+}

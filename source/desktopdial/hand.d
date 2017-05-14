@@ -27,15 +27,6 @@ class Hand
 {
 public:
     /// @brief  コンストラクタ。
-    /// @param  definition 針の定義。
-    /// @throws InvalidParamException レンダラが無効だった場合。
-    /// @throws CreationException     オブジェクト生成に失敗した場合。
-    this(ref HandDefinition definition)
-    {
-        this(definition.Renderer, definition.Region, definition.Visual);
-    }
-
-    /// @brief  コンストラクタ。
     /// @param  renderer 使用するレンダラ。
     /// @param  region   時計盤の領域。
     /// @param  visual   針の見た目。
@@ -43,16 +34,16 @@ public:
     /// @throws CreationException     オブジェクト生成に失敗した場合。
     this(sdl.SDL_Renderer *renderer, in sdl.SDL_Rect region, in HandVisual visual)
     {
-        this.renderer = renderer.enforceEx!InvalidParamException(invalidRendererError);
+        this.renderer = renderer.enforceEx!InvalidParamException(Error.invalidRenderer);
         this.region = region;
 
         auto surface = createSurface(region.w, region.h);
         scope(exit) surface.free;
 
-        immutable shape = calcShape(region, visual.Size);
+        immutable shape = calcShape(region, visual.size);
 
-        surface.fillAlpha(visual.Color.AlphaR, visual.Color.AlphaG, visual.Color.AlphaB);
-        surface.fillRect(shape, visual.Color.Red, visual.Color.Green, visual.Color.Blue);
+        surface.fillAlpha(visual.color.alphaR, visual.color.alphaG, visual.color.alphaB);
+        surface.fillRect(shape, visual.color.r, visual.color.g, visual.color.b);
 
         texture = renderer.convertToTexture(surface);
     }
@@ -77,39 +68,31 @@ private:
     sdl.SDL_Texture *texture;    ///< 針のテクスチャ。
 }
 
-/// @brief 針を定義する構造体。
-struct HandDefinition
-{
-    sdl.SDL_Renderer *Renderer; ///< 使用するレンダラ。
-    sdl.SDL_Rect Region;        ///< 時計盤の領域。
-    HandVisual Visual;          ///< 針の見た目。
-}
-
 /// @brief 針の見た目を表す構造体。
 struct HandVisual
 {
-    HandSize Size;   ///< サイズ。
-    HandColor Color; ///< 色。
+    HandSize size;   ///< サイズ。
+    HandColor color; ///< 色。
 }
 
 /// @brief 針のサイズを表す構造体。
 struct HandSize
 {
-    ushort Width;       ///< 幅。
-    ushort LongLength;  ///< 長い方の中心からの長さ。
-    ushort ShortLength; ///< 短い方の中心からの長さ。
+    ushort width;       ///< 幅。
+    ushort longLength;  ///< 長い方の中心からの長さ。
+    ushort shortLength; ///< 短い方の中心からの長さ。
 }
 
 /// @brief 針の色を表す構造体。
 struct HandColor
 {
-    ubyte Red;   ///< 赤の明度。
-    ubyte Green; ///< 緑の明度。
-    ubyte Blue;  ///< 青の明度。
+    ubyte r; ///< 赤の明度。
+    ubyte g; ///< 緑の明度。
+    ubyte b; ///< 青の明度。
 
-    ubyte AlphaR; ///< 透過色の赤の明度。
-    ubyte AlphaG; ///< 透過色の緑の明度。
-    ubyte AlphaB; ///< 透過色の青の明度。
+    ubyte alphaR; ///< 透過色の赤の明度。
+    ubyte alphaG; ///< 透過色の緑の明度。
+    ubyte alphaB; ///< 透過色の青の明度。
 }
 
 private:
@@ -122,13 +105,17 @@ sdl.SDL_Rect calcShape(in sdl.SDL_Rect region, in HandSize size) nothrow pure @s
 {
     immutable sdl.SDL_Rect shape =
     {
-        x: (region.w / 2) - (size.Width / 2),
-        y: (region.h / 2) - size.LongLength,
-        w: size.Width,
-        h: size.LongLength + size.ShortLength
+        x: (region.w / 2) - (size.width / 2),
+        y: (region.h / 2) - size.longLength,
+        w: size.width,
+        h: size.longLength + size.shortLength
     };
 
     return shape;
 }
 
-immutable invalidRendererError = "Renderer object was invalid."; ///< レンダラが無効だったメッセージ。
+/// @brief エラーメッセージ。
+enum Error
+{
+    invalidRenderer = "Renderer object was invalid." ///< レンダラが無効だったメッセージ。
+}

@@ -14,6 +14,9 @@ import std.datetime:
 import desktopdial.exception:
     InvalidParamException;
 
+import desktopdial.face:
+    Face, FaceVisual;
+
 import desktopdial.hand:
     Hand, HandVisual;
 
@@ -40,19 +43,21 @@ public:
     {
         validateDefinition(definition);
 
-        background = definition.Background;
-        window = createWindow(definition.Name, definition.Width, definition.Height);
+        background = definition.background;
+        window = createWindow(definition.name, definition.width, definition.height);
         renderer = window.createRenderer;
 
         immutable sdl.SDL_Rect region =
         {
-            w: definition.Width,
-            h: definition.Height
+            w: definition.width,
+            h: definition.height
         };
 
-        hour = new Hand(renderer, region, definition.Hour);
-        minute = new Hand(renderer, region, definition.Minute);
-        second = new Hand(renderer, region, definition.Second);
+        face = new Face(renderer, region, definition.face);
+
+        hour = new Hand(renderer, region, definition.hour);
+        minute = new Hand(renderer, region, definition.minute);
+        second = new Hand(renderer, region, definition.second);
     }
 
     /// @デストラクタ。
@@ -67,6 +72,7 @@ public:
     void draw(in SysTime time) nothrow
     {
         clear;
+        face.draw;
         drawHands(time);
         sdl.SDL_RenderPresent(renderer);
     }
@@ -77,7 +83,7 @@ private:
     /// @brief レンダラを消去する。
     void clear() nothrow @nogc
     {
-        sdl.SDL_SetRenderDrawColor(renderer, background.Red, background.Green, background.Blue, sdl.SDL_ALPHA_OPAQUE);
+        sdl.SDL_SetRenderDrawColor(renderer, background.r, background.g, background.b, sdl.SDL_ALPHA_OPAQUE);
         sdl.SDL_RenderClear(renderer);
     }
 
@@ -87,13 +93,15 @@ private:
     {
         immutable angle = time.calcHandsAngle;
 
-        hour.draw(angle.Hour);
-        minute.draw(angle.Minute);
-        second.draw(angle.Second);
+        hour.draw(angle.hour);
+        minute.draw(angle.minute);
+        second.draw(angle.second);
     }
 
     sdl.SDL_Window *window;      ///< ウィンドウ。
     sdl.SDL_Renderer *renderer;  ///< レンダラ。
+
+    Face face; ///< 文字盤。
 
     Hand hour;   ///< 時針。
     Hand minute; ///< 分針。
@@ -103,24 +111,26 @@ private:
 /// @brief 時計盤を定義する構造体。
 struct DialDefinition
 {
-    string Name; ///< ウィンドウの名前。
+    string name; ///< ウィンドウの名前。
 
-    ushort Width;  ///< ウィンドウの幅。
-    ushort Height; ///< ウィンドウの高さ。
+    ushort width;  ///< ウィンドウの幅。
+    ushort height; ///< ウィンドウの高さ。
 
-    BackgroundColor Background; ///< 背景色。
+    BackgroundColor background; ///< 背景色。
 
-    HandVisual Hour;   ///< 時針。
-    HandVisual Minute; ///< 分針。
-    HandVisual Second; ///< 秒針。
+    FaceVisual face; ///< 文字盤。
+
+    HandVisual hour;   ///< 時針。
+    HandVisual minute; ///< 分針。
+    HandVisual second; ///< 秒針。
 }
 
 /// @brief 背景色を表す構造体。
 struct BackgroundColor
 {
-    ubyte Red;   ///< 赤の明度。
-    ubyte Green; ///< 青の明度。
-    ubyte Blue;  ///< 緑の明度。
+    ubyte r; ///< 赤の明度。
+    ubyte g; ///< 青の明度。
+    ubyte b; ///< 緑の明度。
 }
 
 private:
@@ -130,13 +140,21 @@ private:
 /// @throws InvalidParamException 定義が無効だった場合。
 void validateDefinition(in ref DialDefinition definition) pure @safe
 {
-    if(definition.Width < minWindowSize || definition.Height < minWindowSize) throw new InvalidParamException(tooSmallWindowError);
+    if(definition.width < WindowSize.min || definition.height < WindowSize.min) throw new InvalidParamException(WindowError.tooSmall);
 
-    if(definition.Width > maxWindowSize || definition.Height > maxWindowSize) throw new InvalidParamException(tooLargeWindowError);
+    if(definition.width > WindowSize.max || definition.height > WindowSize.max) throw new InvalidParamException(WindowError.tooLarge);
 }
 
-immutable tooSmallWindowError = "Window size was too small."; ///< ウィンドウが小さすぎたメッセージ。
-immutable tooLargeWindowError = "Window size was too large."; ///< ウィンドウが大きすぎたメッセージ。
+/// @brief ウィンドウに関するエラーメッセージ。
+enum WindowError
+{
+    tooSmall = "Window size was too small.", ///< ウィンドウが小さすぎたメッセージ。
+    tooLarge = "Window size was too large."  ///< ウィンドウが大きすぎたメッセージ。
+}
 
-immutable minWindowSize = 1;    ///< 最低のウィンドウサイズ。
-immutable maxWindowSize = 1024; ///< 最大のウィンドウサイズ。
+/// @brief ウィンドウサイズ。
+enum WindowSize
+{
+    min = 1,   ///< 最小。
+    max = 1024 ///< 最大。
+}

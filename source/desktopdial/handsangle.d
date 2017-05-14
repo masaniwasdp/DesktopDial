@@ -16,9 +16,9 @@ public:
 /// @brief 時計盤の針の角度を表す構造体。
 struct HandsAngle
 {
-    double Hour;   ///< 時針の角度。
-    double Minute; ///< 分針の角度。
-    double Second; ///< 秒針の角度。
+    double hour;   ///< 時針の角度。
+    double minute; ///< 分針の角度。
+    double second; ///< 秒針の角度。
 }
 
 /// @brief  時計盤の針の角度を計算する。
@@ -32,9 +32,9 @@ HandsAngle calcHandsAngle(in SysTime time) nothrow @safe
 
     immutable HandsAngle angle =
     {
-        Hour: hour * hourAngleUnit,
-        Minute: minute * minuteAngleUnit,
-        Second: second * secondAngleUnit
+        hour: hour * AngleUnit.hour,
+        minute: minute * AngleUnit.minute,
+        second: second * AngleUnit.second
     };
 
     return angle;
@@ -51,6 +51,10 @@ double upUnit(in double value, in double units) nothrow pure @safe @nogc
     return value / units;
 }
 
-immutable hourAngleUnit = 360 / 12.0;   ///< 時針1時の角度。
-immutable minuteAngleUnit = 360 / 60.0; ///< 分針1分の角度。
-immutable secondAngleUnit = 360 / 60.0; ///< 秒針1秒の角度。
+/// @brief 時計の針1単位の角度。
+enum AngleUnit
+{
+    hour = 30,  ///< 時針1時の角度。
+    minute = 6, ///< 分針1分の角度。
+    second = 6  ///< 秒針1秒の角度。
+}

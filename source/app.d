@@ -41,8 +41,15 @@ void main(string[] args)
         }
         else
         {
-            e.error.writeln;
-            readln;
+            version(Windows)
+            {
+                throw e;
+            }
+            else
+            {
+                e.error.writeln;
+                readln;
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 /**
  * アプリケーションモジュール。
  *
- * Date: 2017/7/10
+ * Date: 2017/7/11
  * Authors: masaniwa
  */
 
@@ -89,7 +89,7 @@ private:
      * Params:
      *     event = イベント。
      */
-    void handleEvent(in ref sdl.SDL_Event event) nothrow pure @safe @nogc
+    void handleEvent(in sdl.SDL_Event event) nothrow pure @safe @nogc
     {
         if (event.type == sdl.SDL_QUIT)
         {

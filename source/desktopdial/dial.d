@@ -1,7 +1,7 @@
 /**
  * 時計盤の描画を扱うモジュール。
  *
- * Date: 2017/7/10
+ * Date: 2017/7/11
  * Authors: masaniwa
  */
 
@@ -37,7 +37,7 @@ public:
      *     InvalidParamException = 定義が無効だった場合。
      *     desktopdial.exception.CreationException = オブジェクトの生成に失敗した場合。
      */
-    this(in ref DialDefinition definition)
+    this(in DialDefinition definition)
     {
         validateDefinition(definition);
 
@@ -154,7 +154,7 @@ private:
  * Throws:
  *     InvalidParamException = 定義が無効だった場合。
  */
-void validateDefinition(in ref DialDefinition definition) pure @safe
+void validateDefinition(in DialDefinition definition) pure @safe
 {
     if (definition.width < WindowSize.min || definition.height < WindowSize.min)
     {

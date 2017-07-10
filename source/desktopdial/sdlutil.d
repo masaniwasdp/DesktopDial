@@ -1,7 +1,7 @@
 /**
  * SDLユーティリティモジュール。
  *
- * Date: 2017/7/10
+ * Date: 2017/7/11
  * Authors: masaniwa
  */
 
@@ -49,10 +49,7 @@ sdl.SDL_Window* createWindow(in string name, in ushort width, in ushort height)
  */
 void destroy(sdl.SDL_Window* window) nothrow @nogc
 {
-    if (window)
-    {
-        sdl.SDL_DestroyWindow(window);
-    }
+    sdl.SDL_DestroyWindow(window);
 }
 
 /**
@@ -118,10 +115,7 @@ sdl.SDL_Surface* createSurface(in uint width, in uint height)
  */
 void free(sdl.SDL_Surface* surface) nothrow @nogc
 {
-    if (surface)
-    {
-        sdl.SDL_FreeSurface(surface);
-    }
+    sdl.SDL_FreeSurface(surface);
 }
 
 /**
@@ -187,8 +181,5 @@ sdl.SDL_Texture* convertToTexture(sdl.SDL_Renderer* renderer, sdl.SDL_Surface* s
  */
 void destroy(sdl.SDL_Texture* texture) nothrow @nogc
 {
-    if (texture)
-    {
-        sdl.SDL_DestroyTexture(texture);
-    }
+    sdl.SDL_DestroyTexture(texture);
 }

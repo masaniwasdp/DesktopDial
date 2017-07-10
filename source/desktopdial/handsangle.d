@@ -43,6 +43,15 @@ HandsAngle calcHandsAngle(in SysTime time) nothrow @safe
     return angle;
 }
 
+unittest
+{
+    import std.datetime : DateTime;
+
+    assert(SysTime(DateTime(2017, 7, 10)).calcHandsAngle == HandsAngle(0, 0, 0));
+    assert(SysTime(DateTime(2017, 7, 10, 15, 30, 0)).calcHandsAngle == HandsAngle(465, 180, 0));
+    assert(SysTime(DateTime(2017, 7, 10, 21, 15, 45)).calcHandsAngle == HandsAngle(637.875, 94.5, 270));
+}
+
 private:
 
 /**

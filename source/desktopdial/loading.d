@@ -1,44 +1,37 @@
-///
-/// @file      loading.d
-/// @brief     リソースを読み込むモジュール。
-/// @author    masaniwa
-/// @date      2017/2/28
-/// @copyright (c) 2017 masaniwa
-///
+/**
+ * リソースを読み込むモジュール。
+ *
+ * Date: 2017/7/10
+ * Authors: masaniwa
+ */
 
 module desktopdial.loading;
 
-import std.conv:
-    ConvOverflowException;
+import std.conv : ConvOverflowException;
+import std.file : readText;
+import std.utf : UTFException;
 
-import std.file:
-    readText;
+import jsonserialized.deserialization : deserializeFromJSONValue;
+import stdx.data.json : toJSONValue;
+import stdx.data.json.foundation : JSONException;
 
-import std.utf:
-    UTFException;
-
-import jsonserialized.deserialization:
-    deserializeFromJSONValue;
-
-import stdx.data.json:
-    toJSONValue;
-
-import stdx.data.json.foundation:
-    JSONException;
-
-import desktopdial.dial:
-    DialDefinition;
-
-import desktopdial.exception:
-    InvalidParamException;
+import desktopdial.dial : DialDefinition;
+import desktopdial.exception : InvalidParamException;
 
 public:
 
-/// @brief  jsonファイルから時計盤の定義を読み込む。
-/// @param  path jsonファイルのパス。
-/// @return 読み込んだ時計盤の定義。
-/// @throws FileException         jsonファイルの読み込みに失敗した場合。
-/// @throws InvalidParamException jsonファイルの形式が誤っている場合。
+/**
+ * jsonファイルから時計盤の定義を読み込む。
+ *
+ * Params:
+ *     path = jsonファイルのパス。
+ *
+ * Returns: 読み込んだ時計盤の定義。
+ *
+ * Throws:
+ *     InvalidParamException = jsonファイルの形式が誤っている場合。
+ *     std.file.FileException = jsonファイルの読み込みに失敗した場合。
+ */
 DialDefinition loadDialDefinition(in string path) @safe
 {
     try
@@ -50,15 +43,15 @@ DialDefinition loadDialDefinition(in string path) @safe
 
         return definition;
     }
-    catch(JSONException e)
+    catch (JSONException e)
     {
         throw new InvalidParamException(Error.wrongFormat);
     }
-    catch(UTFException e)
+    catch (UTFException e)
     {
         throw new InvalidParamException(Error.wrongEncoding);
     }
-    catch(ConvOverflowException e)
+    catch (ConvOverflowException e)
     {
         throw new InvalidParamException(Error.valueOverflow);
     }
@@ -66,10 +59,10 @@ DialDefinition loadDialDefinition(in string path) @safe
 
 private:
 
-/// @brief エラーメッセージ。
+/** エラーメッセージ。 */
 enum Error
 {
-    wrongEncoding = "Definition file encoding should be Unicode.", ///< 無効なファイルエンコーディングであるメッセージ。
-    wrongFormat = "JSON string was wrong format.",                 ///< json文字列の形式が誤っているメッセージ。
-    valueOverflow = "Definition value was too larger or smaller."  ///< 定義の値がオーバーフローしたメッセージ。
+    wrongEncoding = "Definition file encoding should be Unicode.", /// 無効なファイルエンコーディングであるメッセージ。
+    wrongFormat = "JSON string was wrong format.",                 /// json文字列の形式が誤っているメッセージ。
+    valueOverflow = "Definition value was too larger or smaller."  /// 定義の値がオーバーフローしたメッセージ。
 }

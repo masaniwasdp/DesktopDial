@@ -1,44 +1,42 @@
-///
-/// @file      dial.d
-/// @brief     時計盤の描画を扱うモジュール。
-/// @author    masaniwa
-/// @date      2017/2/26
-/// @copyright (c) 2017 masaniwa
-///
+/**
+ * 時計盤の描画を扱うモジュール。
+ *
+ * Date: 2017/7/10
+ * Authors: masaniwa
+ */
 
 module desktopdial.dial;
 
-import std.datetime:
-    SysTime;
+import std.datetime : SysTime;
 
-import desktopdial.exception:
-    InvalidParamException;
-
-import desktopdial.face:
-    Face, FaceVisual;
-
-import desktopdial.hand:
-    Hand, HandVisual;
-
-import desktopdial.handsangle:
-    calcHandsAngle;
-
-import desktopdial.sdlutil:
-    createRenderer, createWindow, destroy;
+import desktopdial.exception : InvalidParamException;
+import desktopdial.face : Face, FaceVisual;
+import desktopdial.hand : Hand, HandVisual;
+import desktopdial.handsangle : calcHandsAngle;
+import desktopdial.sdlutil : createRenderer, createWindow, destroy;
 
 import sdl = derelict.sdl2.sdl;
 
 public:
 
-/// @brief   時計盤の描画を扱うクラス。
-/// @details 利用前にSDLを初期化、利用後にSDLを終了する必要がある。
+/**
+ * 時計盤の描画を扱うクラス。
+ *
+ * 利用前にSDLを初期化、利用後にSDLを終了する必要がある。
+ */
 class Dial
 {
 public:
-    /// @brief  コンストラクタ。
-    /// @param  definition 時計盤の定義。
-    /// @throws InvalidParamException   定義が無効だった場合。
-    /// @throws CreationException       オブジェクトの生成に失敗した場合。
+    /**
+     * コンストラクタ。
+     *
+     * Params:
+     *     definition = 時計盤の定義。
+     *
+     * Throws:
+     *     InvalidParamException = 定義が無効だった場合。
+     *     desktopdial.exception.CreationException = オブジェクトの生成に失敗した場合。
+     */
     this(in ref DialDefinition definition)
     {
         validateDefinition(definition);
@@ -47,11 +45,7 @@ public:
         window = createWindow(definition.name, definition.width, definition.height);
         renderer = window.createRenderer;
 
-        immutable sdl.SDL_Rect region =
-        {
-            w: definition.width,
-            h: definition.height
-        };
+        immutable sdl.SDL_Rect region = { w: definition.width, h: definition.height };
 
         face = new Face(renderer, region, definition.face);
 
@@ -60,35 +54,43 @@ public:
         second = new Hand(renderer, region, definition.second);
     }
 
-    /// @デストラクタ。
+    /** デストラクタ。 */
     ~this() nothrow @nogc
     {
         window.destroy;
         renderer.destroy;
     }
 
-    /// @brief 時計盤を描画する。
-    /// @param time 時刻。
+    /**
+     * 時計盤を描画する。
+     *
+     * Params:
+     *     time = 時刻。
+     */
     void draw(in SysTime time) nothrow
     {
         clear;
+
         face.draw;
         drawHands(time);
+
         sdl.SDL_RenderPresent(renderer);
     }
 
 private:
-    immutable BackgroundColor background; ///< 背景色。
-
-    /// @brief レンダラを消去する。
+    /** レンダラを消去する。 */
     void clear() nothrow @nogc
     {
         sdl.SDL_SetRenderDrawColor(renderer, background.r, background.g, background.b, sdl.SDL_ALPHA_OPAQUE);
         sdl.SDL_RenderClear(renderer);
     }
 
-    /// @brief 針を描画する。
-    /// @param time 時刻。
+    /**
+     * 針を描画する。
+     *
+     * Params:
+     *     time = 時刻。
+     */
     void drawHands(in SysTime time) nothrow
     {
         immutable angle = time.calcHandsAngle;
@@ -98,63 +100,83 @@ private:
         second.draw(angle.second);
     }
 
-    sdl.SDL_Window *window;      ///< ウィンドウ。
-    sdl.SDL_Renderer *renderer;  ///< レンダラ。
+    immutable BackgroundColor background; /// 背景色。
 
-    Face face; ///< 文字盤。
+    sdl.SDL_Window* window;     /// ウィンドウ。
+    sdl.SDL_Renderer* renderer; /// レンダラ。
 
-    Hand hour;   ///< 時針。
-    Hand minute; ///< 分針。
-    Hand second; ///< 秒針。
+    Face face; /// 文字盤。
+
+    Hand hour;   /// 時針。
+    Hand minute; /// 分針。
+    Hand second; /// 秒針。
 }
 
-/// @brief 時計盤を定義する構造体。
+/** 時計盤を定義する構造体。 */
 struct DialDefinition
 {
-    string name; ///< ウィンドウの名前。
+    /** Postblits。 */
+    this(this)
+    {
+        name = name.dup;
+    }
 
-    ushort width;  ///< ウィンドウの幅。
-    ushort height; ///< ウィンドウの高さ。
+    string name; /// ウィンドウの名前。
 
-    BackgroundColor background; ///< 背景色。
+    ushort width;  /// ウィンドウの幅。
+    ushort height; /// ウィンドウの高さ。
 
-    FaceVisual face; ///< 文字盤。
+    BackgroundColor background; /// 背景色。
 
-    HandVisual hour;   ///< 時針。
-    HandVisual minute; ///< 分針。
-    HandVisual second; ///< 秒針。
+    FaceVisual face; /// 文字盤。
+
+    HandVisual hour;   /// 時針。
+    HandVisual minute; /// 分針。
+    HandVisual second; /// 秒針。
 }
 
-/// @brief 背景色を表す構造体。
+/** 背景色を表す構造体。 */
 struct BackgroundColor
 {
-    ubyte r; ///< 赤の明度。
-    ubyte g; ///< 青の明度。
-    ubyte b; ///< 緑の明度。
+    ubyte r; /// 赤の明度。
+    ubyte g; /// 青の明度。
+    ubyte b; /// 緑の明度。
 }
 
 private:
 
-/// @brief  時計盤の定義が有効かどうか検証する。
-/// @param  definition 調べる定義。
-/// @throws InvalidParamException 定義が無効だった場合。
+/**
+ * 時計盤の定義が有効かどうか検証する。
+ *
+ * Params:
+ *     definition = 調べる定義。
+ *
+ * Throws:
+ *     InvalidParamException = 定義が無効だった場合。
+ */
 void validateDefinition(in ref DialDefinition definition) pure @safe
 {
-    if(definition.width < WindowSize.min || definition.height < WindowSize.min) throw new InvalidParamException(WindowError.tooSmall);
+    if (definition.width < WindowSize.min || definition.height < WindowSize.min)
+    {
+        throw new InvalidParamException(WindowError.tooSmall);
+    }
 
-    if(definition.width > WindowSize.max || definition.height > WindowSize.max) throw new InvalidParamException(WindowError.tooLarge);
+    if (definition.width > WindowSize.max || definition.height > WindowSize.max)
+    {
+        throw new InvalidParamException(WindowError.tooLarge);
+    }
 }
 
-/// @brief ウィンドウに関するエラーメッセージ。
+/** ウィンドウに関するエラーメッセージ。 */
 enum WindowError
 {
-    tooSmall = "Window size was too small.", ///< ウィンドウが小さすぎたメッセージ。
-    tooLarge = "Window size was too large."  ///< ウィンドウが大きすぎたメッセージ。
+    tooSmall = "Window size was too small.", /// ウィンドウが小さすぎたメッセージ。
+    tooLarge = "Window size was too large."  /// ウィンドウが大きすぎたメッセージ。
 }
 
-/// @brief ウィンドウサイズ。
+/** ウィンドウサイズ。 */
 enum WindowSize
 {
-    min = 1,   ///< 最小。
-    max = 1024 ///< 最大。
+    min = 1,   /// 最小。
+    max = 1024 /// 最大。
 }

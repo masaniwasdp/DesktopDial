@@ -41,9 +41,8 @@ public:
     this(in string path = null)
     {
         immutable file = path ? path : thisExePath.dirName ~ dirSeparator ~ Path.dialDefinition;
-        immutable definition = file.loadDialDefinition;
 
-        dial = new Dial(definition);
+        dial = new Dial(file.loadDialDefinition);
     }
 
     /** アプリケーションを実行する。 */

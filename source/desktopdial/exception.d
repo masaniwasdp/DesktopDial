@@ -1,44 +1,34 @@
 /**
  * 例外を扱うモジュール。
  *
- * Date: 2017/7/10
+ * Date: 2017/7/18
  * Authors: masaniwa
  */
 
 module desktopdial.exception;
 
-public:
+import std.exception : basicExceptionCtors;
 
-/** 無効なパラメタに関する例外クラス。 */
-class InvalidParamException : Exception
+/** 時計盤の定義に関する例外クラス。 */
+class DefinitionException : Exception
 {
-    /**
-     * コンストラクタ。
-     *
-     * Params:
-     *     message = エラーメッセージ。
-     *     file = 例外が発生したファイル名。
-     *     line = 例外が発生した行。
-     */
-    this(in string message, in string file = __FILE__, in ulong line = __LINE__) nothrow pure @safe @nogc
-    {
-        super(message, file, cast(uint) line);
-    }
+    mixin basicExceptionCtors;
 }
 
 /** オブジェクト生成に関する例外クラス。 */
 class CreationException : Exception
 {
-    /**
-     * コンストラクタ。
-     *
-     * Params:
-     *     message = エラーメッセージ。
-     *     file = 例外が発生したファイル名。
-     *     line = 例外が発生した行。
-     */
-    this(in string message, in string file = __FILE__, in ulong line = __LINE__) nothrow pure @safe @nogc
-    {
-        super(message, file, cast(uint) line);
-    }
+    mixin basicExceptionCtors;
+}
+
+/** 描画に関する例外クラス。 */
+class DrawingException : Exception
+{
+    mixin basicExceptionCtors;
+}
+
+/** 設定に関する例外クラス。 */
+class SetupException : Exception
+{
+    mixin basicExceptionCtors;
 }

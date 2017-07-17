@@ -1,21 +1,18 @@
 /**
  * 時計盤の文字盤の描画を扱うモジュール。
  *
- * Date: 2017/7/10
+ * Date: 2017/7/18
  * Authors: masaniwa
  */
 
 module desktopdial.face;
 
-import std.exception : enforceEx;
 import std.range : iota;
 
-import desktopdial.exception : InvalidParamException;
+import desktopdial.exception : CreationException, DrawingException;
 import desktopdial.sdlutil : convertToTexture, createSurface, fillAlpha, fillRect, free;
 
 import sdl = derelict.sdl2.sdl;
-
-public:
 
 /**
  * 時計盤の文字盤の描画を扱うクラス。
@@ -24,7 +21,6 @@ public:
  */
 class Face
 {
-public:
     /**
      * コンストラクタ。
      *
@@ -34,20 +30,30 @@ public:
      *     visual = 文字盤の見た目。
      *
      * Throws:
-     *     InvalidParamException = レンダラが無効だった場合。
-     *     desktopdial.exception.CreationException = オブジェクト生成に失敗した場合。
+     *     CreationException オブジェクト生成に失敗した場合。
      */
     this(sdl.SDL_Renderer* renderer, in sdl.SDL_Rect region, in FaceVisual visual)
+    in
     {
-        this.renderer = renderer.enforceEx!InvalidParamException(Error.invalidRenderer);
+        assert(renderer);
+    }
+    body
+    {
+        this.renderer = renderer;
         this.region = region;
 
-        large = renderer.drawChar(region, visual.large);
-        small = renderer.drawChar(region, visual.small);
+        try
+        {
+            large = renderer.drawChar(region, visual.large);
+            small = renderer.drawChar(region, visual.small);
+        }
+        catch (DrawingException e)
+        {
+            throw new CreationException("Failed to create the face.", e);
+        }
     }
 
-    /** デストラクタ。 */
-    ~this() nothrow @nogc
+    ~this()
     {
         large.destroy;
         small.destroy;
@@ -60,12 +66,18 @@ public:
         renderer.overlaid(region, large, AngleUnit.large);
     }
 
-private:
-    immutable sdl.SDL_Rect region; /// 時計盤の領域。
+    private immutable sdl.SDL_Rect region; /// 時計盤の領域。
 
-    sdl.SDL_Renderer* renderer; /// 使用するレンダラ。
-    sdl.SDL_Texture* large;     /// 大きな文字のテクスチャ。
-    sdl.SDL_Texture* small;     /// 小さな文字のテクスチャ。
+    private sdl.SDL_Renderer* renderer; /// 使用するレンダラ。
+    private sdl.SDL_Texture* large;     /// 大きな文字のテクスチャ。
+    private sdl.SDL_Texture* small;     /// 小さな文字のテクスチャ。
+
+    invariant()
+    {
+        assert(renderer);
+        assert(large);
+        assert(small);
+    }
 }
 
 /** 文字盤の見た目を表す構造体。 */
@@ -102,30 +114,6 @@ struct CharColor
     ubyte alphaB; /// 透過色の青の明度。
 }
 
-private:
-
-/**
- * 文字の形を計算する。
- *
- * Params:
- *     region = 時計盤の領域。
- *     size = 文字のサイズ。
- *
- * Returns: 計算した針の形。
- */
-sdl.SDL_Rect calcShape(in sdl.SDL_Rect region, in CharSize size) nothrow pure @safe @nogc
-{
-    immutable sdl.SDL_Rect shape =
-    {
-        x: (region.w / 2) - (size.width / 2),
-        y: (region.h / 2) - size.start - size.length,
-        w: size.width,
-        h: size.length
-    };
-
-    return shape;
-}
-
 /**
  * 0時の部分に文字を描く。
  *
@@ -139,19 +127,38 @@ sdl.SDL_Rect calcShape(in sdl.SDL_Rect region, in CharSize size) nothrow pure @s
  * Returns: 文字を描いたテクスチャ。
  *
  * Throws:
- *     desktopdial.exception.CreationException = オブジェクト生成に失敗した場合。
+ *     DrawingException 描画に失敗した場合。
  */
-sdl.SDL_Texture* drawChar(sdl.SDL_Renderer* renderer, in sdl.SDL_Rect region, in CharVisual visual)
+private sdl.SDL_Texture* drawChar(sdl.SDL_Renderer* renderer, in sdl.SDL_Rect region, in CharVisual visual)
+in
 {
-    auto surface = createSurface(region.w, region.h);
-    scope(exit) surface.free;
+    assert(renderer);
+}
+body
+{
+    try
+    {
+        auto surface = createSurface(region.w, region.h);
 
-    immutable shape = calcShape(region, visual.size);
+        scope (exit) surface.free;
 
-    surface.fillAlpha(visual.color.alphaR, visual.color.alphaG, visual.color.alphaB);
-    surface.fillRect(shape, visual.color.r, visual.color.g, visual.color.b);
+        immutable sdl.SDL_Rect shape =
+        {
+            x: region.w / 2 - visual.size.width / 2,
+            y: region.h / 2 - visual.size.start - visual.size.length,
+            w: visual.size.width,
+            h: visual.size.length
+        };
 
-    return renderer.convertToTexture(surface);
+        surface.fillAlpha(visual.color.alphaR, visual.color.alphaG, visual.color.alphaB);
+        surface.fillRect(shape, visual.color.r, visual.color.g, visual.color.b);
+
+        return renderer.convertToTexture(surface);
+    }
+    catch (CreationException e)
+    {
+        throw new DrawingException("Failed to draw the character.", e);
+    }
 }
 
 /**
@@ -163,8 +170,14 @@ sdl.SDL_Texture* drawChar(sdl.SDL_Renderer* renderer, in sdl.SDL_Rect region, in
  *     texture = レンダリングするテクスチャ。
  *     step = 1単位の回転角。
  */
-void overlaid(
-        sdl.SDL_Renderer* renderer, in sdl.SDL_Rect region, sdl.SDL_Texture* texture, in ushort unit) nothrow @nogc
+private void overlaid(sdl.SDL_Renderer* renderer, in sdl.SDL_Rect region, sdl.SDL_Texture* texture, in ushort unit)
+    nothrow @nogc
+in
+{
+    assert(renderer);
+    assert(texture);
+}
+body
 {
     foreach (angle; iota(0, 360, unit))
     {
@@ -173,14 +186,8 @@ void overlaid(
 }
 
 /** 文字盤の文字1単位の角度。 */
-enum AngleUnit
+private enum AngleUnit
 {
     large = 90, /// 大きな文字。
     small = 30  /// 小さな文字。
-}
-
-/** エラーメッセージ。 */
-enum Error
-{
-    invalidRenderer = "Renderer object was invalid." /// レンダラが無効だったメッセージ。
 }

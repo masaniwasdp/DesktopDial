@@ -1,20 +1,16 @@
 /**
  * 時計盤の針の描画を扱うモジュール。
  *
- * Date: 2017/7/10
+ * Date: 2017/7/18
  * Authors: masaniwa
  */
 
 module desktopdial.hand;
 
-import std.exception : enforceEx;
-
-import desktopdial.exception : InvalidParamException;
+import desktopdial.exception : CreationException, DrawingException;
 import desktopdial.sdlutil : convertToTexture, createSurface, fillAlpha, fillRect, free;
 
 import sdl = derelict.sdl2.sdl;
-
-public:
 
 /**
  * 時計盤の針の描画を扱うクラス。
@@ -23,7 +19,6 @@ public:
  */
 class Hand
 {
-public:
     /**
      * コンストラクタ。
      *
@@ -33,27 +28,29 @@ public:
      *     visual = 針の見た目。
      *
      * Throws:
-     *     InvalidParamException = レンダラが無効だった場合。
-     *     desktopdial.exception.CreationException = オブジェクト生成に失敗した場合。
+     *     CreationException オブジェクト生成に失敗した場合。
      */
     this(sdl.SDL_Renderer* renderer, in sdl.SDL_Rect region, in HandVisual visual)
+    in
     {
-        this.renderer = renderer.enforceEx!InvalidParamException(Error.invalidRenderer);
+        assert(renderer);
+    }
+    body
+    {
+        this.renderer = renderer;
         this.region = region;
 
-        auto surface = createSurface(region.w, region.h);
-        scope(exit) surface.free;
-
-        immutable shape = calcShape(region, visual.size);
-
-        surface.fillAlpha(visual.color.alphaR, visual.color.alphaG, visual.color.alphaB);
-        surface.fillRect(shape, visual.color.r, visual.color.g, visual.color.b);
-
-        texture = renderer.convertToTexture(surface);
+        try
+        {
+            texture = renderer.drawHand(region, visual);
+        }
+        catch (DrawingException e)
+        {
+            throw new CreationException("Failed to create the hand.", e);
+        }
     }
 
-    /** デストラクタ。 */
-    ~this() nothrow @nogc
+    ~this()
     {
         texture.destroy;
     }
@@ -69,11 +66,16 @@ public:
         sdl.SDL_RenderCopyEx(renderer, texture, null, &region, angle, null, sdl.SDL_FLIP_NONE);
     }
 
-private:
-    immutable sdl.SDL_Rect region; /// 時計盤の領域。
+    private immutable sdl.SDL_Rect region; /// 時計盤の領域。
 
-    sdl.SDL_Renderer* renderer;  /// 使用するレンダラ。
-    sdl.SDL_Texture* texture;    /// 針のテクスチャ。
+    private sdl.SDL_Renderer* renderer; /// 使用するレンダラ。
+    private sdl.SDL_Texture* texture;   /// 針のテクスチャ。
+
+    invariant()
+    {
+        assert(renderer);
+        assert(texture);
+    }
 }
 
 /** 針の見た目を表す構造体。 */
@@ -103,32 +105,49 @@ struct HandColor
     ubyte alphaB; /// 透過色の青の明度。
 }
 
-private:
-
 /**
- * 針の形を計算する。
+ * 針を描く。
+ *
+ * テクスチャ使用後はfree()で解放する必要がある。
  *
  * Params:
+ *     renderer = 使用するレンダラ。
  *     region = 時計盤の領域。
- *     size = 針のサイズ。
+ *     visual = 針の見た目。
  *
- * Returns: 計算した針の形。
+ * Returns: 針を描いたテクスチャ。
+ *
+ * Throws:
+ *     DrawingException 描画に失敗した場合。
  */
-sdl.SDL_Rect calcShape(in sdl.SDL_Rect region, in HandSize size) nothrow pure @safe @nogc
+private sdl.SDL_Texture* drawHand(sdl.SDL_Renderer* renderer, in sdl.SDL_Rect region, in HandVisual visual)
+in
 {
-    immutable sdl.SDL_Rect shape =
-    {
-        x: (region.w / 2) - (size.width / 2),
-        y: (region.h / 2) - size.longLength,
-        w: size.width,
-        h: size.longLength + size.shortLength
-    };
-
-    return shape;
+    assert(renderer);
 }
-
-/** エラーメッセージ。 */
-enum Error
+body
 {
-    invalidRenderer = "Renderer object was invalid." /// レンダラが無効だったメッセージ。
+    try
+    {
+        auto surface = createSurface(region.w, region.h);
+
+        scope (exit) surface.free;
+
+        immutable sdl.SDL_Rect shape =
+        {
+            x: region.w / 2 - visual.size.width / 2,
+            y: region.h / 2 - visual.size.longLength,
+            w: visual.size.width,
+            h: visual.size.longLength + visual.size.shortLength
+        };
+
+        surface.fillAlpha(visual.color.alphaR, visual.color.alphaG, visual.color.alphaB);
+        surface.fillRect(shape, visual.color.r, visual.color.g, visual.color.b);
+
+        return renderer.convertToTexture(surface);
+    }
+    catch (CreationException e)
+    {
+        throw new DrawingException("Failed to draw the hand.", e);
+    }
 }

@@ -1,18 +1,16 @@
 /**
  * メインエントリ。
  *
- * Date: 2017/7/10
+ * Date: 2017/7/18
  * Authors: masaniwa
  */
 
 import std.conv : to;
-import std.stdio : readln, writeln;
+import std.stdio : writeln;
 
 import desktopdial.app : App;
 
 import sdl = derelict.sdl2.sdl;
-
-public:
 
 void main(string[] args)
 {
@@ -22,7 +20,7 @@ void main(string[] args)
 
         if (sdl.SDL_Init(sdl.SDL_INIT_EVERYTHING) < 0) throw new Exception(sdl.SDL_GetError().to!string);
 
-        scope(exit) sdl.SDL_Quit();
+        scope (exit) sdl.SDL_Quit();
 
         configureSDL;
 
@@ -34,10 +32,8 @@ void main(string[] args)
     }
 }
 
-private:
-
 /** SDLの設定を行う。 */
-void configureSDL() nothrow @nogc
+private void configureSDL() nothrow @nogc
 {
     sdl.SDL_SetHint(sdl.SDL_HINT_RENDER_SCALE_QUALITY, "liner");
     sdl.SDL_SetHint(sdl.SDL_HINT_VIDEO_ALLOW_SCREENSAVER, "1");
@@ -51,9 +47,14 @@ void configureSDL() nothrow @nogc
  *     e = 例外。
  *
  * Throws:
- *     Exception = 例外を再送出すべきな場合。
+ *     Exception 例外を再送出すべきな場合。
  */
-void handle(in Exception e)
+private void handle(in Exception e)
+in
+{
+    assert(e);
+}
+body
 {
     debug
     {
@@ -67,21 +68,9 @@ void handle(in Exception e)
         }
         else
         {
-            e.error.writeln;
-            readln;
+            immutable error = e.file ~ "[" ~ e.line.to!string ~ "]: " ~ e.msg ~ "\n";
+
+            error.writeln;
         }
     }
-}
-
-/**
- * 例外発生時のエラーメッセージ。
- *
- * Params:
- *     e = 例外。
- *
- * Returns: 生成したメッセージ。
- */
-string error(in Exception e) nothrow pure @safe
-{
-    return "An error occurred.\n" ~ e.file ~ "(" ~ e.line.to!string ~ "):\n\t" ~ e.msg ~ "\nPress any key...";
 }

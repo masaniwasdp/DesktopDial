@@ -1,15 +1,13 @@
 /**
  * 時計盤の針の角度を扱うモジュール。
  *
- * Date: 2017/7/10
+ * Date: 2017/7/12
  * Authors: masaniwa
  */
 
 module desktopdial.handsangle;
 
 import std.datetime : SysTime;
-
-public:
 
 /** 時計盤の針の角度を表す構造体。 */
 struct HandsAngle
@@ -29,21 +27,14 @@ struct HandsAngle
  */
 HandsAngle calcHandsAngle(in SysTime time) nothrow @safe
 {
-    immutable second = time.second + time.fracSecs.total!"msecs".upUnit(1000);
-    immutable minute = time.minute + second.upUnit(60);
-    immutable hour = time.hour + minute.upUnit(60);
+    immutable second = time.second + time.fracSecs.total!"msecs" / 1000.0;
+    immutable minute = time.minute + second / 60.0;
+    immutable hour = time.hour + minute / 60.0;
 
-    immutable HandsAngle angle =
-    {
-        hour: hour * AngleUnit.hour,
-        minute: minute * AngleUnit.minute,
-        second: second * AngleUnit.second
-    };
-
-    return angle;
+    return HandsAngle(hour * AngleUnit.hour, minute * AngleUnit.minute, second * AngleUnit.second);
 }
 
-unittest
+@safe unittest
 {
     import std.datetime : DateTime;
 
@@ -52,24 +43,8 @@ unittest
     assert(SysTime(DateTime(2017, 7, 10, 21, 15, 45)).calcHandsAngle == HandsAngle(637.875, 94.5, 270));
 }
 
-private:
-
-/**
- * 値を上の単位で換算する。
- *
- * Params:
- *     value = 換算する値。
- *     units = 上の単位に上がる値。
- *
- * Returns: 上の単位で換算した値。
- */
-double upUnit(in double value, in double units) nothrow pure @safe @nogc
-{
-    return value / units;
-}
-
 /** 時計の針1単位の角度。 */
-enum AngleUnit
+private enum AngleUnit
 {
     hour = 30,  /// 時針1時の角度。
     minute = 6, /// 分針1分の角度。

@@ -1,7 +1,7 @@
 /**
  * アプリケーションモジュール。
  *
- * Date: 2017/7/18
+ * Date: 2017/7/24
  * Authors: masaniwa
  */
 
@@ -15,7 +15,7 @@ import desktopdial.dial : Dial;
 import desktopdial.exception : CreationException, DefinitionException, SetupException;
 import desktopdial.loading : loadDialDefinition;
 
-import sdl = derelict.sdl2.sdl;
+import derelict.sdl2.sdl;
 
 /**
  * アプリケーションクラス。
@@ -83,9 +83,9 @@ class App
     /** キューに溜まったイベントを扱う。 */
     private void handleEvents() nothrow @nogc
     {
-        sdl.SDL_Event event;
+        SDL_Event event;
 
-        while (sdl.SDL_PollEvent(&event) == 1)
+        while (SDL_PollEvent(&event) == 1)
         {
             handleEvent(event);
         }
@@ -97,24 +97,18 @@ class App
      * Params:
      *     event = イベント。
      */
-    private void handleEvent(in sdl.SDL_Event event) nothrow pure @safe @nogc
+    private void handleEvent(in SDL_Event event) pure nothrow @nogc @safe
     {
-        if (event.type == sdl.SDL_QUIT)
-        {
-            continuation = false;
-        }
+        if (event.type == SDL_QUIT) continuation = false;
     }
 
     /** FPSを調整する。 */
     private void tuneFPS() nothrow @nogc
     {
-        immutable current = sdl.SDL_GetTicks();
+        immutable current = SDL_GetTicks();
         immutable elapsed = current - last;
 
-        if (elapsed < interval)
-        {
-            sdl.SDL_Delay(interval - elapsed);
-        }
+        if (elapsed < interval) SDL_Delay(interval - elapsed);
 
         last = current;
     }

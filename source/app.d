@@ -1,7 +1,7 @@
 /**
  * メインエントリ。
  *
- * Date: 2017/7/18
+ * Date: 2017/7/24
  * Authors: masaniwa
  */
 
@@ -10,17 +10,17 @@ import std.stdio : writeln;
 
 import desktopdial.app : App;
 
-import sdl = derelict.sdl2.sdl;
+import derelict.sdl2.sdl;
 
 void main(string[] args)
 {
     try
     {
-        sdl.DerelictSDL2.load;
+        DerelictSDL2.load;
 
-        if (sdl.SDL_Init(sdl.SDL_INIT_EVERYTHING) < 0) throw new Exception(sdl.SDL_GetError().to!string);
+        if (SDL_Init(SDL_INIT_EVERYTHING) < 0) throw new Exception(SDL_GetError().to!string);
 
-        scope (exit) sdl.SDL_Quit();
+        scope (exit) SDL_Quit();
 
         configureSDL;
 
@@ -35,9 +35,9 @@ void main(string[] args)
 /** SDLの設定を行う。 */
 private void configureSDL() nothrow @nogc
 {
-    sdl.SDL_SetHint(sdl.SDL_HINT_RENDER_SCALE_QUALITY, "liner");
-    sdl.SDL_SetHint(sdl.SDL_HINT_VIDEO_ALLOW_SCREENSAVER, "1");
-    sdl.SDL_SetHint(sdl.SDL_HINT_NO_SIGNAL_HANDLERS, "0");
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "liner");
+    SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, "1");
+    SDL_SetHint(SDL_HINT_NO_SIGNAL_HANDLERS, "0");
 }
 
 /**

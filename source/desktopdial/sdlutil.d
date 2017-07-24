@@ -1,7 +1,7 @@
 /**
  * SDLユーティリティモジュール。
  *
- * Date: 2017/7/17
+ * Date: 2017/7/24
  * Authors: masaniwa
  */
 
@@ -13,7 +13,7 @@ import std.string : toStringz;
 
 import desktopdial.exception : CreationException;
 
-import sdl = derelict.sdl2.sdl;
+import derelict.sdl2.sdl;
 
 /**
  * ウィンドウを生成する。
@@ -30,18 +30,17 @@ import sdl = derelict.sdl2.sdl;
  * Throws:
  *     CreationException ウィンドウ生成に失敗した場合。
  */
-sdl.SDL_Window* createWindow(in string name, in ushort width, in ushort height)
+SDL_Window* createWindow(in string name, in ushort width, in ushort height)
 in
 {
     assert(name);
 }
 body
 {
-    auto window = sdl.SDL_CreateWindow(
-            name.toStringz, sdl.SDL_WINDOWPOS_UNDEFINED, sdl.SDL_WINDOWPOS_UNDEFINED, width, height,
-            sdl.SDL_WINDOW_ALWAYS_ON_TOP);
+    auto window = SDL_CreateWindow(
+            name.toStringz, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_ALWAYS_ON_TOP);
 
-    return window.enforceEx!CreationException(sdl.SDL_GetError().to!string);
+    return window.enforceEx!CreationException(SDL_GetError().to!string);
 }
 
 /**
@@ -50,9 +49,9 @@ body
  * Params:
  *     window = 破棄するウィンドウ。nullでもよい。
  */
-void destroy(sdl.SDL_Window* window) nothrow @nogc
+void destroy(SDL_Window* window) nothrow @nogc
 {
-    sdl.SDL_DestroyWindow(window);
+    SDL_DestroyWindow(window);
 }
 
 /**
@@ -68,16 +67,16 @@ void destroy(sdl.SDL_Window* window) nothrow @nogc
  * Throws:
  *     CreationException レンダラ生成に失敗した場合。
  */
-sdl.SDL_Renderer* createRenderer(sdl.SDL_Window* window)
+SDL_Renderer* createRenderer(SDL_Window* window)
 in
 {
     assert(window);
 }
 body
 {
-    auto renderer = sdl.SDL_CreateRenderer(window, -1, sdl.SDL_RENDERER_PRESENTVSYNC | sdl.SDL_RENDERER_ACCELERATED);
+    auto renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 
-    return renderer.enforceEx!CreationException(sdl.SDL_GetError().to!string);
+    return renderer.enforceEx!CreationException(SDL_GetError().to!string);
 }
 
 /**
@@ -86,12 +85,9 @@ body
  * Params:
  *     renderer = 破棄するレンダラ。nullでもよい。
  */
-void destroy(sdl.SDL_Renderer* renderer) nothrow @nogc
+void destroy(SDL_Renderer* renderer) nothrow @nogc
 {
-    if (renderer)
-    {
-        sdl.SDL_DestroyRenderer(renderer);
-    }
+    if (renderer) SDL_DestroyRenderer(renderer);
 }
 
 /**
@@ -108,11 +104,11 @@ void destroy(sdl.SDL_Renderer* renderer) nothrow @nogc
  * Throws:
  *     CreationException サーフェス生成に失敗した場合。
  */
-sdl.SDL_Surface* createSurface(in uint width, in uint height)
+SDL_Surface* createSurface(in uint width, in uint height)
 {
-    auto surface = sdl.SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+    auto surface = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
 
-    return surface.enforceEx!CreationException(sdl.SDL_GetError().to!string);
+    return surface.enforceEx!CreationException(SDL_GetError().to!string);
 }
 
 /**
@@ -121,9 +117,9 @@ sdl.SDL_Surface* createSurface(in uint width, in uint height)
  * Params:
  *     surface = 解放するサーフェス。nullでもよい。
  */
-void free(sdl.SDL_Surface* surface) nothrow @nogc
+void free(SDL_Surface* surface) nothrow @nogc
 {
-    sdl.SDL_FreeSurface(surface);
+    SDL_FreeSurface(surface);
 }
 
 /**
@@ -135,17 +131,17 @@ void free(sdl.SDL_Surface* surface) nothrow @nogc
  *     green = 透過色の緑の明度。
  *     blue = 透過色の青の明度。
  */
-void fillAlpha(sdl.SDL_Surface* surface, in ubyte red, in ubyte green, in ubyte blue) nothrow @nogc
+void fillAlpha(SDL_Surface* surface, in ubyte red, in ubyte green, in ubyte blue) nothrow @nogc
 in
 {
     assert(surface);
 }
 body
 {
-    immutable map = sdl.SDL_MapRGB(surface.format, red, green, blue);
+    immutable map = SDL_MapRGB(surface.format, red, green, blue);
 
-    sdl.SDL_SetColorKey(surface, sdl.SDL_TRUE, map);
-    sdl.SDL_FillRect(surface, null, map);
+    SDL_SetColorKey(surface, SDL_TRUE, map);
+    SDL_FillRect(surface, null, map);
 }
 
 /**
@@ -158,16 +154,16 @@ body
  *     green = 矩形の緑の明度。
  *     blue = 矩形の青の明度。
  */
-void fillRect(sdl.SDL_Surface* surface, in sdl.SDL_Rect rect, in ubyte red, in ubyte green, in ubyte blue) nothrow @nogc
+void fillRect(SDL_Surface* surface, in SDL_Rect rect, in ubyte red, in ubyte green, in ubyte blue) nothrow @nogc
 in
 {
     assert(surface);
 }
 body
 {
-    immutable map = sdl.SDL_MapRGB(surface.format, red, green, blue);
+    immutable map = SDL_MapRGB(surface.format, red, green, blue);
 
-    sdl.SDL_FillRect(surface, &rect, map);
+    SDL_FillRect(surface, &rect, map);
 }
 
 /**
@@ -184,7 +180,7 @@ body
  * Throws:
  *     CreationException テクスチャ生成に失敗した場合。
  */
-sdl.SDL_Texture* convertToTexture(sdl.SDL_Renderer* renderer, sdl.SDL_Surface* surface)
+SDL_Texture* convertToTexture(SDL_Renderer* renderer, SDL_Surface* surface)
 in
 {
     assert(renderer);
@@ -192,9 +188,9 @@ in
 }
 body
 {
-    auto texture = sdl.SDL_CreateTextureFromSurface(renderer, surface);
+    auto texture = SDL_CreateTextureFromSurface(renderer, surface);
 
-    return texture.enforceEx!CreationException(sdl.SDL_GetError().to!string);
+    return texture.enforceEx!CreationException(SDL_GetError().to!string);
 }
 
 /**
@@ -203,7 +199,7 @@ body
  * Params:
  *     texture = 破棄するテクスチャ。nullでもよい。
  */
-void destroy(sdl.SDL_Texture* texture) nothrow @nogc
+void destroy(SDL_Texture* texture) nothrow @nogc
 {
-    sdl.SDL_DestroyTexture(texture);
+    SDL_DestroyTexture(texture);
 }

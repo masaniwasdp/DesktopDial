@@ -1,7 +1,7 @@
 /**
  * 時計盤の描画を扱うモジュール。
  *
- * Date: 2017/7/18
+ * Date: 2017/7/24
  * Authors: masaniwa
  */
 
@@ -15,7 +15,7 @@ import desktopdial.hand : Hand, HandVisual;
 import desktopdial.handsangle : calcHandsAngle;
 import desktopdial.sdlutil : createRenderer, createWindow, destroy;
 
-import sdl = derelict.sdl2.sdl;
+import derelict.sdl2.sdl;
 
 /**
  * 時計盤の描画を扱うクラス。
@@ -35,7 +35,7 @@ class Dial
      */
     this(in DialDefinition definition)
     {
-        immutable sdl.SDL_Rect region = { w: definition.width, h: definition.height };
+        immutable SDL_Rect region = { w: definition.width, h: definition.height };
 
         background = definition.background;
 
@@ -76,14 +76,14 @@ class Dial
 
         drawHands(time);
 
-        sdl.SDL_RenderPresent(renderer);
+        SDL_RenderPresent(renderer);
     }
 
     /** レンダラを消去する。 */
     private void clear() nothrow @nogc
     {
-        sdl.SDL_SetRenderDrawColor(renderer, background.r, background.g, background.b, sdl.SDL_ALPHA_OPAQUE);
-        sdl.SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColor(renderer, background.r, background.g, background.b, SDL_ALPHA_OPAQUE);
+        SDL_RenderClear(renderer);
     }
 
     /**
@@ -103,8 +103,8 @@ class Dial
 
     private immutable BackgroundColor background; /// 背景色。
 
-    private sdl.SDL_Window* window;     /// ウィンドウ。
-    private sdl.SDL_Renderer* renderer; /// レンダラ。
+    private SDL_Window* window;     /// ウィンドウ。
+    private SDL_Renderer* renderer; /// レンダラ。
 
     private Face face; /// 文字盤。
 

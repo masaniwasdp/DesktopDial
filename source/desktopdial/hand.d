@@ -1,7 +1,7 @@
 /**
  * 時計盤の針の描画を扱うモジュール。
  *
- * Date: 2017/7/18
+ * Date: 2017/7/24
  * Authors: masaniwa
  */
 
@@ -10,7 +10,7 @@ module desktopdial.hand;
 import desktopdial.exception : CreationException, DrawingException;
 import desktopdial.sdlutil : convertToTexture, createSurface, fillAlpha, fillRect, free;
 
-import sdl = derelict.sdl2.sdl;
+import derelict.sdl2.sdl;
 
 /**
  * 時計盤の針の描画を扱うクラス。
@@ -30,7 +30,7 @@ class Hand
      * Throws:
      *     CreationException オブジェクト生成に失敗した場合。
      */
-    this(sdl.SDL_Renderer* renderer, in sdl.SDL_Rect region, in HandVisual visual)
+    this(SDL_Renderer* renderer, in SDL_Rect region, in HandVisual visual)
     in
     {
         assert(renderer);
@@ -63,13 +63,13 @@ class Hand
      */
     void draw(in double angle) nothrow @nogc
     {
-        sdl.SDL_RenderCopyEx(renderer, texture, null, &region, angle, null, sdl.SDL_FLIP_NONE);
+        SDL_RenderCopyEx(renderer, texture, null, &region, angle, null, SDL_FLIP_NONE);
     }
 
-    private immutable sdl.SDL_Rect region; /// 時計盤の領域。
+    private immutable SDL_Rect region; /// 時計盤の領域。
 
-    private sdl.SDL_Renderer* renderer; /// 使用するレンダラ。
-    private sdl.SDL_Texture* texture;   /// 針のテクスチャ。
+    private SDL_Renderer* renderer; /// 使用するレンダラ。
+    private SDL_Texture* texture;   /// 針のテクスチャ。
 
     invariant()
     {
@@ -120,7 +120,7 @@ struct HandColor
  * Throws:
  *     DrawingException 描画に失敗した場合。
  */
-private sdl.SDL_Texture* drawHand(sdl.SDL_Renderer* renderer, in sdl.SDL_Rect region, in HandVisual visual)
+private SDL_Texture* drawHand(SDL_Renderer* renderer, in SDL_Rect region, in HandVisual visual)
 in
 {
     assert(renderer);
@@ -133,7 +133,7 @@ body
 
         scope (exit) surface.free;
 
-        immutable sdl.SDL_Rect shape =
+        immutable SDL_Rect shape =
         {
             x: region.w / 2 - visual.size.width / 2,
             y: region.h / 2 - visual.size.longLength,

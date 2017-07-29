@@ -1,7 +1,7 @@
 /**
  * メインエントリ。
  *
- * Date: 2017/7/24
+ * Date: 2017/7/29
  * Authors: masaniwa
  */
 
@@ -24,7 +24,11 @@ void main(string[] args)
 
         configureSDL;
 
-        (args.length > 1 ? new App(args[1]) : new App).run;
+        auto app = args.length > 1 ? new App(args[1]) : new App;
+
+        scope (exit) app.destroy;
+
+        app.run;
     }
     catch (Exception e)
     {

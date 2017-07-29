@@ -1,7 +1,7 @@
 /**
  * SDLユーティリティモジュール。
  *
- * Date: 2017/7/24
+ * Date: 2017/7/29
  * Authors: masaniwa
  */
 
@@ -17,8 +17,6 @@ import derelict.sdl2.sdl;
 
 /**
  * ウィンドウを生成する。
- *
- * ウィンドウ使用後はdestroy()で破棄する必要がある。
  *
  * Params:
  *     name = 名前。
@@ -57,8 +55,6 @@ void destroy(SDL_Window* window) nothrow @nogc
 /**
  * レンダラを生成する。
  *
- * レンダラ使用後はdestroy()で破棄する必要がある。
- *
  * Params:
  *     window = ウィンドウ。
  *
@@ -92,8 +88,6 @@ void destroy(SDL_Renderer* renderer) nothrow @nogc
 
 /**
  * サーフェスを生成する。
- *
- * サーフェス使用後はfree()で解放する必要がある。
  *
  * Params:
  *     width = 幅。
@@ -168,8 +162,6 @@ body
 
 /**
  * サーフェスをテクスチャに変換する。
- *
- * テクスチャ使用後はdestroy()で破棄する必要がある。
  *
  * Params:
  *     renderer = 使用するレンダラ。

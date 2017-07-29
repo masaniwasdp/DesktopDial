@@ -1,7 +1,7 @@
 /**
  * 時計盤の文字盤の描画を扱うモジュール。
  *
- * Date: 2017/7/24
+ * Date: 2017/7/29
  * Authors: masaniwa
  */
 
@@ -18,6 +18,7 @@ import derelict.sdl2.sdl;
  * 時計盤の文字盤の描画を扱うクラス。
  *
  * 利用前にSDLを初期化、利用後にSDLを終了する必要がある。
+ * また、SDLを終了する前に破棄する必要がある。
  */
 class Face
 {
@@ -25,7 +26,7 @@ class Face
      * コンストラクタ。
      *
      * Params:
-     *     renderer = 使用するレンダラ。
+     *     renderer = 使用するレンダラ。使用を終えるまで破棄してはならない。
      *     region = 時計盤の領域。
      *     visual = 文字盤の見た目。
      *

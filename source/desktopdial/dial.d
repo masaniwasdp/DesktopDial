@@ -1,7 +1,7 @@
 /**
  * 時計盤の描画を扱うモジュール。
  *
- * Date: 2017/7/24
+ * Date: 2017/7/29
  * Authors: masaniwa
  */
 
@@ -21,6 +21,7 @@ import derelict.sdl2.sdl;
  * 時計盤の描画を扱うクラス。
  *
  * 利用前にSDLを初期化、利用後にSDLを終了する必要がある。
+ * また、SDLを終了する前に破棄する必要がある。
  */
 class Dial
 {
@@ -58,8 +59,13 @@ class Dial
 
     ~this()
     {
-        window.destroy;
+        object.destroy(face);
+        object.destroy(hour);
+        object.destroy(minute);
+        object.destroy(second);
+
         renderer.destroy;
+        window.destroy;
     }
 
     /**

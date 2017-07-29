@@ -1,7 +1,7 @@
 /**
  * アプリケーションモジュール。
  *
- * Date: 2017/7/24
+ * Date: 2017/7/29
  * Authors: masaniwa
  */
 
@@ -21,6 +21,7 @@ import derelict.sdl2.sdl;
  * アプリケーションクラス。
  *
  * 利用前にSDLを初期化、利用後にSDLを終了する必要がある。
+ * また、SDLを終了する前に破棄する必要がある。
  */
 class App
 {
@@ -53,6 +54,11 @@ class App
         {
             throw new SetupException("Failed to get the exe path.", e);
         }
+    }
+
+    ~this()
+    {
+        dial.destroy;
     }
 
     /** アプリケーションを実行する。 */
@@ -113,7 +119,7 @@ class App
         last = current;
     }
 
-    private bool continuation = true; /// メインループを続行するかどうか。
+    private auto continuation = true; /// メインループを続行するかどうか。
 
     private uint last; /// 最後にフレームを更新した時刻。
 

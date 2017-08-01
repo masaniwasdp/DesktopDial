@@ -1,7 +1,7 @@
 /**
  * アプリケーションモジュール。
  *
- * Date: 2017/7/29
+ * Date: 2017/8/2
  * Authors: masaniwa
  */
 
@@ -111,12 +111,11 @@ class App
     /** FPSを調整する。 */
     private void tuneFPS() nothrow @nogc
     {
-        immutable current = SDL_GetTicks();
-        immutable elapsed = current - last;
+        immutable elapsed = SDL_GetTicks() - last;
 
         if (elapsed < interval) SDL_Delay(interval - elapsed);
 
-        last = current;
+        last = SDL_GetTicks();
     }
 
     private auto continuation = true; /// メインループを続行するかどうか。

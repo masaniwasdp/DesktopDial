@@ -1,7 +1,7 @@
 /**
  * メインエントリ。
  *
- * Date: 2017/7/29
+ * Date: 2017/8/6
  * Authors: masaniwa
  */
 
@@ -66,15 +66,6 @@ body
     }
     else
     {
-        version (Windows)
-        {
-            throw e;
-        }
-        else
-        {
-            immutable error = e.file ~ "[" ~ e.line.to!string ~ "]: " ~ e.msg ~ "\n";
-
-            error.writeln;
-        }
+        (e.file ~ "[" ~ e.line.to!string ~ "]: " ~ e.msg ~ "\n").writeln;
     }
 }

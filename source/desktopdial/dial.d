@@ -1,7 +1,7 @@
 /**
  * 時計盤の描画を扱うモジュール。
  *
- * Date: 2017/7/29
+ * Date: 2017/8/6
  * Authors: masaniwa
  */
 
@@ -43,6 +43,7 @@ class Dial
         try
         {
             window = createWindow(definition.name, definition.width, definition.height);
+
             renderer = window.createRenderer;
 
             face = new Face(renderer, region, definition.face);
@@ -132,11 +133,6 @@ class Dial
 /** 時計盤を定義する構造体。 */
 struct DialDefinition
 {
-    this(this)
-    {
-        name = name.dup;
-    }
-
     string name; /// ウィンドウの名前。
 
     ushort width;  /// ウィンドウの幅。

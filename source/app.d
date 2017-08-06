@@ -1,7 +1,7 @@
 /**
  * メインエントリ。
  *
- * Date: 2017/8/6
+ * Date: 2017/8/7
  * Authors: masaniwa
  */
 
@@ -66,6 +66,6 @@ body
     }
     else
     {
-        (e.file ~ "[" ~ e.line.to!string ~ "]: " ~ e.msg ~ "\n").writeln;
+        (e.file ~ "(" ~ e.line.to!string ~ "): " ~ e.msg ~ "\n").writeln;
     }
 }

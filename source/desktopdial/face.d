@@ -1,7 +1,7 @@
 /**
  * 時計盤の文字盤の描画を扱うモジュール。
  *
- * Date: 2017/7/29
+ * Date: 2017/8/7
  * Authors: masaniwa
  */
 
@@ -10,7 +10,7 @@ module desktopdial.face;
 import std.range : iota;
 
 import desktopdial.exception : CreationException, DrawingException;
-import desktopdial.sdlutil : convertToTexture, createSurface, fillAlpha, fillRect, free;
+import desktopdial.sdlutil : Color, convertToTexture, createSurface, fillAlpha, fillRect, free;
 
 import derelict.sdl2.sdl;
 
@@ -41,6 +41,7 @@ class Face
     body
     {
         this.renderer = renderer;
+
         this.region = region;
 
         try
@@ -70,8 +71,9 @@ class Face
     private immutable SDL_Rect region; /// 時計盤の領域。
 
     private SDL_Renderer* renderer; /// 使用するレンダラ。
-    private SDL_Texture* large;     /// 大きな文字のテクスチャ。
-    private SDL_Texture* small;     /// 小さな文字のテクスチャ。
+
+    private SDL_Texture* large; /// 大きな文字のテクスチャ。
+    private SDL_Texture* small; /// 小さな文字のテクスチャ。
 
     invariant()
     {
@@ -91,8 +93,10 @@ struct FaceVisual
 /** 文字盤の文字の見た目を表す構造体。 */
 struct CharVisual
 {
-    CharSize size;   /// サイズ。
-    CharColor color; /// 色。
+    CharSize size; /// サイズ。
+
+    Color color; /// 色。
+    Color alpha; /// 透過色。
 }
 
 /** 文字盤の文字のサイズを表す構造体。 */
@@ -103,22 +107,8 @@ struct CharSize
     ushort length; /// 長さ。
 }
 
-/** 文字盤の文字の色を表す構造体。 */
-struct CharColor
-{
-    ubyte r; /// 赤の明度。
-    ubyte g; /// 緑の明度。
-    ubyte b; /// 青の明度。
-
-    ubyte alphaR; /// 透過色の赤の明度。
-    ubyte alphaG; /// 透過色の緑の明度。
-    ubyte alphaB; /// 透過色の青の明度。
-}
-
 /**
  * 0時の部分に文字を描く。
- *
- * テクスチャ使用後はfree()で破棄する必要がある。
  *
  * Params:
  *     renderer = 使用するレンダラ。
@@ -145,14 +135,15 @@ body
 
         immutable SDL_Rect shape =
         {
-            x: region.w / 2 - visual.size.width / 2,
-            y: region.h / 2 - visual.size.start - visual.size.length,
-            w: visual.size.width,
-            h: visual.size.length
+            region.w / 2 - visual.size.width / 2,
+            region.h / 2 - visual.size.start - visual.size.length,
+            visual.size.width,
+            visual.size.length
         };
 
-        surface.fillAlpha(visual.color.alphaR, visual.color.alphaG, visual.color.alphaB);
-        surface.fillRect(shape, visual.color.r, visual.color.g, visual.color.b);
+        surface.fillAlpha(visual.alpha);
+
+        surface.fillRect(shape, visual.color);
 
         return renderer.convertToTexture(surface);
     }

@@ -1,7 +1,7 @@
 /**
  * 時計盤の描画を扱うモジュール。
  *
- * Date: 2017/8/6
+ * Date: 2017/8/7
  * Authors: masaniwa
  */
 
@@ -11,9 +11,9 @@ import std.datetime : SysTime;
 
 import desktopdial.exception : CreationException;
 import desktopdial.face : Face, FaceVisual;
-import desktopdial.hand : Hand, HandVisual;
+import desktopdial.hands : Hands, HandVisuals;
 import desktopdial.handsangle : calcHandsAngle;
-import desktopdial.sdlutil : createRenderer, createWindow, destroy;
+import desktopdial.sdlutil : Color, createRenderer, createWindow, destroy;
 
 import derelict.sdl2.sdl;
 
@@ -36,7 +36,7 @@ class Dial
      */
     this(in DialDefinition definition)
     {
-        immutable SDL_Rect region = { w: definition.width, h: definition.height };
+        immutable SDL_Rect region = { 0, 0, definition.width, definition.height };
 
         background = definition.background;
 
@@ -48,9 +48,7 @@ class Dial
 
             face = new Face(renderer, region, definition.face);
 
-            hour = new Hand(renderer, region, definition.hour);
-            minute = new Hand(renderer, region, definition.minute);
-            second = new Hand(renderer, region, definition.second);
+            hands = new Hands(renderer, region, definition.hands);
         }
         catch (CreationException e)
         {
@@ -61,9 +59,7 @@ class Dial
     ~this()
     {
         object.destroy(face);
-        object.destroy(hour);
-        object.destroy(minute);
-        object.destroy(second);
+        object.destroy(hands);
 
         renderer.destroy;
         window.destroy;
@@ -77,56 +73,33 @@ class Dial
      */
     void draw(in SysTime time) nothrow
     {
-        clear;
+        SDL_SetRenderDrawColor(renderer, background.r, background.g, background.b, SDL_ALPHA_OPAQUE);
+
+        SDL_RenderClear(renderer);
 
         face.draw;
 
-        drawHands(time);
+        hands.draw(time);
 
         SDL_RenderPresent(renderer);
     }
 
-    /** レンダラを消去する。 */
-    private void clear() nothrow @nogc
-    {
-        SDL_SetRenderDrawColor(renderer, background.r, background.g, background.b, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(renderer);
-    }
+    private immutable Color background; /// 背景色。
 
-    /**
-     * 針を描画する。
-     *
-     * Params:
-     *     time = 時刻。
-     */
-    private void drawHands(in SysTime time) nothrow
-    {
-        immutable angle = time.calcHandsAngle;
+    private SDL_Window* window; /// ウィンドウ。
 
-        hour.draw(angle.hour);
-        minute.draw(angle.minute);
-        second.draw(angle.second);
-    }
-
-    private immutable BackgroundColor background; /// 背景色。
-
-    private SDL_Window* window;     /// ウィンドウ。
     private SDL_Renderer* renderer; /// レンダラ。
 
     private Face face; /// 文字盤。
 
-    private Hand hour;   /// 時針。
-    private Hand minute; /// 分針。
-    private Hand second; /// 秒針。
+    private Hands hands; /// 針。
 
     invariant()
     {
         assert(window);
         assert(renderer);
         assert(face);
-        assert(hour);
-        assert(minute);
-        assert(second);
+        assert(hands);
     }
 }
 
@@ -138,19 +111,9 @@ struct DialDefinition
     ushort width;  /// ウィンドウの幅。
     ushort height; /// ウィンドウの高さ。
 
-    BackgroundColor background; /// 背景色。
+    Color background; /// 背景色。
 
-    FaceVisual face; /// 文字盤。
+    FaceVisual face;   /// 文字盤。
 
-    HandVisual hour;   /// 時針。
-    HandVisual minute; /// 分針。
-    HandVisual second; /// 秒針。
-}
-
-/** 背景色を表す構造体。 */
-struct BackgroundColor
-{
-    ubyte r; /// 赤の明度。
-    ubyte g; /// 青の明度。
-    ubyte b; /// 緑の明度。
+    HandVisuals hands; /// 針。
 }

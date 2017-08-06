@@ -1,7 +1,7 @@
 /**
  * SDLユーティリティモジュール。
  *
- * Date: 2017/7/29
+ * Date: 2017/8/7
  * Authors: masaniwa
  */
 
@@ -14,6 +14,14 @@ import std.string : toStringz;
 import desktopdial.exception : CreationException;
 
 import derelict.sdl2.sdl;
+
+/** 色を表す構造体。 */
+struct Color
+{
+    ubyte r; /// 赤の明度。
+    ubyte g; /// 青の明度。
+    ubyte b; /// 緑の明度。
+}
 
 /**
  * ウィンドウを生成する。
@@ -35,8 +43,11 @@ in
 }
 body
 {
-    auto window = SDL_CreateWindow(
-            name.toStringz, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_ALWAYS_ON_TOP);
+    alias undefined = SDL_WINDOWPOS_UNDEFINED;
+
+    alias alwaysOnTop = SDL_WINDOW_ALWAYS_ON_TOP;
+
+    auto window = SDL_CreateWindow(name.toStringz, undefined, undefined, width, height, alwaysOnTop);
 
     return window.enforceEx!CreationException(SDL_GetError().to!string);
 }
@@ -121,20 +132,19 @@ void free(SDL_Surface* surface) nothrow @nogc
  *
  * Params:
  *     surface = 塗りつぶすサーフェス。
- *     red = 透過色の赤の明度。
- *     green = 透過色の緑の明度。
- *     blue = 透過色の青の明度。
+ *     color = 透過色。
  */
-void fillAlpha(SDL_Surface* surface, in ubyte red, in ubyte green, in ubyte blue) nothrow @nogc
+void fillAlpha(SDL_Surface* surface, in Color color) nothrow @nogc
 in
 {
     assert(surface);
 }
 body
 {
-    immutable map = SDL_MapRGB(surface.format, red, green, blue);
+    immutable map = SDL_MapRGB(surface.format, color.r, color.g, color.b);
 
     SDL_SetColorKey(surface, SDL_TRUE, map);
+
     SDL_FillRect(surface, null, map);
 }
 
@@ -144,18 +154,16 @@ body
  * Params:
  *     surface = 描画するサーフェス。
  *     rect = 描画する矩形。
- *     red = 矩形の赤の明度。
- *     green = 矩形の緑の明度。
- *     blue = 矩形の青の明度。
+ *     color = 矩形の色。
  */
-void fillRect(SDL_Surface* surface, in SDL_Rect rect, in ubyte red, in ubyte green, in ubyte blue) nothrow @nogc
+void fillRect(SDL_Surface* surface, in SDL_Rect rect, in Color color) nothrow @nogc
 in
 {
     assert(surface);
 }
 body
 {
-    immutable map = SDL_MapRGB(surface.format, red, green, blue);
+    immutable map = SDL_MapRGB(surface.format, color.r, color.g, color.b);
 
     SDL_FillRect(surface, &rect, map);
 }

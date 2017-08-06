@@ -1,14 +1,14 @@
 /**
  * 時計盤の針の描画を扱うモジュール。
  *
- * Date: 2017/7/29
+ * Date: 2017/8/7
  * Authors: masaniwa
  */
 
 module desktopdial.hand;
 
 import desktopdial.exception : CreationException, DrawingException;
-import desktopdial.sdlutil : convertToTexture, createSurface, fillAlpha, fillRect, free;
+import desktopdial.sdlutil : Color, convertToTexture, createSurface, fillAlpha, fillRect, free;
 
 import derelict.sdl2.sdl;
 
@@ -39,6 +39,7 @@ class Hand
     body
     {
         this.renderer = renderer;
+
         this.region = region;
 
         try
@@ -70,7 +71,8 @@ class Hand
     private immutable SDL_Rect region; /// 時計盤の領域。
 
     private SDL_Renderer* renderer; /// 使用するレンダラ。
-    private SDL_Texture* texture;   /// 針のテクスチャ。
+
+    private SDL_Texture* texture; /// 針のテクスチャ。
 
     invariant()
     {
@@ -82,34 +84,23 @@ class Hand
 /** 針の見た目を表す構造体。 */
 struct HandVisual
 {
-    HandSize size;   /// サイズ。
-    HandColor color; /// 色。
+    HandSize size; /// サイズ。
+
+    Color color; /// 色。
+    Color alpha; /// 透過色。
 }
 
 /** 針のサイズを表す構造体。 */
 struct HandSize
 {
-    ushort width;       /// 幅。
-    ushort longLength;  /// 長い方の中心からの長さ。
-    ushort shortLength; /// 短い方の中心からの長さ。
-}
+    ushort width; /// 幅。
 
-/** 針の色を表す構造体。 */
-struct HandColor
-{
-    ubyte r; /// 赤の明度。
-    ubyte g; /// 緑の明度。
-    ubyte b; /// 青の明度。
-
-    ubyte alphaR; /// 透過色の赤の明度。
-    ubyte alphaG; /// 透過色の緑の明度。
-    ubyte alphaB; /// 透過色の青の明度。
+    ushort lengthL; /// 長い方の中心からの長さ。
+    ushort lengthS; /// 短い方の中心からの長さ。
 }
 
 /**
  * 針を描く。
- *
- * テクスチャ使用後はfree()で解放する必要がある。
  *
  * Params:
  *     renderer = 使用するレンダラ。
@@ -136,14 +127,15 @@ body
 
         immutable SDL_Rect shape =
         {
-            x: region.w / 2 - visual.size.width / 2,
-            y: region.h / 2 - visual.size.longLength,
-            w: visual.size.width,
-            h: visual.size.longLength + visual.size.shortLength
+            region.w / 2 - visual.size.width / 2,
+            region.h / 2 - visual.size.lengthL,
+            visual.size.width,
+            visual.size.lengthL + visual.size.lengthS
         };
 
-        surface.fillAlpha(visual.color.alphaR, visual.color.alphaG, visual.color.alphaB);
-        surface.fillRect(shape, visual.color.r, visual.color.g, visual.color.b);
+        surface.fillAlpha(visual.alpha);
+
+        surface.fillRect(shape, visual.color);
 
         return renderer.convertToTexture(surface);
     }

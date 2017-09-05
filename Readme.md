@@ -1,7 +1,7 @@
 DesktopDial
 ===
 
-![DesktopDial](https://github.com/masaniwasdp/Screenshots/blob/master/DesktopDial.png)
+![DesktopDial](https://masaniwasdp.github.io/DesktopDial/Screenshot.png)
 
 デスクトップ上で動作する時計盤です。
 

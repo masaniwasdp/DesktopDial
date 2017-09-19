@@ -76,7 +76,7 @@ private struct App
     {
         immutable elapsed = SDL_GetTicks() - last;
 
-        if (elapsed < interval) SDL_Delay(interval - elapsed);
+        if (elapsed < interval) (interval - elapsed).SDL_Delay;
 
         last = SDL_GetTicks();
     }
@@ -85,7 +85,7 @@ private struct App
     {
         SDL_Event event;
 
-        while (SDL_PollEvent(&event) == 1)
+        while ((&event).SDL_PollEvent == 1)
         {
             if (event.type == SDL_QUIT) continuation = false;
         }
@@ -107,11 +107,10 @@ private void initializeSDL()
 {
     DerelictSDL2.load;
 
-    if (SDL_INIT_EVERYTHING.SDL_Init < 0) throw new SDLException(`Failed to initialize SDL.`);
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) throw new SDLException(`Failed to initialize SDL.`);
 
-    SDL_HINT_RENDER_SCALE_QUALITY.SDL_SetHint(`liner`);
-
-    SDL_HINT_VIDEO_ALLOW_SCREENSAVER.SDL_SetHint(`1`);
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, `liner`);
+    SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, `1`);
 }
 
 private void finalizeSDL() nothrow @nogc
@@ -132,6 +131,6 @@ body
     }
     catch (E)
     {
-        debug message.writeln;
+        message.writeln;
     }
 }

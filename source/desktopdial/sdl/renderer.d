@@ -19,7 +19,7 @@ struct Renderer
 
     this(ref Window window)
     {
-        data = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+        data = window.SDL_CreateRenderer(-1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 
         if (!data) throw new SDLException(SDL_GetError().to!string);
     }

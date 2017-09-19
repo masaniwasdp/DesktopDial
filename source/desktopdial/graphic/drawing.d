@@ -1,6 +1,6 @@
 module desktopdial.graphic.drawing;
 
-import derelict.sdl2.sdl : SDL_Color, SDL_FillRect, SDL_GetError, SDL_MapRGB, SDL_Rect, SDL_SetColorKey, SDL_TRUE;
+import derelict.sdl2.sdl : SDL_Color, SDL_FillRect, SDL_MapRGB, SDL_Rect, SDL_SetColorKey, SDL_TRUE;
 
 import desktopdial.sdl.surface : Surface;
 

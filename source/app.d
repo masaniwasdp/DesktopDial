@@ -28,9 +28,14 @@ import desktopdial.sdl.exception : SDLException;
 
 void main(string[] args)
 {
-    initializeSDL.handle!SDLException(`Failed to initialize the graphic library.`);
+    DerelictSDL2.load;
 
-    scope(exit) finalizeSDL;
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) return `Failed to initialize the graphic library.`.writeln;
+
+    scope(exit) SDL_Quit();
+
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, `liner`);
+    SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, `1`);
 
     (args.length > 1 ? App(args[1]) : App(thisExePath.dirName ~ dirSeparator ~ resource))
             .run
@@ -103,27 +108,7 @@ private struct App
     private Dial dial;
 }
 
-private void initializeSDL()
-{
-    DerelictSDL2.load;
-
-    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) throw new SDLException(`Failed to initialize SDL.`);
-
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, `liner`);
-    SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, `1`);
-}
-
-private void finalizeSDL() nothrow @nogc
-{
-    SDL_Quit();
-}
-
 private void handle(E : Throwable)(lazy scope void expression, in string message)
-in
-{
-    assert(message);
-}
-body
 {
     try
     {

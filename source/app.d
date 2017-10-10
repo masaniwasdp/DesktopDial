@@ -49,7 +49,7 @@ void main(string[] args)
 
 private enum interval = 16;
 
-private enum resource = `resource` ~ dirSeparator ~ `DialVisual.json`;
+private enum resource = `resource` ~ dirSeparator ~ `dialvisual.json`;
 
 private struct App
 {

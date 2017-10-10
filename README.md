@@ -28,10 +28,10 @@ $ cd ~/DesktopDial
 $ build/desktopdial [path]
 ```
 
-+ `path`: 設定ファイルのパスです。省略時は`build/resource/DialVisual.json`となります。
++ `path`: 設定ファイルのパスです。省略時は`build/resource/dialvisual.json`となります。
 
 ## ライセンス
-[MITライセンス](https://github.com/masaniwasdp/DesktopDial/blob/master/Licence.txt)が適用されます。
+[MITライセンス](https://github.com/masaniwasdp/DesktopDial/blob/master/LICENCE)が適用されます。
 
 ## 作者
 + masaniwa

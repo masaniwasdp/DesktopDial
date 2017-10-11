@@ -18,7 +18,7 @@ X11環境では時計盤は常に最前面に表示されます。
 $ cd ~
 $ git clone https://github.com/masaniwasdp/DesktopDial.git
 $ cd DesktopDial
-$ dub --build=release
+$ dub build --build=release
 ```
 
 ## 実行
@@ -28,7 +28,7 @@ $ cd ~/DesktopDial
 $ build/desktopdial [path]
 ```
 
-+ `path`: 設定ファイルのパスです。省略時は`build/resource/dialvisual.json`となります。
++ `path`は設定ファイルのパスです。省略時は`build/resource/dialvisual.json`となります。
 
 ## ライセンス
 [MITライセンス](https://github.com/masaniwasdp/DesktopDial/blob/master/LICENCE)が適用されます。

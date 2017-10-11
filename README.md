@@ -1,6 +1,7 @@
 DesktopDial
 ===
 
+[![Build Status](https://travis-ci.org/masaniwasdp/DesktopDial.svg?branch=master)](https://travis-ci.org/masaniwasdp/DesktopDial)
 ![DesktopDial](https://masaniwasdp.github.io/DesktopDial/Screenshot.png)
 
 デスクトップ上で動作する時計盤です。

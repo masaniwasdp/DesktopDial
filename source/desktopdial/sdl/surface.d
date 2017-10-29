@@ -45,6 +45,8 @@ struct Surface
 
 unittest
 {
+    import std.exception : assertNotThrown;
+
     import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
 
     DerelictSDL2.load;
@@ -53,5 +55,5 @@ unittest
 
     scope(exit) SDL_Quit();
 
-    assert(Surface(77, 16).get);
+    assertNotThrown(Surface(77, 16));
 }

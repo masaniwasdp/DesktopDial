@@ -34,6 +34,32 @@ struct Hands
     private Texture second;
 }
 
+unittest
+{
+    import std.exception : assertNotThrown;
+
+    import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
+
+    import desktopdial.sdl.window : Window;
+
+    DerelictSDL2.load;
+
+    assert(SDL_Init(SDL_INIT_EVERYTHING) == 0);
+
+    scope(exit) SDL_Quit();
+
+    auto window = Window(`Alice`, 77, 16);
+
+    auto renderer = Renderer(window);
+
+    immutable visual = HandsVisual(
+            HandVisual(0, 1, 6, SDL_Color(0, 6, 7), SDL_Color(0, 1, 7)),
+            HandVisual(7, 0, 6, SDL_Color(1, 0, 7), SDL_Color(6, 0, 7)),
+            HandVisual(7, 1, 0, SDL_Color(1, 6, 0), SDL_Color(6, 1, 0)));
+
+    assertNotThrown(Hands(renderer, visual));
+}
+
 struct HandsVisual
 {
     HandVisual hour;
@@ -84,15 +110,4 @@ private HandAngles calcAngles(in SysTime time) nothrow @safe
     immutable hour = time.hour + minute / 60.0;
 
     return HandAngles(30 * hour, 6 * minute, 6 * second);
-}
-
-@safe unittest
-{
-    import std.datetime : DateTime;
-
-    assert(SysTime(DateTime(2017, 7, 10)).calcAngles == HandAngles(0, 0, 0));
-
-    assert(SysTime(DateTime(2017, 7, 10, 15, 30, 0)).calcAngles == HandAngles(465, 180, 0));
-
-    assert(SysTime(DateTime(2017, 7, 10, 21, 15, 45)).calcAngles == HandAngles(637.875, 94.5, 270));
 }

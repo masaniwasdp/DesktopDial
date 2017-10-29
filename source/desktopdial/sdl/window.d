@@ -58,6 +58,8 @@ struct Window
 
 unittest
 {
+    import std.exception : assertNotThrown;
+
     import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
 
     DerelictSDL2.load;
@@ -66,7 +68,7 @@ unittest
 
     scope(exit) SDL_Quit();
 
-    assert(Window(`Alice`, 77, 16).get);
-    assert(Window(``, 7, 7).get);
-    assert(Window(null, 1, 6).get);
+    assertNotThrown(Window(`Alice`, 77, 16));
+    assertNotThrown(Window(``, 7, 7));
+    assertNotThrown(Window(null, 1, 6));
 }

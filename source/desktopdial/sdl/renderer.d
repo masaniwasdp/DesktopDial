@@ -46,6 +46,8 @@ struct Renderer
 
 unittest
 {
+    import std.exception : assertNotThrown;
+
     import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
 
     DerelictSDL2.load;
@@ -56,5 +58,5 @@ unittest
 
     auto window = Window(`Alice`, 77, 16);
 
-    assert(Renderer(window).get);
+    assertNotThrown(Renderer(window));
 }

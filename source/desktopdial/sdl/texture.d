@@ -41,6 +41,8 @@ struct Texture
 
 unittest
 {
+    import std.exception : assertNotThrown;
+
     import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
 
     import desktopdial.sdl.window : Window;
@@ -58,12 +60,12 @@ unittest
     {
         auto surface = Surface(77, 16);
 
-        assert(Texture(renderer, surface).get);
+        assertNotThrown(Texture(renderer, surface));
     }
 
     {
         auto surface = Surface(16, 77);
 
-        assert(Texture(renderer, surface).get);
+        assertNotThrown(Texture(renderer, surface));
     }
 }

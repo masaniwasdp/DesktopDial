@@ -18,6 +18,12 @@ struct Window
     alias get this;
 
     this(in string name, in int width, in int height)
+    in
+    {
+        assert(width > 0, `The width must be more than 0.`);
+        assert(height > 0, `The height must be more than 0.`);
+    }
+    body
     {
         data = SDL_CreateWindow(
                 name.toStringz,
@@ -48,4 +54,19 @@ struct Window
     {
         assert(data);
     }
+}
+
+unittest
+{
+    import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
+
+    DerelictSDL2.load;
+
+    assert(SDL_Init(SDL_INIT_EVERYTHING) == 0);
+
+    scope(exit) SDL_Quit();
+
+    assert(Window(`Alice`, 77, 16).get);
+    assert(Window(``, 7, 7).get);
+    assert(Window(null, 1, 6).get);
 }

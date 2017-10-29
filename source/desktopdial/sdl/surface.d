@@ -11,6 +11,12 @@ struct Surface
     alias get this;
 
     this(in int width, in int height)
+    in
+    {
+        assert(width > 0, `The width must be more than 0.`);
+        assert(height > 0, `The height must be more than 0.`);
+    }
+    body
     {
         data = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
 
@@ -35,4 +41,17 @@ struct Surface
     {
         assert(data);
     }
+}
+
+unittest
+{
+    import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
+
+    DerelictSDL2.load;
+
+    assert(SDL_Init(SDL_INIT_EVERYTHING) == 0);
+
+    scope(exit) SDL_Quit();
+
+    assert(Surface(77, 16).get);
 }

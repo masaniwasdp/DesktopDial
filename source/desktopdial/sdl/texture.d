@@ -38,3 +38,32 @@ struct Texture
         assert(data);
     }
 }
+
+unittest
+{
+    import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
+
+    import desktopdial.sdl.window : Window;
+
+    DerelictSDL2.load;
+
+    assert(SDL_Init(SDL_INIT_EVERYTHING) == 0);
+
+    scope(exit) SDL_Quit();
+
+    auto window = Window(`Alice`, 77, 16);
+
+    auto renderer = Renderer(window);
+
+    {
+        auto surface = Surface(77, 16);
+
+        assert(Texture(renderer, surface).get);
+    }
+
+    {
+        auto surface = Surface(16, 77);
+
+        assert(Texture(renderer, surface).get);
+    }
+}

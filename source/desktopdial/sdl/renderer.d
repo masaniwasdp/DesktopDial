@@ -43,3 +43,18 @@ struct Renderer
         assert(data);
     }
 }
+
+unittest
+{
+    import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
+
+    DerelictSDL2.load;
+
+    assert(SDL_Init(SDL_INIT_EVERYTHING) == 0);
+
+    scope(exit) SDL_Quit();
+
+    auto window = Window(`Alice`, 77, 16);
+
+    assert(Renderer(window).get);
+}

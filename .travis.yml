@@ -1,11 +1,11 @@
 language: d
 
+sudo: required
+
 dist: zesty
 
-addons:
-  apt:
-    packages:
-      - libsdl2-2.0
+before_script:
+  - sudo apt-get install libsdl2-2.0
 
 script:
   - dub build

@@ -49,23 +49,24 @@ unittest
 
     DerelictSDL2.load;
 
-    assert(SDL_Init(SDL_INIT_EVERYTHING) == 0);
-
-    scope(exit) SDL_Quit();
-
-    auto window = Window(`Alice`, 77, 16);
-
-    auto renderer = Renderer(window);
-
+    if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
     {
-        auto surface = Surface(77, 16);
+        scope(exit) SDL_Quit();
 
-        assertNotThrown(Texture(renderer, surface));
-    }
+        auto window = Window(`Alice`, 77, 16);
 
-    {
-        auto surface = Surface(16, 77);
+        auto renderer = Renderer(window);
 
-        assertNotThrown(Texture(renderer, surface));
+        {
+            auto surface = Surface(77, 16);
+
+            assertNotThrown(Texture(renderer, surface));
+        }
+
+        {
+            auto surface = Surface(16, 77);
+
+            assertNotThrown(Texture(renderer, surface));
+        }
     }
 }

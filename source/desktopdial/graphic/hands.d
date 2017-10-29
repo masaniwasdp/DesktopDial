@@ -44,20 +44,21 @@ unittest
 
     DerelictSDL2.load;
 
-    assert(SDL_Init(SDL_INIT_EVERYTHING) == 0);
+    if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
+    {
+        scope(exit) SDL_Quit();
 
-    scope(exit) SDL_Quit();
+        auto window = Window(`Alice`, 77, 16);
 
-    auto window = Window(`Alice`, 77, 16);
+        auto renderer = Renderer(window);
 
-    auto renderer = Renderer(window);
+        immutable visual = HandsVisual(
+                HandVisual(0, 1, 6, SDL_Color(0, 6, 7), SDL_Color(0, 1, 7)),
+                HandVisual(7, 0, 6, SDL_Color(1, 0, 7), SDL_Color(6, 0, 7)),
+                HandVisual(7, 1, 0, SDL_Color(1, 6, 0), SDL_Color(6, 1, 0)));
 
-    immutable visual = HandsVisual(
-            HandVisual(0, 1, 6, SDL_Color(0, 6, 7), SDL_Color(0, 1, 7)),
-            HandVisual(7, 0, 6, SDL_Color(1, 0, 7), SDL_Color(6, 0, 7)),
-            HandVisual(7, 1, 0, SDL_Color(1, 6, 0), SDL_Color(6, 1, 0)));
-
-    assertNotThrown(Hands(renderer, visual));
+        assertNotThrown(Hands(renderer, visual));
+    }
 }
 
 struct HandsVisual

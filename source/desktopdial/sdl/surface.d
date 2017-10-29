@@ -51,9 +51,10 @@ unittest
 
     DerelictSDL2.load;
 
-    assert(SDL_Init(SDL_INIT_EVERYTHING) == 0);
+    if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
+    {
+        scope(exit) SDL_Quit();
 
-    scope(exit) SDL_Quit();
-
-    assertNotThrown(Surface(77, 16));
+        assertNotThrown(Surface(77, 16));
+    }
 }

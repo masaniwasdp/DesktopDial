@@ -2,10 +2,15 @@ language: d
 
 sudo: required
 
-dist: zesty
-
 before_script:
-  - sudo apt-get install libsdl2-2.0
+  - hg clone https://hg.libsdl.org/SDL SDL
+  - cd SDL
+  - mkdir build
+  - cd build
+  - ../configure
+  - make
+  - sudo make install
+  - cd $TRAVIS_BUILD_DIR
 
 script:
   - dub build

@@ -57,16 +57,14 @@ unittest
 
         auto renderer = Renderer(window);
 
-        {
-            auto surface = Surface(77, 16);
+        auto surface = Surface(77, 16);
 
-            assertNotThrown(Texture(renderer, surface));
-        }
+        assertNotThrown(Texture(renderer, surface));
+    }
+    else
+    {
+        import std.stdio : writeln;
 
-        {
-            auto surface = Surface(16, 77);
-
-            assertNotThrown(Texture(renderer, surface));
-        }
+        writeln(__FILE__ ~ `: The test of class Texture was disable.`);
     }
 }

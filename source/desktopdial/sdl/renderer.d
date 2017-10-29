@@ -60,4 +60,10 @@ unittest
 
         assertNotThrown(Renderer(window));
     }
+    else
+    {
+        import std.stdio : writeln;
+
+        writeln(__FILE__ ~ `: The test of class Renderer was disable.`);
+    }
 }

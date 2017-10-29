@@ -72,4 +72,10 @@ unittest
         assertNotThrown(Window(``, 7, 7));
         assertNotThrown(Window(null, 1, 6));
     }
+    else
+    {
+        import std.stdio : writeln;
+
+        writeln(__FILE__ ~ `: The test of class Window was disable.`);
+    }
 }

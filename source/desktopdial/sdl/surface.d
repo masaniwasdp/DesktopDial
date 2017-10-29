@@ -57,4 +57,10 @@ unittest
 
         assertNotThrown(Surface(77, 16));
     }
+    else
+    {
+        import std.stdio : writeln;
+
+        writeln(__FILE__ ~ `: The test of class Surface was disable.`);
+    }
 }

@@ -59,6 +59,12 @@ unittest
 
         assertNotThrown(Hands(renderer, visual));
     }
+    else
+    {
+        import std.stdio : writeln;
+
+        writeln(__FILE__ ~ `: The test of class Hands was disable.`);
+    }
 }
 
 struct HandsVisual

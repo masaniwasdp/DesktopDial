@@ -1,5 +1,10 @@
 language: d
 
+addons:
+  apt:
+    packages:
+      - libsdl2-dev
+
 script:
   - dub build
   - dub test

@@ -18,12 +18,6 @@ struct Window
     alias get this;
 
     this(in string name, in int width, in int height)
-    in
-    {
-        assert(width > 0, `The width must be more than 0.`);
-        assert(height > 0, `The height must be more than 0.`);
-    }
-    body
     {
         data = SDL_CreateWindow(
                 name.toStringz,

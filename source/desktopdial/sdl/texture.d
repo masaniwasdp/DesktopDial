@@ -38,33 +38,3 @@ struct Texture
         assert(data);
     }
 }
-
-unittest
-{
-    import std.exception : assertNotThrown;
-
-    import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
-
-    import desktopdial.sdl.window : Window;
-
-    DerelictSDL2.load;
-
-    if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
-    {
-        scope(exit) SDL_Quit();
-
-        auto window = Window(`Alice`, 77, 16);
-
-        auto renderer = Renderer(window);
-
-        auto surface = Surface(77, 16);
-
-        assertNotThrown(Texture(renderer, surface));
-    }
-    else
-    {
-        import std.stdio : writeln;
-
-        writeln(__FILE__ ~ `: The test of class Texture was disable.`);
-    }
-}

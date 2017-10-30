@@ -42,25 +42,3 @@ struct Surface
         assert(data);
     }
 }
-
-unittest
-{
-    import std.exception : assertNotThrown;
-
-    import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
-
-    DerelictSDL2.load;
-
-    if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
-    {
-        scope(exit) SDL_Quit();
-
-        assertNotThrown(Surface(77, 16));
-    }
-    else
-    {
-        import std.stdio : writeln;
-
-        writeln(__FILE__ ~ `: The test of class Surface was disable.`);
-    }
-}

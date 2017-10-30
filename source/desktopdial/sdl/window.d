@@ -55,27 +55,3 @@ struct Window
         assert(data);
     }
 }
-
-unittest
-{
-    import std.exception : assertNotThrown;
-
-    import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
-
-    DerelictSDL2.load;
-
-    if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
-    {
-        scope(exit) SDL_Quit();
-
-        assertNotThrown(Window(`Alice`, 77, 16));
-        assertNotThrown(Window(``, 7, 7));
-        assertNotThrown(Window(null, 1, 6));
-    }
-    else
-    {
-        import std.stdio : writeln;
-
-        writeln(__FILE__ ~ `: The test of class Window was disable.`);
-    }
-}

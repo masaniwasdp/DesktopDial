@@ -1,17 +1,5 @@
 language: d
 
-sudo: required
-
-before_script:
-  - hg clone https://hg.libsdl.org/SDL SDL
-  - cd SDL
-  - mkdir build
-  - cd build
-  - ../configure
-  - make
-  - sudo make install
-  - cd $TRAVIS_BUILD_DIR
-
 script:
   - dub build
   - dub test

@@ -85,14 +85,3 @@ private HandAngles calcAngles(in SysTime time) nothrow @safe
 
     return HandAngles(30 * hour, 6 * minute, 6 * second);
 }
-
-@safe unittest
-{
-    import std.datetime : DateTime;
-
-    assert(SysTime(DateTime(2017, 7, 10)).calcAngles == HandAngles(0, 0, 0));
-
-    assert(SysTime(DateTime(2017, 7, 10, 15, 30, 0)).calcAngles == HandAngles(465, 180, 0));
-
-    assert(SysTime(DateTime(2017, 7, 10, 21, 15, 45)).calcAngles == HandAngles(637.875, 94.5, 270));
-}

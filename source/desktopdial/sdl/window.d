@@ -20,7 +20,7 @@ import derelict.sdl2.sdl :
 
 import desktopdial.sdl.exception : SDLException;
 
-/** Strukturo, kiu administras fenestran rimedon. */
+/** Strukturo, kiu administras fenestran rimedon. Uzi tion postulas la SDL-bibliotekon. */
 struct Window
 {
     alias get this;

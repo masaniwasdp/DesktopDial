@@ -1,6 +1,7 @@
 module desktopdial.graphic.hands;
 
 import std.datetime : SysTime;
+import std.typecons : Tuple, tuple;
 
 import derelict.sdl2.sdl : SDL_Color, SDL_FLIP_NONE, SDL_GetRendererOutputSize, SDL_Rect, SDL_RenderCopyEx;
 
@@ -24,9 +25,9 @@ struct Hands
     {
         immutable angles = time.calcAngles;
 
-        renderer.SDL_RenderCopyEx(hour, null, null, angles.hour, null, SDL_FLIP_NONE);
-        renderer.SDL_RenderCopyEx(minute, null, null, angles.minute, null, SDL_FLIP_NONE);
-        renderer.SDL_RenderCopyEx(second, null, null, angles.second, null, SDL_FLIP_NONE);
+        renderer.SDL_RenderCopyEx(hour, null, null, angles[0], null, SDL_FLIP_NONE);
+        renderer.SDL_RenderCopyEx(minute, null, null, angles[1], null, SDL_FLIP_NONE);
+        renderer.SDL_RenderCopyEx(second, null, null, angles[2], null, SDL_FLIP_NONE);
     }
 
     private Texture hour;
@@ -51,13 +52,6 @@ struct HandVisual
     SDL_Color alpha;
 }
 
-private struct HandAngles
-{
-    double hour;
-    double minute;
-    double second;
-}
-
 private Texture drawHand(ref Renderer renderer, in HandVisual visual)
 {
     int width, height;
@@ -77,11 +71,13 @@ private Texture drawHand(ref Renderer renderer, in HandVisual visual)
     return Texture(renderer, surface);
 }
 
-private HandAngles calcAngles(in SysTime time) nothrow @safe
+private Tuple!(double, double, double) calcAngles(in SysTime time) nothrow @safe
 {
     immutable second = time.second + time.fracSecs.total!`msecs` / 1000.0;
+
     immutable minute = time.minute + second / 60.0;
+
     immutable hour = time.hour + minute / 60.0;
 
-    return HandAngles(30 * hour, 6 * minute, 6 * second);
+    return tuple(30 * hour, 6 * minute, 6 * second);
 }

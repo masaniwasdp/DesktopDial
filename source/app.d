@@ -30,6 +30,7 @@ void main(string[] args)
 }
 
 private enum directory = `resource`;
+
 private enum file = `dialvisual.json`;
 
 private void handle(E : Throwable)(lazy scope void expression, in string message)

@@ -1,14 +1,12 @@
+import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
+import desktopdial.app : App;
+import desktopdial.sdl.exception : SDLException;
 import std.conv : ConvOverflowException;
 import std.file : FileException, thisExePath;
 import std.path : buildPath, dirName;
 import std.stdio : StdioException, writeln;
 import std.utf : UTFException;
-
-import derelict.sdl2.sdl : DerelictSDL2, SDL_INIT_EVERYTHING, SDL_Init, SDL_Quit;
 import stdx.data.json : JSONException;
-
-import desktopdial.app : App;
-import desktopdial.sdl.exception : SDLException;
 
 void main(string[] args)
 {

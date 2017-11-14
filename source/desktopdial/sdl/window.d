@@ -7,18 +7,13 @@
 
 module desktopdial.sdl.window;
 
-import std.conv : to;
-import std.string : toStringz;
-
 import derelict.sdl2.sdl :
-    SDL_CreateWindow,
-    SDL_DestroyWindow,
-    SDL_GetError,
-    SDL_WINDOWPOS_UNDEFINED,
-    SDL_WINDOW_ALWAYS_ON_TOP,
-    SDL_Window;
+        SDL_CreateWindow, SDL_DestroyWindow, SDL_GetError, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOW_ALWAYS_ON_TOP,
+        SDL_Window;
 
 import desktopdial.sdl.exception : SDLException;
+import std.conv : to;
+import std.string : toStringz;
 
 /** Strukturo, kiu administras fenestran rimedon. Uzi tion postulas la SDL-bibliotekon. */
 struct Window
@@ -39,11 +34,7 @@ struct Window
     this(in string name, in int width, in int height)
     {
         data = SDL_CreateWindow(
-                name.toStringz,
-                SDL_WINDOWPOS_UNDEFINED,
-                SDL_WINDOWPOS_UNDEFINED,
-                width,
-                height,
+                name.toStringz, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height,
                 SDL_WINDOW_ALWAYS_ON_TOP);
 
         if (!data) throw new SDLException(SDL_GetError().to!string);

@@ -1,14 +1,12 @@
 module desktopdial.graphic.hands;
 
-import std.datetime : SysTime;
-import std.typecons : Tuple, tuple;
-
 import derelict.sdl2.sdl : SDL_Color, SDL_FLIP_NONE, SDL_GetRendererOutputSize, SDL_Rect, SDL_RenderCopyEx;
-
 import desktopdial.graphic.drawing : drawRect;
 import desktopdial.sdl.renderer : Renderer;
 import desktopdial.sdl.surface : Surface;
 import desktopdial.sdl.texture : Texture;
+import std.datetime : SysTime;
+import std.typecons : Tuple, tuple;
 
 struct Hands
 {

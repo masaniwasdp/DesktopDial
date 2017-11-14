@@ -1,10 +1,8 @@
 module desktopdial.sdl.surface;
 
-import std.conv : to;
-
 import derelict.sdl2.sdl : SDL_CreateRGBSurface, SDL_FreeSurface, SDL_GetError, SDL_Surface;
-
 import desktopdial.sdl.exception : SDLException;
+import std.conv : to;
 
 struct Surface
 {

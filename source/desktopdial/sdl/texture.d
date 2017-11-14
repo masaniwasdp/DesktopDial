@@ -1,12 +1,10 @@
 module desktopdial.sdl.texture;
 
-import std.conv : to;
-
 import derelict.sdl2.sdl : SDL_CreateTextureFromSurface, SDL_DestroyTexture, SDL_GetError, SDL_Texture;
-
 import desktopdial.sdl.exception : SDLException;
 import desktopdial.sdl.renderer : Renderer;
 import desktopdial.sdl.surface : Surface;
+import std.conv : to;
 
 struct Texture
 {

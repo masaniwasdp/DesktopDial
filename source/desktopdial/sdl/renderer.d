@@ -7,18 +7,13 @@
 
 module desktopdial.sdl.renderer;
 
-import std.conv : to;
-
 import derelict.sdl2.sdl :
-    SDL_CreateRenderer,
-    SDL_DestroyRenderer,
-    SDL_GetError,
-    SDL_RENDERER_ACCELERATED,
-    SDL_RENDERER_PRESENTVSYNC,
-    SDL_Renderer;
+        SDL_CreateRenderer, SDL_DestroyRenderer, SDL_GetError, SDL_RENDERER_ACCELERATED, SDL_RENDERER_PRESENTVSYNC,
+        SDL_Renderer;
 
 import desktopdial.sdl.exception : SDLException;
 import desktopdial.sdl.window : Window;
+import std.conv : to;
 
 /** Strukturo, kiu administras rendistan rimedon. Uzi tion postulas la SDL-bibliotekon. */
 struct Renderer

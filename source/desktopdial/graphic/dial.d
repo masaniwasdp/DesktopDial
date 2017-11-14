@@ -1,13 +1,11 @@
 module desktopdial.graphic.dial;
 
-import std.datetime : SysTime;
-
 import derelict.sdl2.sdl : SDL_ALPHA_OPAQUE, SDL_Color, SDL_RenderClear, SDL_RenderPresent, SDL_SetRenderDrawColor;
-
 import desktopdial.graphic.hands : Hands, HandsVisual;
 import desktopdial.graphic.symbols : Symbols, SymbolsVisual;
 import desktopdial.sdl.renderer : Renderer;
 import desktopdial.sdl.window : Window;
+import std.datetime : SysTime;
 
 struct Dial
 {

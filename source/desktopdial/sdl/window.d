@@ -1,8 +1,8 @@
 /**
   Modulo, kiu provizas strukturon de fenestro.
 
-  Date: 2017/11/1
-  Author: masaniwa
+  Copyright: 2017 masaniwa
+  License: MIT
  */
 
 module desktopdial.sdl.window;
@@ -15,7 +15,7 @@ import desktopdial.sdl.exception : SDLException;
 import std.conv : to;
 import std.string : toStringz;
 
-/** Strukturo, kiu administras fenestran rimedon. Uzi tion postulas la SDL-bibliotekon. */
+/** Strukturo, kiu administras fenestron rimedon. Uzi tion postulas la SDL-bibliotekon. */
 struct Window
 {
     alias get this;
@@ -48,16 +48,16 @@ struct Window
     }
 
     /**
-      Akiras la fenestran rimedon, kiu estas administrata.
+      Akiras la fenestron rimedon, kiu estas administrata.
 
-      Returns: La fenestra rimedo.
+      Returns: La fenestro rimedo.
      */
     SDL_Window* get() pure nothrow @nogc @safe
     {
         return data;
     }
 
-    private SDL_Window* data; /// Fenestra rimedo, kiu estas administrata.
+    private SDL_Window* data; /// Fenestro rimedo, kiu estas administrata.
 
     invariant
     {

@@ -1,8 +1,8 @@
 /**
   Modulo, kiu provizas strukturon de rendisto.
 
-  Date: 2017/11/2
-  Author: masaniwa
+  Copyright: 2017 masaniwa
+  License: MIT
  */
 
 module desktopdial.sdl.renderer;
@@ -15,7 +15,7 @@ import desktopdial.sdl.exception : SDLException;
 import desktopdial.sdl.window : Window;
 import std.conv : to;
 
-/** Strukturo, kiu administras rendistan rimedon. Uzi tion postulas la SDL-bibliotekon. */
+/** Strukturo, kiu administras rendiston rimedon. Uzi tion postulas la SDL-bibliotekon. */
 struct Renderer
 {
     alias get this;
@@ -44,16 +44,16 @@ struct Renderer
     }
 
     /**
-      Akiras la rendistan rimedon, kiu estas administrata.
+      Akiras la rendiston rimedon, kiu estas administrata.
 
-      Returns: La rendista rimedo.
+      Returns: La rendisto rimedo.
      */
     SDL_Renderer* get() pure nothrow @nogc @safe
     {
         return data;
     }
 
-    private SDL_Renderer* data; /// Rendista rimedo, kiu estas administrata.
+    private SDL_Renderer* data; /// Rendisto rimedo, kiu estas administrata.
 
     invariant
     {

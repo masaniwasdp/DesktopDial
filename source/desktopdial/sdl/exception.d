@@ -1,8 +1,8 @@
 /**
   Modulo, kiu provizas la esceptojn de la SDL-biblioteko.
 
-  Date: 2017/11/1
-  Author: masaniwa
+  Copyright: 2017 masaniwa
+  License: MIT
  */
 
 module desktopdial.sdl.exception;

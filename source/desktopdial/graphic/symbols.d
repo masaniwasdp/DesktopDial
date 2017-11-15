@@ -1,3 +1,10 @@
+/**
+  Modulo, kiu provizas simbolojn de horloĝo.
+
+  Copyright: 2017 masaniwa
+  License: MIT
+ */
+
 module desktopdial.graphic.symbols;
 
 import derelict.sdl2.sdl : SDL_Color, SDL_FLIP_NONE, SDL_GetRendererOutputSize, SDL_Rect, SDL_RenderCopyEx;
@@ -7,8 +14,19 @@ import desktopdial.sdl.surface : Surface;
 import desktopdial.sdl.texture : Texture;
 import std.range : iota;
 
+/** Simboloj de horloĝo. Uzi tiojn postulas la SDL-bibliotekon. */
 struct Symbols
 {
+    /**
+      Konstruas la simbolojn.
+
+      Params:
+        renderer = Rendisto uzota por konstrui la simbolojn.
+        visual = La vido de la simboloj.
+
+      Throws:
+        desktopdial.sdl.exception.SDLException Kiam konstruado malsukcesas.
+     */
     this(ref Renderer renderer, in SymbolsVisual visual)
     {
         small = renderer.drawSymbol(visual.small);
@@ -17,6 +35,12 @@ struct Symbols
 
     this(this) @disable;
 
+    /**
+      Desegnas la simbolojn en fenestro.
+
+      Params:
+        renderer = Rendisto de fenestro uzota por desegni.
+     */
     void draw(ref Renderer renderer) nothrow @nogc
     {
         foreach (angle; iota(0, 360, smallInterval))
@@ -30,29 +54,43 @@ struct Symbols
         }
     }
 
-    private Texture small;
-    private Texture large;
+    private Texture small; /// Teksturo de malgrandaj horloĝaj simboloj.
+    private Texture large; /// Teksturo de grandaj horloĝaj simboloj.
 }
 
+/** Vidoj de horloĝaj simboloj. */
 struct SymbolsVisual
 {
-    SymbolVisual small;
-    SymbolVisual large;
+    SymbolVisual small; /// Vido de malgrandaj horloĝaj simboloj.
+    SymbolVisual large; /// Vido de grandaj horloĝaj simboloj.
 }
 
+/** Vido de horloĝa simbolo. */
 struct SymbolVisual
 {
-    ushort width;
-    ushort start;
-    ushort length;
+    ushort width;  /// La larĝo de simbolo.
+    ushort start;  /// La distanco de la centro de komencpunkto.
+    ushort length; /// La longo de simbolo.
 
-    SDL_Color color;
-    SDL_Color alpha;
+    SDL_Color color; /// Koloro de simbolo.
+    SDL_Color alpha; /// Travidebla koloro de teksturo.
 }
 
-private enum smallInterval = 30;
-private enum largeInterval = 90;
+private enum smallInterval = 30; /// La angula interspaco de malgrandaj simboloj.
+private enum largeInterval = 90; /// La angula interspaco de grandaj simboloj.
 
+/**
+  Desegnas simbolon en teksturo.
+
+  Params:
+    renderer = Rendisto uzota por desegni simbolon.
+    visual = La vido de simbolo.
+
+  Returns: Teksturo sur kiu desegnis la simbolon.
+
+  Throws:
+    desktopdial.sdl.exception.SDLException Kiam malsukcesas desegni.
+ */
 private Texture drawSymbol(ref Renderer renderer, in SymbolVisual visual)
 {
     int width, height;

@@ -7,10 +7,7 @@
 
 module desktopdial.sdl.window;
 
-import derelict.sdl2.sdl :
-        SDL_CreateWindow, SDL_DestroyWindow, SDL_GetError, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOW_ALWAYS_ON_TOP,
-        SDL_Window;
-
+import derelict.sdl2.sdl;
 import desktopdial.sdl.exception : SDLException;
 import std.conv : to;
 import std.string : toStringz;
@@ -18,8 +15,6 @@ import std.string : toStringz;
 /** Strukturo, kiu administras fenestron rimedon. Uzi tion postulas la SDL-bibliotekon. */
 struct Window
 {
-    alias get this;
-
     /**
       Konstruas la strukturon kaj fenestron.
 
@@ -44,17 +39,7 @@ struct Window
 
     ~this()
     {
-        data.SDL_DestroyWindow;
-    }
-
-    /**
-      Akiras la fenestron rimedon, kiu estas administrata.
-
-      Returns: La fenestro rimedo.
-     */
-    SDL_Window* get() pure nothrow @nogc @safe
-    {
-        return data;
+        SDL_DestroyWindow(data);
     }
 
     private SDL_Window* data; /// Fenestro rimedo, kiu estas administrata.
@@ -63,4 +48,17 @@ struct Window
     {
         assert(data);
     }
+}
+
+/**
+  Akiras fenestron rimedon, kiu estas administrata.
+
+  Params:
+    window = Strukturo, kiu administras fenestron rimedon.
+
+  Returns: Fenestro rimedo.
+ */
+SDL_Window* get(ref Window window) @nogc nothrow pure @safe
+{
+    return window.data;
 }

@@ -7,19 +7,14 @@
 
 module desktopdial.sdl.renderer;
 
-import derelict.sdl2.sdl :
-        SDL_CreateRenderer, SDL_DestroyRenderer, SDL_GetError, SDL_RENDERER_ACCELERATED, SDL_RENDERER_PRESENTVSYNC,
-        SDL_Renderer;
-
+import derelict.sdl2.sdl;
 import desktopdial.sdl.exception : SDLException;
-import desktopdial.sdl.window : Window;
+import desktopdial.sdl.window : Window, get;
 import std.conv : to;
 
 /** Strukturo, kiu administras rendiston rimedon. Uzi tion postulas la SDL-bibliotekon. */
 struct Renderer
 {
-    alias get this;
-
     /**
       Konstruas la strukturon kaj rendiston.
 
@@ -31,7 +26,7 @@ struct Renderer
      */
     this(ref Window window)
     {
-        data = window.SDL_CreateRenderer(-1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+        data = SDL_CreateRenderer(window.get, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 
         if (!data) throw new SDLException(SDL_GetError().to!string);
     }
@@ -40,17 +35,7 @@ struct Renderer
 
     ~this()
     {
-        data.SDL_DestroyRenderer;
-    }
-
-    /**
-      Akiras la rendiston rimedon, kiu estas administrata.
-
-      Returns: La rendisto rimedo.
-     */
-    SDL_Renderer* get() pure nothrow @nogc @safe
-    {
-        return data;
+        SDL_DestroyRenderer(data);
     }
 
     private SDL_Renderer* data; /// Rendisto rimedo, kiu estas administrata.
@@ -59,4 +44,17 @@ struct Renderer
     {
         assert(data);
     }
+}
+
+/**
+  Akiras rendiston rimedon, kiu estas administrata.
+
+  Params:
+    renderer = Strukturo, kiu administras rendiston rimedon.
+
+  Returns: Rendisto rimedo.
+ */
+SDL_Renderer* get(ref Renderer renderer) @nogc nothrow pure @safe
+{
+    return renderer.data;
 }

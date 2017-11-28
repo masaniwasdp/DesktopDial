@@ -10,8 +10,8 @@ module desktopdial.graphic.symbols;
 import derelict.sdl2.sdl : SDL_Color, SDL_FLIP_NONE, SDL_GetRendererOutputSize, SDL_Rect, SDL_RenderCopyEx;
 import desktopdial.graphic.drawing : drawRect;
 import desktopdial.sdl.renderer : Renderer;
-import desktopdial.sdl.surface : Surface;
-import desktopdial.sdl.texture : Texture;
+import desktopdial.sdl.surface : Surface, get;
+import desktopdial.sdl.texture : Texture, get;
 import std.range : iota;
 
 /** Simboloj de horloĝo. Uzi tiojn postulas la SDL-bibliotekon. */
@@ -45,12 +45,12 @@ struct Symbols
     {
         foreach (angle; iota(0, 360, smallInterval))
         {
-            renderer.SDL_RenderCopyEx(small, null, null, angle, null, SDL_FLIP_NONE);
+            renderer.get.SDL_RenderCopyEx(small.get, null, null, angle, null, SDL_FLIP_NONE);
         }
 
         foreach (angle; iota(0, 360, largeInterval))
         {
-            renderer.SDL_RenderCopyEx(large, null, null, angle, null, SDL_FLIP_NONE);
+            renderer.get.SDL_RenderCopyEx(large.get, null, null, angle, null, SDL_FLIP_NONE);
         }
     }
 
@@ -95,7 +95,7 @@ private Texture drawSymbol(ref Renderer renderer, in SymbolVisual visual)
 {
     int width, height;
 
-    renderer.SDL_GetRendererOutputSize(&width, &height);
+    renderer.get.SDL_GetRendererOutputSize(&width, &height);
 
     auto surface = Surface(width, height);
 

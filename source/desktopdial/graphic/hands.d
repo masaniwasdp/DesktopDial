@@ -10,8 +10,8 @@ module desktopdial.graphic.hands;
 import derelict.sdl2.sdl : SDL_Color, SDL_FLIP_NONE, SDL_GetRendererOutputSize, SDL_Rect, SDL_RenderCopyEx;
 import desktopdial.graphic.drawing : drawRect;
 import desktopdial.sdl.renderer : Renderer;
-import desktopdial.sdl.surface : Surface;
-import desktopdial.sdl.texture : Texture;
+import desktopdial.sdl.surface : Surface, get;
+import desktopdial.sdl.texture : Texture, get;
 import std.datetime : SysTime;
 import std.typecons : Tuple, tuple;
 
@@ -48,9 +48,9 @@ struct Hands
     {
         immutable angles = time.calcAngles;
 
-        renderer.SDL_RenderCopyEx(hour, null, null, angles[0], null, SDL_FLIP_NONE);
-        renderer.SDL_RenderCopyEx(minute, null, null, angles[1], null, SDL_FLIP_NONE);
-        renderer.SDL_RenderCopyEx(second, null, null, angles[2], null, SDL_FLIP_NONE);
+        renderer.get.SDL_RenderCopyEx(hour.get, null, null, angles[0], null, SDL_FLIP_NONE);
+        renderer.get.SDL_RenderCopyEx(minute.get, null, null, angles[1], null, SDL_FLIP_NONE);
+        renderer.get.SDL_RenderCopyEx(second.get, null, null, angles[2], null, SDL_FLIP_NONE);
     }
 
     private Texture hour;   /// Teksturo de horoj manoj.
@@ -93,7 +93,7 @@ private Texture drawHand(ref Renderer renderer, in HandVisual visual)
 {
     int width, height;
 
-    renderer.SDL_GetRendererOutputSize(&width, &height);
+    renderer.get.SDL_GetRendererOutputSize(&width, &height);
 
     auto surface = Surface(width, height);
 

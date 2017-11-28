@@ -3,7 +3,7 @@ module desktopdial.graphic.dial;
 import derelict.sdl2.sdl : SDL_ALPHA_OPAQUE, SDL_Color, SDL_RenderClear, SDL_RenderPresent, SDL_SetRenderDrawColor;
 import desktopdial.graphic.hands : Hands, HandsVisual;
 import desktopdial.graphic.symbols : Symbols, SymbolsVisual;
-import desktopdial.sdl.renderer : Renderer;
+import desktopdial.sdl.renderer : Renderer, get;
 import desktopdial.sdl.window : Window;
 import std.datetime : SysTime;
 
@@ -26,15 +26,15 @@ struct Dial
 
     void draw(in SysTime time) nothrow
     {
-        renderer.SDL_SetRenderDrawColor(background.r, background.g, background.b, SDL_ALPHA_OPAQUE);
+        renderer.get.SDL_SetRenderDrawColor(background.r, background.g, background.b, SDL_ALPHA_OPAQUE);
 
-        renderer.SDL_RenderClear;
+        renderer.get.SDL_RenderClear;
 
         symbols.draw(renderer);
 
         hands.draw(renderer, time);
 
-        renderer.SDL_RenderPresent;
+        renderer.get.SDL_RenderPresent;
     }
 
     private immutable SDL_Color background;

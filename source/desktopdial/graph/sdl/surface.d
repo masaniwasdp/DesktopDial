@@ -1,14 +1,14 @@
 /**
   Modulo, kiu provizas strukturon de surfaco.
 
-  Copyright: 2017 masaniwa
-  License: MIT
+  Copyright: 2018 masaniwa
+  License:   MIT
  */
 
-module desktopdial.sdl.surface;
+module desktopdial.graph.sdl.surface;
 
 import derelict.sdl2.sdl;
-import desktopdial.sdl.exception : SDLException;
+import desktopdial.graph.sdl.exception : SDLException;
 import std.conv : to;
 
 /** Strukturo, kiu administras surfacon rimedon. Uzi tion postulas la SDL-bibliotekon. */
@@ -18,7 +18,7 @@ struct Surface
       Konstruas la strukturon kaj surfacon.
 
       Params:
-        width = La larĝo de la surfaco.
+        width  = La larĝo de la surfaco.
         height = La alceto de la surfaco.
 
       Throws:

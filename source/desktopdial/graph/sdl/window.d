@@ -1,14 +1,14 @@
 /**
   Modulo, kiu provizas strukturon de fenestro.
 
-  Copyright: 2017 masaniwa
-  License: MIT
+  Copyright: 2018 masaniwa
+  License:   MIT
  */
 
-module desktopdial.sdl.window;
+module desktopdial.graph.sdl.window;
 
 import derelict.sdl2.sdl;
-import desktopdial.sdl.exception : SDLException;
+import desktopdial.graph.sdl.exception : SDLException;
 import std.conv : to;
 import std.string : toStringz;
 
@@ -19,8 +19,8 @@ struct Window
       Konstruas la strukturon kaj fenestron.
 
       Params:
-        name = La nomo por doni la fenestron.
-        width = La larĝo de la fenestro.
+        name   = La nomo por doni la fenestron.
+        width  = La larĝo de la fenestro.
         height = La alceto de la fenestro.
 
       Throws:
@@ -28,10 +28,13 @@ struct Window
      */
     this(in string name, in int width, in int height)
     {
-        immutable namez = name.toStringz;
-
         data = SDL_CreateWindow(
-                namez, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_ALWAYS_ON_TOP);
+            name.toStringz,
+            SDL_WINDOWPOS_UNDEFINED,
+            SDL_WINDOWPOS_UNDEFINED,
+            width,
+            height,
+            SDL_WINDOW_ALWAYS_ON_TOP);
 
         if (!data) throw new SDLException(SDL_GetError().to!string);
     }

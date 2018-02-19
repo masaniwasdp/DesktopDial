@@ -1,15 +1,15 @@
 /**
   Modulo, kiu provizas strukturon de rendisto.
 
-  Copyright: 2017 masaniwa
-  License: MIT
+  Copyright: 2018 masaniwa
+  License:   MIT
  */
 
-module desktopdial.sdl.renderer;
+module desktopdial.graph.sdl.renderer;
 
 import derelict.sdl2.sdl;
-import desktopdial.sdl.exception : SDLException;
-import desktopdial.sdl.window : Window, get;
+import desktopdial.graph.sdl.exception : SDLException;
+import desktopdial.graph.sdl.window : Window, get;
 import std.conv : to;
 
 /** Strukturo, kiu administras rendiston rimedon. Uzi tion postulas la SDL-bibliotekon. */

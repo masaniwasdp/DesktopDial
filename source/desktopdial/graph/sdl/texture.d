@@ -1,16 +1,16 @@
 /**
   Modulo, kiu provizas strukturon de teksturo.
 
-  Copyright: 2017 masaniwa
-  License: MIT
+  Copyright: 2018 masaniwa
+  License:   MIT
  */
 
-module desktopdial.sdl.texture;
+module desktopdial.graph.sdl.texture;
 
 import derelict.sdl2.sdl;
-import desktopdial.sdl.exception : SDLException;
-import desktopdial.sdl.renderer : Renderer, get;
-import desktopdial.sdl.surface : Surface, get;
+import desktopdial.graph.sdl.exception : SDLException;
+import desktopdial.graph.sdl.renderer : Renderer, get;
+import desktopdial.graph.sdl.surface : Surface, get;
 import std.conv : to;
 
 /** Strukturo, kiu administras teksturon rimedon. Uzi tion postulas la SDL-bibliotekon. */
@@ -21,7 +21,7 @@ struct Texture
 
       Params:
         renderer = Rendisto uzota por konstrui teksturon.
-        surface = Surfaco uzota por konstrui teksturon.
+        surface  = Surfaco uzota por konstrui teksturon.
 
       Throws:
         SDLException Kiam konstruado malsukcesas.

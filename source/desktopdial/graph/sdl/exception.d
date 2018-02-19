@@ -1,11 +1,11 @@
 /**
   Modulo, kiu provizas la esceptojn de la SDL-biblioteko.
 
-  Copyright: 2017 masaniwa
-  License: MIT
+  Copyright: 2018 masaniwa
+  License:   MIT
  */
 
-module desktopdial.sdl.exception;
+module desktopdial.graph.sdl.exception;
 
 import std.exception : basicExceptionCtors;
 

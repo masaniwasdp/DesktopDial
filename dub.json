@@ -2,11 +2,11 @@
     "name": "desktopdial",
     "authors": [ "masaniwa" ],
     "dependencies": {
-        "derelict-sdl2": "~>3.1.0-alpha.2",
+        "derelict-sdl2": "~>3.1.0-alpha.3",
         "jsonserialized": "~>0.2.1"
     },
     "description": "A clock dial for desktop.",
-    "copyright": "Copyright © 2017, masaniwa",
+    "copyright": "Copyright © 2018, masaniwa",
     "license": "MIT",
     "targetPath": "$PACKAGE_DIR/build/",
     "copyFiles": [ "$PACKAGE_DIR/resource" ],

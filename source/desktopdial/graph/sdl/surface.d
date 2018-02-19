@@ -1,26 +1,24 @@
 /**
   Modulo, kiu provizas strukturon de surfaco.
 
-  Copyright: 2017 masaniwa
-  License: MIT
+  Copyright: 2018 masaniwa
+  License:   MIT
  */
 
-module desktopdial.sdl.surface;
+module desktopdial.graph.sdl.surface;
 
-import derelict.sdl2.sdl : SDL_CreateRGBSurface, SDL_FreeSurface, SDL_GetError, SDL_Surface;
-import desktopdial.sdl.exception : SDLException;
+import derelict.sdl2.sdl;
+import desktopdial.graph.sdl.exception : SDLException;
 import std.conv : to;
 
 /** Strukturo, kiu administras surfacon rimedon. Uzi tion postulas la SDL-bibliotekon. */
 struct Surface
 {
-    alias get this;
-
     /**
       Konstruas la strukturon kaj surfacon.
 
       Params:
-        width = La larĝo de la surfaco.
+        width  = La larĝo de la surfaco.
         height = La alceto de la surfaco.
 
       Throws:
@@ -37,17 +35,7 @@ struct Surface
 
     ~this()
     {
-        data.SDL_FreeSurface;
-    }
-
-    /**
-      Akiras la surfacon rimedon, kiu estas administrata.
-
-      Returns: La surfaco rimedo.
-     */
-    SDL_Surface* get() pure nothrow @nogc @safe
-    {
-        return data;
+        SDL_FreeSurface(data);
     }
 
     private SDL_Surface* data; /// Surfaco rimedo, kiu estas administrata.
@@ -56,4 +44,17 @@ struct Surface
     {
         assert(data);
     }
+}
+
+/**
+  Akiras surfacon rimedon, kiu estas administrata.
+
+  Params:
+    surface = Strukturo, kiu administras surfacon rimedon.
+
+  Returns: Surfaco rimedo.
+ */
+SDL_Surface* get(ref Surface surface) @nogc nothrow pure @safe
+{
+    return surface.data;
 }

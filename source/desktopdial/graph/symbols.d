@@ -1,17 +1,17 @@
 /**
   Modulo, kiu provizas simbolojn de horloĝo.
 
-  Copyright: 2017 masaniwa
-  License: MIT
+  Copyright: 2018 masaniwa
+  License:   MIT
  */
 
-module desktopdial.graphic.symbols;
+module desktopdial.graph.symbols;
 
-import derelict.sdl2.sdl : SDL_Color, SDL_FLIP_NONE, SDL_GetRendererOutputSize, SDL_Rect, SDL_RenderCopyEx;
-import desktopdial.graphic.drawing : drawRect;
-import desktopdial.sdl.renderer : Renderer;
-import desktopdial.sdl.surface : Surface;
-import desktopdial.sdl.texture : Texture;
+import derelict.sdl2.sdl;
+import desktopdial.graph.drawing : draw;
+import desktopdial.graph.sdl.renderer : Renderer;
+import desktopdial.graph.sdl.surface : Surface, get;
+import desktopdial.graph.sdl.texture : Texture, get;
 import std.range : iota;
 
 /** Simboloj de horloĝo. Uzi tiojn postulas la SDL-bibliotekon. */
@@ -22,15 +22,15 @@ struct Symbols
 
       Params:
         renderer = Rendisto uzota por konstrui la simbolojn.
-        visual = La vido de la simboloj.
+        visual   = La vido de la simboloj.
 
       Throws:
-        desktopdial.sdl.exception.SDLException Kiam konstruado malsukcesas.
+        desktopdial.graph.sdl.exception.SDLException Kiam konstruado malsukcesas.
      */
     this(ref Renderer renderer, in SymbolsVisual visual)
     {
-        small = renderer.drawSymbol(visual.small);
-        large = renderer.drawSymbol(visual.large);
+        small = renderer.draw(visual.small);
+        large = renderer.draw(visual.large);
     }
 
     this(this) @disable;
@@ -45,12 +45,12 @@ struct Symbols
     {
         foreach (angle; iota(0, 360, smallInterval))
         {
-            renderer.SDL_RenderCopyEx(small, null, null, angle, null, SDL_FLIP_NONE);
+            SDL_RenderCopyEx(renderer.get, small.get, null, null, angle, null, SDL_FLIP_NONE);
         }
 
         foreach (angle; iota(0, 360, largeInterval))
         {
-            renderer.SDL_RenderCopyEx(large, null, null, angle, null, SDL_FLIP_NONE);
+            SDL_RenderCopyEx(renderer.get, large.get, null, null, angle, null, SDL_FLIP_NONE);
         }
     }
 
@@ -84,28 +84,28 @@ private enum largeInterval = 90; /// La angula interspaco de grandaj simboloj.
 
   Params:
     renderer = Rendisto uzota por desegni simbolon.
-    visual = La vido de simbolo.
+    visual   = La vido de simbolo.
 
   Returns: Teksturo sur kiu desegnis la simbolon.
 
   Throws:
-    desktopdial.sdl.exception.SDLException Kiam malsukcesas desegni.
+    desktopdial.graph.sdl.exception.SDLException Kiam malsukcesas desegni.
  */
-private Texture drawSymbol(ref Renderer renderer, in SymbolVisual visual)
+private Texture draw(ref Renderer renderer, in SymbolVisual visual)
 {
     int width, height;
 
-    renderer.SDL_GetRendererOutputSize(&width, &height);
+    SDL_GetRendererOutputSize(renderer.get, &width, &height);
 
     auto surface = Surface(width, height);
 
     immutable rect = SDL_Rect(
-            width / 2 - visual.width / 2,
-            height / 2 - visual.start - visual.length,
-            visual.width,
-            visual.length);
+        width / 2 - visual.width / 2,
+        height / 2 - visual.start - visual.length,
+        visual.width,
+        visual.length);
 
-    surface.drawRect(rect, visual.color, visual.alpha);
+    surface.draw(rect, visual.color, visual.alpha);
 
     return Texture(renderer, surface);
 }

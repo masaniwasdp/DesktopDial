@@ -1,36 +1,34 @@
 /**
   Modulo, kiu provizas strukturon de teksturo.
 
-  Copyright: 2017 masaniwa
-  License: MIT
+  Copyright: 2018 masaniwa
+  License:   MIT
  */
 
-module desktopdial.sdl.texture;
+module desktopdial.graph.sdl.texture;
 
-import derelict.sdl2.sdl : SDL_CreateTextureFromSurface, SDL_DestroyTexture, SDL_GetError, SDL_Texture;
-import desktopdial.sdl.exception : SDLException;
-import desktopdial.sdl.renderer : Renderer;
-import desktopdial.sdl.surface : Surface;
+import derelict.sdl2.sdl;
+import desktopdial.graph.sdl.exception : SDLException;
+import desktopdial.graph.sdl.renderer : Renderer, get;
+import desktopdial.graph.sdl.surface : Surface, get;
 import std.conv : to;
 
 /** Strukturo, kiu administras teksturon rimedon. Uzi tion postulas la SDL-bibliotekon. */
 struct Texture
 {
-    alias get this;
-
     /**
       Konstruas la strukturon kaj teksturon.
 
       Params:
         renderer = Rendisto uzota por konstrui teksturon.
-        surface = Surfaco uzota por konstrui teksturon.
+        surface  = Surfaco uzota por konstrui teksturon.
 
       Throws:
         SDLException Kiam konstruado malsukcesas.
      */
     this(ref Renderer renderer, ref Surface surface)
     {
-        data = renderer.SDL_CreateTextureFromSurface(surface);
+        data = SDL_CreateTextureFromSurface(renderer.get, surface.get);
 
         if (!data) throw new SDLException(SDL_GetError().to!string);
     }
@@ -39,17 +37,7 @@ struct Texture
 
     ~this()
     {
-        data.SDL_DestroyTexture;
-    }
-
-    /**
-      Akiras la teksturon rimedon, kiu estas administrata.
-
-      Returns: La teksturo rimedo.
-     */
-    SDL_Texture* get() pure nothrow @nogc @safe
-    {
-        return data;
+        SDL_DestroyTexture(data);
     }
 
     private SDL_Texture* data; /// Teksturo rimedo, kiu estas administrata.
@@ -58,4 +46,17 @@ struct Texture
     {
         assert(data);
     }
+}
+
+/**
+  Akiras teksturon rimedon, kiu estas administrata.
+
+  Params:
+    texture = Strukturo, kiu administras teksturon rimedon.
+
+  Returns: Teksturo rimedo.
+ */
+SDL_Texture* get(ref Texture texture) @nogc nothrow pure @safe
+{
+    return texture.data;
 }

@@ -6,21 +6,21 @@
         "background": { "r":255, "g": 255, "b": 255 }
     },
     "hands": {
-        "hour": {
+        "hou": {
             "width": 3,
             "longer": 80,
             "shorter": 10,
             "color": { "r": 0, "g": 0, "b": 0 },
             "alpha": { "r": 255, "g": 255, "b": 255 }
         },
-        "minute": {
+        "min": {
             "width": 3,
             "longer": 100,
             "shorter": 10,
             "color": { "r": 0, "g": 0, "b": 0 },
             "alpha": { "r": 255, "g": 255, "b": 255 }
         },
-        "second": {
+        "sec": {
             "width": 3,
             "longer": 120,
             "shorter": 10,

@@ -1,23 +1,12 @@
 module desktopdial.app;
 
+import derelict.sdl2.sdl;
+import desktopdial.graph.dial : Dial, DialVisual;
+import jsonserialized.deserialization : deserializeFromJSONValue;
 import std.datetime : Clock;
 import std.file : readText;
 import std.stdio : writeln;
-
-import derelict.sdl2.sdl :
-    SDL_Delay,
-    SDL_Event,
-    SDL_GetTicks,
-    SDL_HINT_RENDER_SCALE_QUALITY,
-    SDL_HINT_VIDEO_ALLOW_SCREENSAVER,
-    SDL_PollEvent,
-    SDL_QUIT,
-    SDL_SetHint;
-
-import jsonserialized.deserialization : deserializeFromJSONValue;
 import stdx.data.json : toJSONValue;
-
-import desktopdial.graphic.dial : Dial, DialVisual;
 
 struct App
 {
@@ -26,7 +15,12 @@ struct App
         SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, quality);
         SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, screensaver);
 
-        dial = Dial(path.readText.toJSONValue.deserializeFromJSONValue!DialVisual);
+        immutable visual = path
+            .readText
+            .toJSONValue
+            .deserializeFromJSONValue!DialVisual;
+
+        dial = Dial(visual);
     }
 
     this(this) @disable;

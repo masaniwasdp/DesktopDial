@@ -46,7 +46,7 @@ struct App
 
     private void handleEvents() nothrow @nogc
     {
-        SDL_Event event;
+        SDL_Event event = void;
 
         while (SDL_PollEvent(&event) == 1)
         {

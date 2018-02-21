@@ -42,7 +42,7 @@ private void handle(E : Throwable)(lazy scope void expression, in string message
 {
     try
     {
-        return expression;
+        expression;
     }
     catch (E)
     {

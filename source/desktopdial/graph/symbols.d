@@ -93,17 +93,18 @@ private enum largeInterval = 90; /// La angula interspaco de grandaj simboloj.
  */
 private Texture draw(ref Renderer renderer, in SymbolVisual visual)
 {
-    int width, height;
+    int width = void, height = void;
 
     SDL_GetRendererOutputSize(renderer.get, &width, &height);
 
     auto surface = Surface(width, height);
 
-    immutable rect = SDL_Rect(
+    immutable SDL_Rect rect = {
         width / 2 - visual.width / 2,
         height / 2 - visual.start - visual.length,
         visual.width,
-        visual.length);
+        visual.length
+    };
 
     surface.draw(rect, visual.color, visual.alpha);
 

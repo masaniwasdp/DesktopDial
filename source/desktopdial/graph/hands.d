@@ -91,17 +91,18 @@ struct HandVisual
  */
 private Texture draw(ref Renderer renderer, in HandVisual visual)
 {
-    int width, height;
+    int width = void, height = void;
 
     SDL_GetRendererOutputSize(renderer.get, &width, &height);
 
     auto surface = Surface(width, height);
 
-    immutable rect = SDL_Rect(
+    immutable SDL_Rect rect = {
         width / 2 - visual.width / 2,
         height / 2 - visual.longer,
         visual.width,
-        visual.longer + visual.shorter);
+        visual.longer + visual.shorter
+    };
 
     surface.draw(rect, visual.color, visual.alpha);
 

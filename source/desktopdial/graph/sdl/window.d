@@ -29,12 +29,7 @@ struct Window
     this(in string name, in int width, in int height)
     {
         data = SDL_CreateWindow(
-            name.toStringz,
-            SDL_WINDOWPOS_UNDEFINED,
-            SDL_WINDOWPOS_UNDEFINED,
-            width,
-            height,
-            SDL_WINDOW_ALWAYS_ON_TOP);
+            name.toStringz, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_ALWAYS_ON_TOP);
 
         if (!data) throw new SDLException(SDL_GetError().to!string);
     }

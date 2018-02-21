@@ -100,10 +100,7 @@ private Texture draw(ref Renderer renderer, in SymbolVisual visual)
     auto surface = Surface(width, height);
 
     immutable SDL_Rect rect = {
-        width / 2 - visual.width / 2,
-        height / 2 - visual.start - visual.length,
-        visual.width,
-        visual.length
+        width / 2 - visual.width / 2, height / 2 - visual.start - visual.length, visual.width, visual.length
     };
 
     surface.draw(rect, visual.color, visual.alpha);

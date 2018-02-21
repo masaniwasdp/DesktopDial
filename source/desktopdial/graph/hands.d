@@ -98,10 +98,7 @@ private Texture draw(ref Renderer renderer, in HandVisual visual)
     auto surface = Surface(width, height);
 
     immutable SDL_Rect rect = {
-        width / 2 - visual.width / 2,
-        height / 2 - visual.longer,
-        visual.width,
-        visual.longer + visual.shorter
+        width / 2 - visual.width / 2, height / 2 - visual.longer, visual.width, visual.longer + visual.shorter
     };
 
     surface.draw(rect, visual.color, visual.alpha);

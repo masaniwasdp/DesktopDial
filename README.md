@@ -18,9 +18,9 @@ X11環境では時計盤は常に最前面に表示されます。
 
 ``` bash
 $ cd ~
-$ git clone https://github.com/masaniwasdp/DesktopDial.git
+$ git clone https://github.com/masaniwasdp/DesktopDial.git --depth 1
 $ cd DesktopDial
-$ dub build --build=release
+$ dub build --build release
 ```
 
 ## 実行

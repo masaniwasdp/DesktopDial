@@ -20,10 +20,10 @@ import std.typecons : Tuple, tuple;
 struct Hands
 {
     /**
-      Konstruas la manojn.
+      Konstruas manojn.
 
       Params:
-        renderer = Rendisto uzota por konstrui la manojn.
+        renderer = Rendisto uzota por desegni manojn.
         designs  = Dezajnoj de manoj.
 
       Throws:
@@ -31,6 +31,8 @@ struct Hands
      */
     this(ref SDL_RAII_Renderer renderer, in HandDesigns designs)
     {
+        renderer_ = renderer.ptr;
+
         hHand_ = renderer.draw(designs.hHand);
         mHand_ = renderer.draw(designs.mHand);
         sHand_ = renderer.draw(designs.sHand);
@@ -42,24 +44,30 @@ struct Hands
       Desegnas la manojn en fenestro.
 
       Params:
-        renderer = Rendisto de fenestro uzota por desegni.
-        time     = Tempo, kiu estos montrata.
+        time = Tempo, kiu estos montrata.
 
       Throws:
         sdlraii.SDL_Exception Kiam malsukcesas desegni.
      */
-    void draw(ref SDL_RAII_Renderer renderer, in SysTime time)
+    void draw(in SysTime time)
     {
         immutable angles = time.calcAngles;
 
-        SDL_Try(SDL_RenderCopyEx(renderer.ptr, hHand_.ptr, null, null, angles[0], null, SDL_FLIP_NONE));
-        SDL_Try(SDL_RenderCopyEx(renderer.ptr, mHand_.ptr, null, null, angles[1], null, SDL_FLIP_NONE));
-        SDL_Try(SDL_RenderCopyEx(renderer.ptr, sHand_.ptr, null, null, angles[2], null, SDL_FLIP_NONE));
+        SDL_Try(SDL_RenderCopyEx(renderer_, hHand_.ptr, null, null, angles[0], null, SDL_FLIP_NONE));
+        SDL_Try(SDL_RenderCopyEx(renderer_, mHand_.ptr, null, null, angles[1], null, SDL_FLIP_NONE));
+        SDL_Try(SDL_RenderCopyEx(renderer_, sHand_.ptr, null, null, angles[2], null, SDL_FLIP_NONE));
     }
+
+    private SDL_Renderer* renderer_; // Rendisto por desegni manojn.
 
     private SDL_RAII_Texture hHand_; // Teksturo de horoj manoj.
     private SDL_RAII_Texture mHand_; // Teksturo de minutoj manoj.
     private SDL_RAII_Texture sHand_; // Teksturo de sekundoj manoj.
+
+    invariant
+    {
+        assert(renderer_);
+    }
 }
 
 /** Dezajnoj de horloĝaj manoj. */

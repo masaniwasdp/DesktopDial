@@ -10,12 +10,7 @@ import std.file : thisExePath, readText;
 import std.path : buildPath, dirName;
 import stdx.data.json : toJSONValue;
 
-class ReadingDesignException : Exception
-{
-    mixin basicExceptionCtors;
-}
-
-class GraphicInitException : Exception
+class AppException : Exception
 {
     mixin basicExceptionCtors;
 }
@@ -26,7 +21,7 @@ struct App
     {
         SDL_Initialize();
 
-        dial_ = Dial(path.readDesign);
+        dial_ = Dial(path.readDesignFile.parseDesign);
     }
 
     this(this) @disable;
@@ -98,9 +93,13 @@ private void SDL_Initialize()
 
         SDL_Try(SDL_Init(SDL_INIT_EVERYTHING));
     }
+    catch (SDL_Exception e)
+    {
+        throw new AppException(`Couldn't initialize the SDL library.`, e);
+    }
     catch (Exception e)
     {
-        throw new GraphicInitException(`Couldn't initialize the SDL library.`, e);
+        throw new AppException(`Couldn't load the SDL library.`, e);
     }
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, `liner`);
@@ -108,7 +107,7 @@ private void SDL_Initialize()
     SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, `1`);
 }
 
-private DialDesign readDesign(in string path) @safe
+private string readDesignFile(in string path) @safe
 {
     try
     {
@@ -116,13 +115,24 @@ private DialDesign readDesign(in string path) @safe
             ? path
             : buildPath(thisExePath.dirName, directory, filename);
 
-        return file
-            .readText
+        return file.readText;
+    }
+    catch (Exception e)
+    {
+        throw new AppException(`Couldn't read the design file.`, e);
+    }
+}
+
+private DialDesign parseDesign(in string text) @safe
+{
+    try
+    {
+        return text
             .toJSONValue
             .deserializeFromJSONValue!DialDesign;
     }
     catch (Exception e)
     {
-        throw new ReadingDesignException(`Couldn't read the design of the dial.`, e);
+        throw new AppException(`Couldn't parse the design.`, e);
     }
 }

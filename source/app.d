@@ -1,18 +1,16 @@
-import desktopdial.app : App, GraphicInitException, ReadingDesignException;
+import desktopdial.app : App;
 import std.experimental.logger : critical;
 
 void main(string[] args)
 {
+    immutable path = args.length < 2 ? null : args[1];
+
     try
     {
-        App(args.length > 1 ? args[1] : null).run;
+        App(path).run;
     }
-    catch (GraphicInitException)
+    catch (Exception e)
     {
-        critical(`Failed to initialize the SDL library.`);
-    }
-    catch (ReadingDesignException)
-    {
-        critical(`Failed to read the design of the dial.`);
+        critical(e.msg);
     }
 }

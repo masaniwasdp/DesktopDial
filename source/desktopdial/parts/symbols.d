@@ -19,10 +19,10 @@ import std.range : iota;
 struct Symbols
 {
     /**
-      Konstruas la simbolojn.
+      Konstruas simbolojn.
 
       Params:
-        renderer = Rendisto uzota por konstrui la simbolojn.
+        renderer = Rendisto uzota por desegni simbolojn.
         designs  = Dezajnoj de simboloj.
 
       Throws:
@@ -30,6 +30,8 @@ struct Symbols
      */
     this(ref SDL_RAII_Renderer renderer, in SymbolDesigns designs)
     {
+        renderer_ = renderer.ptr;
+
         small_ = renderer.draw(designs.small);
         large_ = renderer.draw(designs.large);
     }
@@ -39,27 +41,31 @@ struct Symbols
     /**
       Desegnas la simbolojn en fenestro.
 
-      Params:
-        renderer = Rendisto de fenestro uzota por desegni.
-
       Throws:
         sdlraii.SDL_Exception Kiam malsukcesas desegni.
      */
-    void draw(ref SDL_RAII_Renderer renderer)
+    void draw()
     {
         foreach (angle; iota(0, 360, smallInterval))
         {
-            SDL_Try(SDL_RenderCopyEx(renderer.ptr, small_.ptr, null, null, angle, null, SDL_FLIP_NONE));
+            SDL_Try(SDL_RenderCopyEx(renderer_, small_.ptr, null, null, angle, null, SDL_FLIP_NONE));
         }
 
         foreach (angle; iota(0, 360, largeInterval))
         {
-            SDL_Try(SDL_RenderCopyEx(renderer.ptr, large_.ptr, null, null, angle, null, SDL_FLIP_NONE));
+            SDL_Try(SDL_RenderCopyEx(renderer_, large_.ptr, null, null, angle, null, SDL_FLIP_NONE));
         }
     }
 
+    private SDL_Renderer* renderer_; // Rendisto por desegni simbolojn;
+
     private SDL_RAII_Texture small_; // Teksturo de malgrandaj horloĝaj simboloj.
     private SDL_RAII_Texture large_; // Teksturo de grandaj horloĝaj simboloj.
+
+    invariant
+    {
+        assert(renderer_);
+    }
 }
 
 /** Dezajnoj de horloĝaj simboloj. */

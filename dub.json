@@ -4,7 +4,7 @@
     "dependencies": {
         "derelict-sdl2": "~>3.1.0-alpha.3",
         "jsonserialized": "~>0.2.1",
-        "sdlraii": "~>0.0.1"
+        "sdlraii": "~>1.0.0"
     },
     "description": "A clock dial for the desktop.",
     "copyright": "Copyright © 2018, masaniwa",

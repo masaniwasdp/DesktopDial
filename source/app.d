@@ -11,6 +11,6 @@ void main(string[] args)
     }
     catch (Throwable e)
     {
-        critical(e.msg);
+        e.msg.critical;
     }
 }

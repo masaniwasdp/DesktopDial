@@ -5,7 +5,6 @@ import jsonserialized.deserialization : deserializeFromJSONValue;
 import sdlraii;
 import std.datetime : Clock;
 import std.exception : basicExceptionCtors;
-import std.experimental.logger : error;
 import std.file : thisExePath, readText;
 import std.path : buildPath, dirName;
 import stdx.data.json : toJSONValue;
@@ -66,9 +65,9 @@ struct App
         {
             dial_.draw(Clock.currTime);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            error(`Failed to update the clock.`);
+            throw new AppException(`Couldn't update the clock.`, e);
         }
     }
 

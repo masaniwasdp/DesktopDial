@@ -9,7 +9,7 @@ void main(string[] args)
     {
         App(path).run;
     }
-    catch (Exception e)
+    catch (Throwable e)
     {
         critical(e.msg);
     }

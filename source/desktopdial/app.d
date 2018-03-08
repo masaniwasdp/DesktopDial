@@ -20,6 +20,8 @@ struct App
     {
         SDL_Initialize();
 
+        SDL_Configure();
+
         dial_ = Dial(path.readDesignFile.parseDesign);
     }
 
@@ -100,7 +102,10 @@ private void SDL_Initialize()
     {
         throw new AppException(`Couldn't load the SDL library.`, e);
     }
+}
 
+private void SDL_Configure() nothrow @nogc
+{
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, `liner`);
 
     SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, `1`);

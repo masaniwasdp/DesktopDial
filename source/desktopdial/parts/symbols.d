@@ -7,7 +7,7 @@
  */
 module desktopdial.parts.symbols;
 
-import desktopdial.parts.drawing : RadioRectTextureDesign, draw;
+import desktopdial.parts.radiorect : RadioRectTextureDesign, draw;
 import sdlraii;
 import std.range : iota;
 

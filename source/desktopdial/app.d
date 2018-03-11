@@ -20,8 +20,6 @@ struct App
     {
         SDL_Initialize();
 
-        SDL_Configure();
-
         dial_ = Dial(path.readDesignFile.parseDesign);
     }
 
@@ -65,7 +63,7 @@ struct App
     {
         try
         {
-            dial_.draw(Clock.currTime);
+            dial_.render(Clock.currTime);
         }
         catch (Exception e)
         {
@@ -82,9 +80,7 @@ struct App
 
 private enum interval = 16;
 
-private enum directory = `asset`;
-
-private enum filename = `dialdesign.json`;
+private enum filename = `asset/dialdesign.json`;
 
 private void SDL_Initialize()
 {
@@ -93,22 +89,15 @@ private void SDL_Initialize()
         DerelictSDL2.load;
 
         SDL_Try(SDL_Init(SDL_INIT_EVERYTHING));
-    }
-    catch (SDL_Exception e)
-    {
-        throw new AppException(`Couldn't initialize the SDL library.`, e);
+
+        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, `liner`);
+
+        SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, `1`);
     }
     catch (Exception e)
     {
-        throw new AppException(`Couldn't load the SDL library.`, e);
+        throw new AppException(`Couldn't initialize the SDL library.`, e);
     }
-}
-
-private void SDL_Configure() nothrow @nogc
-{
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, `liner`);
-
-    SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, `1`);
 }
 
 private string readDesignFile(in string path) @safe
@@ -117,7 +106,7 @@ private string readDesignFile(in string path) @safe
     {
         immutable file = path
             ? path
-            : buildPath(thisExePath.dirName, directory, filename);
+            : buildPath(thisExePath.dirName, filename);
 
         return file.readText;
     }

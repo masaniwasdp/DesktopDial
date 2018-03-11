@@ -7,7 +7,7 @@
  */
 module desktopdial.parts.hands;
 
-import desktopdial.parts.drawing : RadioRectTextureDesign, draw;
+import desktopdial.parts.radiorect : RadioRectTextureDesign, draw;
 import sdlraii;
 import std.datetime : SysTime;
 import std.typecons : Tuple, tuple;

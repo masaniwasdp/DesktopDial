@@ -5,16 +5,17 @@ DesktopDial
 
 ![DesktopDial](https://masaniwasdp.github.io/DesktopDial/Screenshot.png)
 
-デスクトップ上で動作する時計盤です。
+Montras la aktualan tempon en dial-horloĝo.
 
-## 概要
-デスクトップ上で現在時刻を表示する時計盤のアプリケーションです。
-X11環境では時計盤は常に最前面に表示されます。
+## Priskribo
 
-## 依存
+La apliko montras la aktualan tempon en dial-horloĝo.
+Ĉi tio ĉiam montriĝos en la fronto kiam vi uzas X11 medio.
+
+## Dependeco
 + [SDL2.0.5](https://www.libsdl.org)
 
-## ビルド
+## Konstruaĵo
 
 ``` bash
 $ cd ~
@@ -23,17 +24,16 @@ $ cd DesktopDial
 $ dub build --build release
 ```
 
-## 実行
+## Ekzekuto
 
 ``` bash
 $ cd ~/DesktopDial
 $ build/desktopdial [path]
 ```
 
-+ `path`は設定ファイルのパスです。省略時は`build/resource/dialvisual.json`となります。
++ `path` estas la vojo al la agorda dosiero. La defaŭlta valoro estas `build/asset/dialdesign.json`.
 
-## ライセンス
-[MITライセンス](https://github.com/masaniwasdp/DesktopDial/blob/master/LICENCE)が適用されます。
+## Permesiro
+© 2018, masaniwa
 
-## 作者
-+ masaniwa
+La programaro estas licencita sub la [MIT](https://github.com/masaniwasdp/DesktopDial/blob/master/LICENCE).

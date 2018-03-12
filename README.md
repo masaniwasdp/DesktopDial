@@ -27,11 +27,11 @@ $ dub build --build release
 ## Ekzekuto
 
 ``` bash
-$ cd ~/DesktopDial
-$ build/desktopdial [path]
+$ cd ~
+$ DesktopDial/build/desktopdial [path]
 ```
 
-+ `path` estas la vojo al la agorda dosiero. La defaŭlta valoro estas `build/asset/dialdesign.json`.
++ `path` estas la vojo al la agorda dosiero. La defaŭlta valoro estas `DesktopDial/build/asset/dialdesign.json`.
 
 ## Permesiro
 © 2018, masaniwa

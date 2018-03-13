@@ -10,7 +10,7 @@ Montras la aktualan tempon en dial-horloĝo.
 ## Priskribo
 
 La apliko montras la aktualan tempon en dial-horloĝo.
-Ĉi tio ĉiam montriĝos en la fronto kiam vi uzas X11 medio.
+Ĉi tio ĉiam montriĝos en la fronto se vi uzas X11 medio.
 
 ## Dependeco
 + [SDL2.0.5](https://www.libsdl.org)

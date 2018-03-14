@@ -44,7 +44,7 @@ package struct Dial
       Rendas la horloĝon en fenestro.
 
       Params:
-        time = Tempo, kiu estos montras en la horloĝo.
+        time = Tempo montrota en la horloĝo.
 
       Throws:
         sdlraii.SDL_Exception Kiam malsukcesas rendi.

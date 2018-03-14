@@ -1,3 +1,10 @@
+/**
+  Provizas efektivigo de apliko.
+
+  Authors:   masaniwa
+  Copyright: 2018 masaniwa
+  License:   MIT
+ */
 module desktopdial.app;
 
 import desktopdial.dial : Dial, DialDesign;
@@ -9,18 +16,36 @@ import std.file : thisExePath, readText;
 import std.path : buildPath, dirName;
 import stdx.data.json : toJSONValue;
 
+/** Escepto de apliko. */
 class AppException : Exception
 {
     mixin basicExceptionCtors;
 }
 
+/** Efektivigo de apliko. */
 struct App
 {
+    /**
+      Komencas aplikon.
+
+      Params:
+        path = Vojo al la agorda dosiero de dezajno.
+
+      Throws:
+        AppException Kiam malsukcesas komenci la aplikon.
+     */
     this(in string path)
     {
-        SDL_Initialize();
+        try
+        {
+            SDL_Initialize();
 
-        dial_ = Dial(path.readDesignFile.parseDesign);
+            dial_ = Dial(path.readDesignFile.parseDesign);
+        }
+        catch (SDL_Exception e)
+        {
+            throw new AppException(`Couldn't initialize graphic objects.`, e);
+        }
     }
 
     this(this) @disable;
@@ -30,6 +55,12 @@ struct App
         SDL_Quit();
     }
 
+    /**
+      Kuras la aplikon.
+
+      Throws:
+        AppException Kiam malsukcesas ĝisdatigi horloĝon.
+     */
     void run()
     {
         while (continuation_)
@@ -40,6 +71,7 @@ struct App
         }
     }
 
+    /* Alĝustigas FPS. */
     private void adjust() nothrow @nogc
     {
         immutable elapsed = SDL_GetTicks() - last_;
@@ -49,6 +81,7 @@ struct App
         last_ = SDL_GetTicks();
     }
 
+    /* Manipulas eventojn. */
     private void handle() nothrow @nogc
     {
         SDL_Event event = void;
@@ -59,6 +92,12 @@ struct App
         }
     }
 
+    /*
+      Ĝisdatigas horloĝon.
+
+      Throws:
+        AppException Kiam malsukcesas ĝisdatigi.
+     */
     private void update()
     {
         try
@@ -71,17 +110,23 @@ struct App
         }
     }
 
-    private auto continuation_ = true;
+    private auto continuation_ = true; // Flago indikanta ĉu daŭri.
 
-    private uint last_;
+    private uint last_; // Lasta ĝisdatigita tempo.
 
-    private Dial dial_;
+    private Dial dial_; // Rendisto de dial-horloĝo.
 }
 
-private enum interval = 16;
+private enum interval = 16; // La intertempo por ĝisdatigi aplikon.
 
-private enum filename = `asset/dialdesign.json`;
+private enum filename = `asset/dialdesign.json`; // La defaŭlta valoro de vojo al la agorda dosiero.
 
+/*
+  Komencas la SDL bibliotekon.
+
+  Throws:
+    AppException Kiam malsukcesas komenci.
+ */
 private void SDL_Initialize()
 {
     try
@@ -100,6 +145,18 @@ private void SDL_Initialize()
     }
 }
 
+/*
+  Legas agordan dosieron.
+
+  Params:
+    path = Vojo al la agorda dosiero.
+
+  Returns:
+    Enhavo de la agorda dosiero.
+
+  Throws:
+    AppException Kiam malsukcesas legi.
+ */
 private string readDesignFile(in string path) @safe
 {
     try
@@ -116,6 +173,18 @@ private string readDesignFile(in string path) @safe
     }
 }
 
+/*
+  Analizas JSON kiel dezajno.
+
+  Params:
+    text = JSON reprezentanta dezajno.
+
+  Returns:
+    Dezajno analizita de JSON.
+
+  Throws:
+    AppException Kiam malsukcesas analizi.
+ */
 private DialDesign parseDesign(in string text) @safe
 {
     try

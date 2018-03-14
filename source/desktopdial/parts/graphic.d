@@ -1,10 +1,32 @@
+/**
+  Provizas grafika kunteksto.
+
+  Authors:   masaniwa
+  Copyright: 2018 masaniwa
+  License:   MIT
+ */
 module desktopdial.parts.graphic;
 
 import desktopdial.parts.types : Color, Size;
 import sdlraii;
 
+/**
+  Grafika kunteksto.
+
+  Uzi tiojn postulas la SDL bibliotekon.
+ */
 struct Graphic
 {
+    /**
+      Konstruas kunteksto.
+
+      Params:
+        size  = La grandeco de fenestro.
+        color = La koloro de fenestro.
+
+      Throws:
+        sdlraii.SDL_Exception Kiam konstruado malsukcesas.
+     */
     this(in Size size, in Color color)
     {
         color_ = color;
@@ -16,11 +38,21 @@ struct Graphic
 
     this(this) @disable;
 
+    /** La rendisto de fenestro. */
     ref SDL_RAII_Renderer context() @nogc nothrow @property pure @safe
     {
         return renderer_;
     }
 
+    /**
+      Rendas la fenestron.
+
+      Params:
+        expression = Esprimo, kiun ekzekutas antaŭ prezentas fenestron.
+
+      Throws:
+        sdlraii.SDL_Exception Kiam malsukcesas rendi.
+     */
     void render(lazy void expression)
     {
         SDL_Try(SDL_SetRenderDrawColor(renderer_.ptr, color_.r, color_.g, color_.b, SDL_ALPHA_OPAQUE));
@@ -32,19 +64,19 @@ struct Graphic
         SDL_RenderPresent(renderer_.ptr);
     }
 
-    private immutable Color color_;
+    private immutable Color color_; // La koloro de la fenestro.
 
-    private SDL_RAII_Window window_;
+    private SDL_RAII_Window window_; // Fenestro por prezentas grafikon.
 
-    private SDL_RAII_Renderer renderer_;
+    private SDL_RAII_Renderer renderer_; // Rendisto de la fenestro.
 }
 
-private enum windowInitX = SDL_WINDOWPOS_UNDEFINED;
+private enum windowInitX = SDL_WINDOWPOS_UNDEFINED; // La komenca X pozicio de fenestro.
 
-private enum windowInitY = SDL_WINDOWPOS_UNDEFINED;
+private enum windowInitY = SDL_WINDOWPOS_UNDEFINED; // La komenca Y pozicio de fenestro.
 
-private enum windowFlags = SDL_WINDOW_ALWAYS_ON_TOP;
+private enum windowFlags = SDL_WINDOW_ALWAYS_ON_TOP; // La flagoj por krei fenestron.
 
-private enum rendererIndex = -1;
+private enum rendererIndex = -1; // La indekso de rendisto.
 
-private enum rendererFlags = SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED;
+private enum rendererFlags = SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED; // La flagoj por krei rendiston.

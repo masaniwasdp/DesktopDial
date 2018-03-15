@@ -2,13 +2,14 @@
     "name": "desktopdial",
     "authors": [ "masaniwa" ],
     "dependencies": {
-        "derelict-sdl2": "~>3.1.0-alpha.2",
-        "jsonserialized": "~>0.2.1"
+        "derelict-sdl2": "~>3.1.0-alpha.3",
+        "jsonserialized": "~>0.2.1",
+        "sdlraii": "~>1.0.0"
     },
-    "description": "A clock dial for desktop.",
-    "copyright": "Copyright © 2017, masaniwa",
+    "description": "A clock dial for the desktop.",
+    "copyright": "Copyright © 2018, masaniwa",
     "license": "MIT",
     "targetPath": "$PACKAGE_DIR/build/",
-    "copyFiles": [ "$PACKAGE_DIR/resource" ],
+    "copyFiles": [ "$PACKAGE_DIR/asset" ],
     "lflags-windows": [ "-L/exet:nt/su:windows:4.0" ]
 }

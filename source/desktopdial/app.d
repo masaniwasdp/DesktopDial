@@ -1,86 +1,205 @@
+/**
+  Provizas efektivigo de apliko.
+
+  Authors:   masaniwa
+  Copyright: 2018 masaniwa
+  License:   MIT
+ */
 module desktopdial.app;
 
-import std.datetime : Clock;
-import std.file : readText;
-import std.stdio : writeln;
-
-import derelict.sdl2.sdl :
-    SDL_Delay,
-    SDL_Event,
-    SDL_GetTicks,
-    SDL_HINT_RENDER_SCALE_QUALITY,
-    SDL_HINT_VIDEO_ALLOW_SCREENSAVER,
-    SDL_PollEvent,
-    SDL_QUIT,
-    SDL_SetHint;
-
+import desktopdial.dial : Dial, DialDesign;
 import jsonserialized.deserialization : deserializeFromJSONValue;
+import sdlraii;
+import std.datetime : Clock;
+import std.exception : basicExceptionCtors;
+import std.file : thisExePath, readText;
+import std.path : buildPath, dirName;
 import stdx.data.json : toJSONValue;
 
-import desktopdial.graphic.dial : Dial, DialVisual;
+/** Escepto de apliko. */
+class AppException : Exception
+{
+    mixin basicExceptionCtors;
+}
 
+/** Efektivigo de apliko. */
 struct App
 {
+    /**
+      Komencas aplikon.
+
+      Params:
+        path = Vojo al la agorda dosiero. Kiam ĝi estas malpleno, elektas defaŭltan valoron.
+
+      Throws:
+        AppException Kiam malsukcesas komenci la aplikon.
+     */
     this(in string path)
     {
-        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, quality);
-        SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, screensaver);
+        try
+        {
+            SDL_Initialize();
 
-        dial = Dial(path.readText.toJSONValue.deserializeFromJSONValue!DialVisual);
+            dial_ = Dial(path.readDesignFile.parseDesign);
+        }
+        catch (SDL_Exception e)
+        {
+            throw new AppException(`Couldn't initialize graphic objects.`, e);
+        }
     }
 
     this(this) @disable;
 
+    ~this()
+    {
+        SDL_Quit();
+    }
+
+    /**
+      Kuras la aplikon.
+
+      Throws:
+        AppException Kiam malsukcesas ĝisdatigi horloĝon.
+     */
     void run()
     {
-        while (continuation)
+        while (continuation_)
         {
-            tuneFPS;
-            handleEvents;
+            adjust;
+            handle;
             update;
         }
     }
 
-    private void tuneFPS() nothrow @nogc
+    /* Alĝustigas FPS. */
+    private void adjust() nothrow @nogc
     {
-        immutable elapsed = SDL_GetTicks() - last;
+        immutable elapsed = SDL_GetTicks() - last_;
 
         if (elapsed < interval) SDL_Delay(interval - elapsed);
 
-        last = SDL_GetTicks();
+        last_ = SDL_GetTicks();
     }
 
-    private void handleEvents() nothrow @nogc
+    /* Manipulas eventojn. */
+    private void handle() nothrow @nogc
     {
-        SDL_Event event;
+        SDL_Event event = void;
 
         while (SDL_PollEvent(&event) == 1)
         {
-            if (event.type == SDL_QUIT) continuation = false;
+            if (event.type == SDL_QUIT) continuation_ = false;
         }
     }
 
+    /*
+      Ĝisdatigas horloĝon.
+
+      Throws:
+        AppException Kiam malsukcesas ĝisdatigi.
+     */
     private void update()
     {
         try
         {
-            dial.draw(Clock.currTime);
+            dial_.render(Clock.currTime);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            writeln(`Couldn't get the current time.`);
+            throw new AppException(`Couldn't update the clock.`, e);
         }
     }
 
-    private auto continuation = true;
+    /* Flago indikanta ĉu daŭri. */
+    private auto continuation_ = true;
 
-    private uint last;
+    /* Lasta ĝisdatigita tempo. */
+    private uint last_;
 
-    private Dial dial;
+    /* Rendisto de dial-horloĝo. */
+    private Dial dial_;
 }
 
-private enum quality = `liner`;
-
-private enum screensaver = `1`;
-
+/* La intertempo por ĝisdatigi aplikon. */
 private enum interval = 16;
+
+/* La defaŭlta valoro de vojo al la agorda dosiero. */
+private enum filename = `asset/dialdesign.json`;
+
+/*
+  Komencas la SDL bibliotekon.
+
+  Throws:
+    AppException Kiam malsukcesas komenci.
+ */
+private void SDL_Initialize()
+{
+    try
+    {
+        DerelictSDL2.load;
+
+        SDL_Try(SDL_Init(SDL_INIT_EVERYTHING));
+
+        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, `liner`);
+
+        SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, `1`);
+    }
+    catch (Exception e)
+    {
+        throw new AppException(`Couldn't initialize the SDL library.`, e);
+    }
+}
+
+/*
+  Legas agordan dosieron de dezajno.
+
+  Params:
+    path = Vojo al la agorda dosiero. Kiam ĝi estas malpleno, elektas defaŭltan valoron.
+
+  Returns:
+    Enhava teksto de la agorda dosiero.
+
+  Throws:
+    AppException Kiam malsukcesas legi.
+ */
+private string readDesignFile(in string path) @safe
+{
+    try
+    {
+        immutable file = path
+            ? path
+            : buildPath(thisExePath.dirName, filename);
+
+        return file.readText;
+    }
+    catch (Exception e)
+    {
+        throw new AppException(`Couldn't read the design file.`, e);
+    }
+}
+
+/*
+  Analizas JSON kiel dezajno.
+
+  Params:
+    text = JSON teksto reprezentanta dezajno.
+
+  Returns:
+    Dezajno analizita de JSON.
+
+  Throws:
+    AppException Kiam malsukcesas analizi.
+ */
+private DialDesign parseDesign(in string text) @safe
+{
+    try
+    {
+        return text
+            .toJSONValue
+            .deserializeFromJSONValue!DialDesign;
+    }
+    catch (Exception e)
+    {
+        throw new AppException(`Couldn't parse the design.`, e);
+    }
+}

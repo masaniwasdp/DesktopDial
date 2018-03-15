@@ -29,7 +29,7 @@ struct App
       Komencas aplikon.
 
       Params:
-        path = Vojo al la agorda dosiero de dezajno.
+        path = Vojo al la agorda dosiero. Kiam ĝi estas malpleno, elektas defaŭltan valoron.
 
       Throws:
         AppException Kiam malsukcesas komenci la aplikon.

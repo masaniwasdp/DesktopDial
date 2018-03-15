@@ -27,7 +27,7 @@ struct Hands
         designs  = Dezajnoj de manoj.
 
       Throws:
-        sdlraii.SDL_Exception Kiam konstruado malsukcesas.
+        SDL_Exception Kiam konstruado malsukcesas.
      */
     this(ref SDL_RAII_Renderer renderer, in HandDesigns designs)
     {
@@ -47,7 +47,7 @@ struct Hands
         time = Tempo, kiu estos montrata.
 
       Throws:
-        sdlraii.SDL_Exception Kiam malsukcesas desegni.
+        SDL_Exception Kiam malsukcesas desegni.
      */
     void draw(in SysTime time)
     {
@@ -58,16 +58,16 @@ struct Hands
         SDL_Try(SDL_RenderCopyEx(renderer_, sHand_.ptr, null, null, angles[2], null, SDL_FLIP_NONE));
     }
 
-    /* Rendisto por desegni manojn. */
+    /** Rendisto por desegni manojn. */
     private SDL_Renderer* renderer_;
 
-    /* Teksturoj de horoj manoj. */
+    /** Teksturoj de horoj manoj. */
     private SDL_RAII_Texture hHand_;
 
-    /* Teksturoj de minutoj manoj. */
+    /** Teksturoj de minutoj manoj. */
     private SDL_RAII_Texture mHand_;
 
-    /* Teksturoj de sekundoj manoj. */
+    /** Teksturoj de sekundoj manoj. */
     private SDL_RAII_Texture sHand_;
 
     invariant
@@ -89,16 +89,16 @@ struct HandDesigns
     RadioRectTextureDesign sHand;
 }
 
-/* La angulo de manoj por horo. */
+/** La angulo de manoj por horo. */
 private enum hUnitAngle = 30;
 
-/* La angulo de manoj por minuto. */
+/** La angulo de manoj por minuto. */
 private enum mUnitAngle = 6;
 
-/* La angulo de manoj por sekundo. */
+/** La angulo de manoj por sekundo. */
 private enum sUnitAngle = 6;
 
-/*
+/**
   Kalkuras angulojn de manoj, kiuj montras tempo donita.
 
   Params:

@@ -10,14 +10,22 @@ module desktopdial.parts.types;
 /** Strukturo de grandeco. */
 struct Size
 {
-    int w; /// Larĝo.
-    int h; /// Alteco.
+    /** Larĝo. */
+    int w;
+
+    /** Alteco. */
+    int h;
 }
 
 /** Strukturo de koloro. */
 struct Color
 {
-    ubyte r; /// Ruĝo.
-    ubyte g; /// Verdo.
-    ubyte b; /// Bluo.
+    /** Ruĝo. */
+    ubyte r;
+
+    /** Verdo. */
+    ubyte g;
+
+    /** Bluo. */
+    ubyte b;
 }

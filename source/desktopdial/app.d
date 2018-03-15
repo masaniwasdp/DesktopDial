@@ -110,16 +110,21 @@ struct App
         }
     }
 
-    private auto continuation_ = true; // Flago indikanta ĉu daŭri.
+    /* Flago indikanta ĉu daŭri. */
+    private auto continuation_ = true;
 
-    private uint last_; // Lasta ĝisdatigita tempo.
+    /* Lasta ĝisdatigita tempo. */
+    private uint last_;
 
-    private Dial dial_; // Rendisto de dial-horloĝo.
+    /* Rendisto de dial-horloĝo. */
+    private Dial dial_;
 }
 
-private enum interval = 16; // La intertempo por ĝisdatigi aplikon.
+/* La intertempo por ĝisdatigi aplikon. */
+private enum interval = 16;
 
-private enum filename = `asset/dialdesign.json`; // La defaŭlta valoro de vojo al la agorda dosiero.
+/* La defaŭlta valoro de vojo al la agorda dosiero. */
+private enum filename = `asset/dialdesign.json`;
 
 /*
   Komencas la SDL bibliotekon.
@@ -146,13 +151,13 @@ private void SDL_Initialize()
 }
 
 /*
-  Legas agordan dosieron.
+  Legas agordan dosieron de grafika dezajno.
 
   Params:
     path = Vojo al la agorda dosiero.
 
   Returns:
-    Enhavo de la agorda dosiero.
+    Enhava teksto de la agorda dosiero.
 
   Throws:
     AppException Kiam malsukcesas legi.
@@ -177,7 +182,7 @@ private string readDesignFile(in string path) @safe
   Analizas JSON kiel dezajno.
 
   Params:
-    text = JSON reprezentanta dezajno.
+    text = JSON teksto reprezentanta dezajno.
 
   Returns:
     Dezajno analizita de JSON.

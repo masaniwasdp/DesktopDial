@@ -57,10 +57,14 @@ struct Symbols
         }
     }
 
-    private SDL_Renderer* renderer_; // Rendisto por desegni simbolojn;
+    /* Rendisto por desegni simbolojn; */
+    private SDL_Renderer* renderer_;
 
-    private SDL_RAII_Texture small_; // Teksturo de malgrandaj horloĝaj simboloj.
-    private SDL_RAII_Texture large_; // Teksturo de grandaj horloĝaj simboloj.
+    /* Teksturo de malgrandaj horloĝaj simboloj. */
+    private SDL_RAII_Texture small_;
+
+    /* Teksturo de grandaj horloĝaj simboloj. */
+    private SDL_RAII_Texture large_;
 
     invariant
     {
@@ -71,9 +75,15 @@ struct Symbols
 /** Dezajnoj de horloĝaj simboloj. */
 struct SymbolDesigns
 {
-    RadioRectTextureDesign small; /// Dezajno de malgrandaj simboloj.
-    RadioRectTextureDesign large; /// Dezajno de grandaj simboloj.
+    /** Dezajno de malgrandaj simboloj. */
+    RadioRectTextureDesign small;
+
+    /** Dezajno de grandaj simboloj. */
+    RadioRectTextureDesign large;
 }
 
-private enum smallInterval = 30; // La angula interspaco de malgrandaj simboloj.
-private enum largeInterval = 90; // La angula interspaco de grandaj simboloj.
+/* La angula interspaco de malgrandaj simboloj. */
+private enum smallInterval = 30;
+
+/* La angula interspaco de grandaj simboloj. */
+private enum largeInterval = 90;

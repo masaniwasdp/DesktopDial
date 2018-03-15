@@ -58,21 +58,28 @@ package struct Dial
         }());
     }
 
-    private Graphic graphic_; // Grafika kunteksto.
+    /* Grafika kunteksto. */
+    private Graphic graphic_;
 
-    private Hands hands_; // Manoj de horloĝo.
+    /* Manoj de horloĝo. */
+    private Hands hands_;
 
-    private Symbols symbols_; // Simboloj de horloĝo.
+    /* Simboloj de horloĝo. */
+    private Symbols symbols_;
 }
 
 /** Dezajno de dial-horloĝo. */
 package struct DialDesign
 {
-    Size size; /// Grandeco de fenestro.
+    /** Grandeco de fenestro. */
+    Size size;
 
-    Color color; /// Korolo de fenestro.
+    /** Korolo de fenestro. */
+    Color color;
 
-    HandDesigns hands; /// Dezajno de manoj.
+    /** Dezajno de manoj. */
+    HandDesigns hands;
 
-    SymbolDesigns symbols; /// Dezajno de simboloj.
+    /** Dezajno de simboloj. */
+    SymbolDesigns symbols;
 }

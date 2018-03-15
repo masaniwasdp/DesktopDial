@@ -58,11 +58,17 @@ struct Hands
         SDL_Try(SDL_RenderCopyEx(renderer_, sHand_.ptr, null, null, angles[2], null, SDL_FLIP_NONE));
     }
 
-    private SDL_Renderer* renderer_; // Rendisto por desegni manojn.
+    /* Rendisto por desegni manojn. */
+    private SDL_Renderer* renderer_;
 
-    private SDL_RAII_Texture hHand_; // Teksturo de horoj manoj.
-    private SDL_RAII_Texture mHand_; // Teksturo de minutoj manoj.
-    private SDL_RAII_Texture sHand_; // Teksturo de sekundoj manoj.
+    /* Teksturoj de horoj manoj. */
+    private SDL_RAII_Texture hHand_;
+
+    /* Teksturoj de minutoj manoj. */
+    private SDL_RAII_Texture mHand_;
+
+    /* Teksturoj de sekundoj manoj. */
+    private SDL_RAII_Texture sHand_;
 
     invariant
     {
@@ -73,14 +79,24 @@ struct Hands
 /** Dezajnoj de horloĝaj manoj. */
 struct HandDesigns
 {
-    RadioRectTextureDesign hHand; /// Dezajno de horoj manoj.
-    RadioRectTextureDesign mHand; /// Dezajno de minutoj manoj.
-    RadioRectTextureDesign sHand; /// Dezajno de sekundoj manoj.
+    /** Dezajno de horoj manoj. */
+    RadioRectTextureDesign hHand;
+
+    /** Dezajno de minutoj manoj. */
+    RadioRectTextureDesign mHand;
+
+    /** Dezajno de sekundoj manoj. */
+    RadioRectTextureDesign sHand;
 }
 
-private enum hUnitAngle = 30; // La angulo de manoj por horo.
-private enum mUnitAngle = 6;  // La angulo de manoj por minuto.
-private enum sUnitAngle = 6;  // La angulo de manoj por sekundo.
+/* La angulo de manoj por horo. */
+private enum hUnitAngle = 30;
+
+/* La angulo de manoj por minuto. */
+private enum mUnitAngle = 6;
+
+/* La angulo de manoj por sekundo. */
+private enum sUnitAngle = 6;
 
 /*
   Kalkuras angulojn de manoj, kiuj montras tempo donita.
@@ -88,7 +104,8 @@ private enum sUnitAngle = 6;  // La angulo de manoj por sekundo.
   Params:
     time = Tempo, kiu estos montrata.
 
-  Returns: Anguloj de la horo, la minuto kaj la sekundo.
+  Returns:
+    Anguloj de la horo, la minuto kaj la sekundo.
  */
 private Tuple!(double, double, double) calcAngles(in SysTime time) nothrow @safe
 {

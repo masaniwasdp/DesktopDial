@@ -64,19 +64,27 @@ struct Graphic
         SDL_RenderPresent(renderer_.ptr);
     }
 
-    private immutable Color color_; // La koloro de la fenestro.
+    /* La koloro de la fenestro. */
+    private immutable Color color_;
 
-    private SDL_RAII_Window window_; // Fenestro por prezentas grafikon.
+    /* Fenestro por prezentas grafikon. */
+    private SDL_RAII_Window window_;
 
-    private SDL_RAII_Renderer renderer_; // Rendisto de la fenestro.
+    /* Rendisto de la fenestro. */
+    private SDL_RAII_Renderer renderer_;
 }
 
-private enum windowInitX = SDL_WINDOWPOS_UNDEFINED; // La komenca X pozicio de fenestro.
+/* La komenca X pozicio de fenestro. */
+private enum windowInitX = SDL_WINDOWPOS_UNDEFINED;
 
-private enum windowInitY = SDL_WINDOWPOS_UNDEFINED; // La komenca Y pozicio de fenestro.
+/* La komenca Y pozicio de fenestro. */
+private enum windowInitY = SDL_WINDOWPOS_UNDEFINED;
 
-private enum windowFlags = SDL_WINDOW_ALWAYS_ON_TOP; // La flagoj por krei fenestron.
+/* La flagoj por krei fenestron. */
+private enum windowFlags = SDL_WINDOW_ALWAYS_ON_TOP;
 
-private enum rendererIndex = -1; // La indekso de rendisto.
+/* La indekso de rendistoj. */
+private enum rendererIndex = -1;
 
-private enum rendererFlags = SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED; // La flagoj por krei rendiston.
+/* La flagoj por krei rendiston. */
+private enum rendererFlags = SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED;

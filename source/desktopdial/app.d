@@ -151,10 +151,10 @@ private void SDL_Initialize()
 }
 
 /*
-  Legas agordan dosieron de grafika dezajno.
+  Legas agordan dosieron de dezajno.
 
   Params:
-    path = Vojo al la agorda dosiero.
+    path = Vojo al la agorda dosiero. Kiam ĝi estas malpleno, elektas defaŭltan valoron.
 
   Returns:
     Enhava teksto de la agorda dosiero.

@@ -8,7 +8,6 @@ DesktopDial
 Montras la aktualan tempon en dial-horloĝo.
 
 ## Priskribo
-
 La apliko montras la aktualan tempon en dial-horloĝo.
 Ĉi tio ĉiam montriĝos en la fronto se vi uzas X11 medio.
 

@@ -31,7 +31,7 @@ package struct RadioRectTextureDesign
 
   Params:
     renderer = Rendisto por desegni.
-    design   = Dezajno de rektangulo, kiun desegnos.
+    design   = Dezajno de radia rektangulo, kiun desegnos.
 
   Returns:
     Teksturo kun rektangulo desegnita.
@@ -53,7 +53,7 @@ package SDL_RAII_Texture draw(ref SDL_RAII_Renderer renderer, in RadioRectTextur
 }
 
 /**
-  Akiras la eligo grandeco de rendisto.
+  Akiras la eligon grandecon de rendisto.
 
   Params:
     renderer = Rendisto de intereso.
@@ -62,7 +62,7 @@ package SDL_RAII_Texture draw(ref SDL_RAII_Renderer renderer, in RadioRectTextur
     La eligo grandeco de rendisto.
 
   Throws:
-    SDL_Exception Kiam malsukcesas akiri.
+    SDL_Exception Kiam malsukcesas akiri la grandecon.
  */
 private Size size(ref SDL_RAII_Renderer renderer)
 {

@@ -71,7 +71,7 @@ struct App
         }
     }
 
-    /* Alĝustigas FPS. */
+    /** Alĝustigas FPS. */
     private void adjust() nothrow @nogc
     {
         immutable elapsed = SDL_GetTicks() - last_;
@@ -81,7 +81,7 @@ struct App
         last_ = SDL_GetTicks();
     }
 
-    /* Manipulas eventojn. */
+    /** Manipulas eventojn. */
     private void handle() nothrow @nogc
     {
         SDL_Event event = void;
@@ -92,7 +92,7 @@ struct App
         }
     }
 
-    /*
+    /**
       Ĝisdatigas horloĝon.
 
       Throws:
@@ -110,23 +110,23 @@ struct App
         }
     }
 
-    /* Flago indikanta ĉu daŭri. */
+    /** Flago indikanta ĉu daŭri. */
     private auto continuation_ = true;
 
-    /* Lasta ĝisdatigita tempo. */
+    /** Lasta ĝisdatigita tempo. */
     private uint last_;
 
-    /* Rendisto de dial-horloĝo. */
+    /** Rendisto de dial-horloĝo. */
     private Dial dial_;
 }
 
-/* La intertempo por ĝisdatigi aplikon. */
+/** La intertempo por ĝisdatigi aplikon. */
 private enum interval = 16;
 
-/* La defaŭlta valoro de vojo al la agorda dosiero. */
+/** La defaŭlta valoro de vojo al la agorda dosiero. */
 private enum filename = `asset/dialdesign.json`;
 
-/*
+/**
   Komencas la SDL bibliotekon.
 
   Throws:
@@ -150,7 +150,7 @@ private void SDL_Initialize()
     }
 }
 
-/*
+/**
   Legas agordan dosieron de dezajno.
 
   Params:
@@ -178,7 +178,7 @@ private string readDesignFile(in string path) @safe
     }
 }
 
-/*
+/**
   Analizas JSON kiel dezajno.
 
   Params:

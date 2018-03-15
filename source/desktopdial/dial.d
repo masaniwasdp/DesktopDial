@@ -11,6 +11,7 @@ import desktopdial.parts.graphic : Graphic;
 import desktopdial.parts.hands : HandDesigns, Hands;
 import desktopdial.parts.symbols : SymbolDesigns, Symbols;
 import desktopdial.parts.types : Color, Size;
+import sdlraii;
 import std.datetime : SysTime;
 
 /**
@@ -27,7 +28,7 @@ package struct Dial
         design = Dezajno de dial-horloĝo.
 
       Throws:
-        sdlraii.SDL_Exception Kiam konstruado malsukcesas.
+        SDL_Exception Kiam konstruado malsukcesas.
      */
     this(in DialDesign design)
     {
@@ -47,7 +48,7 @@ package struct Dial
         time = Tempo montrota en la horloĝo.
 
       Throws:
-        sdlraii.SDL_Exception Kiam malsukcesas rendi.
+        SDL_Exception Kiam malsukcesas rendi.
      */
     void render(in SysTime time)
     {
@@ -58,13 +59,13 @@ package struct Dial
         }());
     }
 
-    /* Grafika kunteksto. */
+    /** Grafika kunteksto. */
     private Graphic graphic_;
 
-    /* Manoj de horloĝo. */
+    /** Manoj de horloĝo. */
     private Hands hands_;
 
-    /* Simboloj de horloĝo. */
+    /** Simboloj de horloĝo. */
     private Symbols symbols_;
 }
 

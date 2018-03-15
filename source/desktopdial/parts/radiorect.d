@@ -37,7 +37,7 @@ package struct RadioRectTextureDesign
     Teksturo kun rektangulo desegnita.
 
   Throws:
-    sdlraii.SDL_Exception Kiam desegno malsukcesas.
+    SDL_Exception Kiam desegno malsukcesas.
  */
 package SDL_RAII_Texture draw(ref SDL_RAII_Renderer renderer, in RadioRectTextureDesign design)
 {
@@ -52,17 +52,17 @@ package SDL_RAII_Texture draw(ref SDL_RAII_Renderer renderer, in RadioRectTextur
     return SDL_RAII_Texture(SDL_CreateTextureFromSurface(renderer.ptr, surface.ptr));
 }
 
-/*
-  Akiras la grandeco de rendisto.
+/**
+  Akiras la eligo grandeco de rendisto.
 
   Params:
     renderer = Rendisto de intereso.
 
   Returns:
-    La grandeco de rendisto.
+    La eligo grandeco de rendisto.
 
   Throws:
-    sdlraii.SDL_Exception Kiam malsukcesas akiri.
+    SDL_Exception Kiam malsukcesas akiri.
  */
 private Size size(ref SDL_RAII_Renderer renderer)
 {
@@ -73,7 +73,7 @@ private Size size(ref SDL_RAII_Renderer renderer)
     return size;
 }
 
-/*
+/**
   Desegnas radian rektangulon.
 
   Params:
@@ -83,7 +83,7 @@ private Size size(ref SDL_RAII_Renderer renderer)
     distance = La distanco de centro.
 
   Throws:
-    sdlraii.SDL_Exception Kiam desegno malsukcesas.
+    SDL_Exception Kiam desegno malsukcesas.
  */
 private void drawFront(ref SDL_RAII_Surface surface, in Color color, in Size size, in int distance)
 {
@@ -99,7 +99,7 @@ private void drawFront(ref SDL_RAII_Surface surface, in Color color, in Size siz
     SDL_Try(SDL_FillRect(surface.ptr, &rect, pixel));
 }
 
-/*
+/**
   Desegnas fonon de radia rektangulo.
 
   Params:
@@ -107,7 +107,7 @@ private void drawFront(ref SDL_RAII_Surface surface, in Color color, in Size siz
     color   = La koloro de rektangulo, kiun desegnos.
 
   Throws:
-    sdlraii.SDL_Exception Kiam desegno malsukcesas.
+    SDL_Exception Kiam desegno malsukcesas.
  */
 private void drawBack(ref SDL_RAII_Surface surface, in Color color)
 {

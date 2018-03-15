@@ -25,7 +25,7 @@ struct Graphic
         color = La koloro de fenestro.
 
       Throws:
-        sdlraii.SDL_Exception Kiam konstruado malsukcesas.
+        SDL_Exception Kiam konstruado malsukcesas.
      */
     this(in Size size, in Color color)
     {
@@ -51,7 +51,7 @@ struct Graphic
         expression = Esprimo, kiun ekzekutas antaŭ prezentas fenestron.
 
       Throws:
-        sdlraii.SDL_Exception Kiam malsukcesas rendi.
+        SDL_Exception Kiam malsukcesas rendi.
      */
     void render(lazy void expression)
     {
@@ -64,27 +64,27 @@ struct Graphic
         SDL_RenderPresent(renderer_.ptr);
     }
 
-    /* La koloro de la fenestro. */
+    /** La koloro de la fenestro. */
     private immutable Color color_;
 
-    /* Fenestro por prezentas grafikon. */
+    /** Fenestro por prezentas grafikon. */
     private SDL_RAII_Window window_;
 
-    /* Rendisto de la fenestro. */
+    /** Rendisto de la fenestro. */
     private SDL_RAII_Renderer renderer_;
 }
 
-/* La komenca X pozicio de fenestro. */
+/** La komenca X pozicio de fenestro. */
 private enum windowInitX = SDL_WINDOWPOS_UNDEFINED;
 
-/* La komenca Y pozicio de fenestro. */
+/** La komenca Y pozicio de fenestro. */
 private enum windowInitY = SDL_WINDOWPOS_UNDEFINED;
 
-/* La flagoj por krei fenestron. */
+/** La flagoj por krei fenestron. */
 private enum windowFlags = SDL_WINDOW_ALWAYS_ON_TOP;
 
-/* La indekso de rendistoj. */
+/** La indekso de rendistoj. */
 private enum rendererIndex = -1;
 
-/* La flagoj por krei rendiston. */
+/** La flagoj por krei rendiston. */
 private enum rendererFlags = SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED;

@@ -26,7 +26,7 @@ struct Symbols
         designs  = Dezajnoj de simboloj.
 
       Throws:
-        sdlraii.SDL_Exception Kiam konstruado malsukcesas.
+        SDL_Exception Kiam konstruado malsukcesas.
      */
     this(ref SDL_RAII_Renderer renderer, in SymbolDesigns designs)
     {
@@ -42,7 +42,7 @@ struct Symbols
       Desegnas la simbolojn en fenestro.
 
       Throws:
-        sdlraii.SDL_Exception Kiam malsukcesas desegni.
+        SDL_Exception Kiam malsukcesas desegni.
      */
     void draw()
     {
@@ -57,13 +57,13 @@ struct Symbols
         }
     }
 
-    /* Rendisto por desegni simbolojn; */
+    /** Rendisto por desegni simbolojn; */
     private SDL_Renderer* renderer_;
 
-    /* Teksturo de malgrandaj horloĝaj simboloj. */
+    /** Teksturo de malgrandaj horloĝaj simboloj. */
     private SDL_RAII_Texture small_;
 
-    /* Teksturo de grandaj horloĝaj simboloj. */
+    /** Teksturo de grandaj horloĝaj simboloj. */
     private SDL_RAII_Texture large_;
 
     invariant
@@ -82,8 +82,8 @@ struct SymbolDesigns
     RadioRectTextureDesign large;
 }
 
-/* La angula interspaco de malgrandaj simboloj. */
+/** La angula interspaco de malgrandaj simboloj. */
 private enum smallInterval = 30;
 
-/* La angula interspaco de grandaj simboloj. */
+/** La angula interspaco de grandaj simboloj. */
 private enum largeInterval = 90;

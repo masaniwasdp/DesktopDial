@@ -5,9 +5,9 @@
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.parts.symbols;
+module desktopdial.ui.units.symbols;
 
-import desktopdial.parts.radiorect : RadioRectTextureDesign, draw;
+import desktopdial.ui.units.shape : RectTextureDesign, draw;
 import sdlraii;
 import std.range : iota;
 
@@ -76,10 +76,10 @@ struct Symbols
 struct SymbolDesigns
 {
     /** Dezajno de malgrandaj simboloj. */
-    RadioRectTextureDesign small;
+    RectTextureDesign small;
 
     /** Dezajno de grandaj simboloj. */
-    RadioRectTextureDesign large;
+    RectTextureDesign large;
 }
 
 /** La angula interspaco de malgrandaj simboloj. */

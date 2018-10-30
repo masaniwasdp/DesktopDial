@@ -7,8 +7,8 @@
  */
 module desktopdial.app;
 
-import desktopdial.dial : Dial;
-import desktopdial.support : AppException, SDL_Initialize, parseDesign, readDesignFile;
+import desktopdial.ui.dial : Dial;
+import desktopdial.util : AppException, SDL_Initialize, parseDesign, readDesignFile;
 import sdlraii;
 import std.datetime : Clock;
 

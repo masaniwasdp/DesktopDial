@@ -5,9 +5,9 @@
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.support;
+module desktopdial.util;
 
-import desktopdial.dial : DialDesign;
+import desktopdial.ui.dial : DialDesign;
 import jsonserialized.deserialization : deserializeFromJSONValue;
 import sdlraii;
 import std.exception : basicExceptionCtors;

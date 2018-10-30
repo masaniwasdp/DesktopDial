@@ -5,9 +5,9 @@
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.parts.graphic;
+module desktopdial.ui.units.graphic;
 
-import desktopdial.parts.types : Color, Size;
+import desktopdial.ui.units.property : Color, Size;
 import sdlraii;
 
 /**

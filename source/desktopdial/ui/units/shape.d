@@ -1,17 +1,17 @@
 /**
-  Desegnas teksturojn de radiaj rektanguloj.
+  Desegnas teksturojn.
 
   Authors:   masaniwa
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.parts.radiorect;
+module desktopdial.ui.units.shape;
 
-import desktopdial.parts.types : Color, Size;
+import desktopdial.ui.units.property : Color, Size;
 import sdlraii;
 
-/** Dezajno de radiaj rektanguloj. */
-package struct RadioRectTextureDesign
+/** Dezajno de rektanguloj. */
+package struct RectTextureDesign
 {
     /** La distanco de centro. */
     int distance;
@@ -27,11 +27,11 @@ package struct RadioRectTextureDesign
 }
 
 /**
-  Desegnas radian rektangulon sur teksturo.
+  Desegnas rektangulon sur teksturo.
 
   Params:
     renderer = Rendisto por desegni.
-    design   = Dezajno de radia rektangulo, kiun desegnos.
+    design   = Dezajno de rektangulo, kiun desegnos.
 
   Returns:
     Teksturo kun rektangulo desegnita.
@@ -39,7 +39,7 @@ package struct RadioRectTextureDesign
   Throws:
     SDL_Exception Kiam desegno malsukcesas.
  */
-package SDL_RAII_Texture draw(ref SDL_RAII_Renderer renderer, in RadioRectTextureDesign design)
+package SDL_RAII_Texture draw(ref SDL_RAII_Renderer renderer, in RectTextureDesign design)
 {
     immutable size = renderer.size;
 
@@ -74,7 +74,7 @@ private Size size(ref SDL_RAII_Renderer renderer)
 }
 
 /**
-  Desegnas radian rektangulon.
+  Desegnas rektangulon.
 
   Params:
     surface  = Surfaco por desegni.
@@ -100,7 +100,7 @@ private void drawFront(ref SDL_RAII_Surface surface, in Color color, in Size siz
 }
 
 /**
-  Desegnas fonon de radia rektangulo.
+  Desegnas fonon de rektangulo.
 
   Params:
     surface = Surfaco por desegni.

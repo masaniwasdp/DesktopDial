@@ -1,11 +1,11 @@
 /**
-  Provizas tipojn.
+  Provizas tipojn de proprietoj.
 
   Authors:   masaniwa
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.parts.types;
+module desktopdial.ui.units.property;
 
 /** Strukturo de grandeco. */
 struct Size

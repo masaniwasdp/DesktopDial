@@ -5,9 +5,9 @@
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.parts.hands;
+module desktopdial.ui.units.hands;
 
-import desktopdial.parts.radiorect : RadioRectTextureDesign, draw;
+import desktopdial.ui.units.shape : RectTextureDesign, draw;
 import sdlraii;
 import std.datetime : SysTime;
 import std.typecons : Tuple, tuple;
@@ -80,13 +80,13 @@ struct Hands
 struct HandDesigns
 {
     /** Dezajno de horoj manoj. */
-    RadioRectTextureDesign hHand;
+    RectTextureDesign hHand;
 
     /** Dezajno de minutoj manoj. */
-    RadioRectTextureDesign mHand;
+    RectTextureDesign mHand;
 
     /** Dezajno de sekundoj manoj. */
-    RadioRectTextureDesign sHand;
+    RectTextureDesign sHand;
 }
 
 /** La angulo de manoj por horo. */

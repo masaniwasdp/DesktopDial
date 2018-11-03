@@ -5,27 +5,19 @@
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.ui.units.property;
+module desktopdial.view.units.property;
 
 /** Strukturo de grandeco. */
 struct Size
 {
-    /** Larĝo. */
-    int w;
-
-    /** Alteco. */
-    int h;
+    int w; /// Larĝo.
+    int h; /// Alteco.
 }
 
 /** Strukturo de koloro. */
 struct Color
 {
-    /** Ruĝo. */
-    ubyte r;
-
-    /** Verdo. */
-    ubyte g;
-
-    /** Bluo. */
-    ubyte b;
+    ubyte r; /// Ruĝo.
+    ubyte g; /// Verdo.
+    ubyte b; /// Bluo.
 }

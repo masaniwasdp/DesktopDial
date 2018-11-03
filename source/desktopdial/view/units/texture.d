@@ -5,25 +5,19 @@
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.ui.units.shape;
+module desktopdial.view.units.texture;
 
-import desktopdial.ui.units.property : Color, Size;
+import desktopdial.view.units.property : Color, Size;
 import sdlraii;
 
 /** Dezajno de rektanguloj. */
 package struct RectTextureDesign
 {
-    /** La distanco de centro. */
-    int distance;
+    int distance; /// La distanco de centro.
 
-    /** Grandeco. */
-    Size size;
+    Size size; /// Grandeco.
 
-    /** Antaŭa koloro. */
-    Color front;
-
-    /** Fona koloro. */
-    Color back;
+    TextureColor color; /// Koloro.
 }
 
 /**
@@ -45,11 +39,18 @@ package SDL_RAII_Texture draw(ref SDL_RAII_Renderer renderer, in RectTextureDesi
 
     auto surface = SDL_RAII_Surface(SDL_CreateRGBSurface(0, size.w, size.h, 32, 0, 0, 0, 0));
 
-    surface.drawBack(design.back);
+    surface.drawBack(design.color.back);
 
-    surface.drawFront(design.front, design.size, design.distance);
+    surface.drawFront(design.color.front, design.size, design.distance);
 
     return SDL_RAII_Texture(SDL_CreateTextureFromSurface(renderer.ptr, surface.ptr));
+}
+
+/** Koloro de teksturoj. */
+private struct TextureColor
+{
+    Color front; /// Antaŭa koloro.
+    Color back;  /// Fona koloro.
 }
 
 /**

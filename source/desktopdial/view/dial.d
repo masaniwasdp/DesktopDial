@@ -5,12 +5,12 @@
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.ui.dial;
+module desktopdial.view.dial;
 
-import desktopdial.ui.units.graphic : Graphic;
-import desktopdial.ui.units.hands : HandDesigns, Hands;
-import desktopdial.ui.units.property : Color, Size;
-import desktopdial.ui.units.symbols : SymbolDesigns, Symbols;
+import desktopdial.view.units.graphic : Graphic;
+import desktopdial.view.units.hands : HandDesigns, Hands;
+import desktopdial.view.units.property : Color, Size;
+import desktopdial.view.units.symbols : SymbolDesigns, Symbols;
 import sdlraii;
 import std.datetime : SysTime;
 
@@ -72,15 +72,11 @@ struct Dial
 /** Dezajno de dial-horloĝo. */
 struct DialDesign
 {
-    /** Grandeco de fenestro. */
-    Size size;
+    Size size; /// Grandeco de fenestro.
 
-    /** Korolo de fenestro. */
-    Color color;
+    Color color; /// Korolo de fenestro.
 
-    /** Dezajno de manoj. */
-    HandDesigns hands;
+    HandDesigns hands; /// Dezajno de manoj.
 
-    /** Dezajno de simboloj. */
-    SymbolDesigns symbols;
+    SymbolDesigns symbols; /// Dezajno de simboloj.
 }

@@ -5,9 +5,9 @@
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.ui.units.hands;
+module desktopdial.view.units.hands;
 
-import desktopdial.ui.units.shape : RectTextureDesign, draw;
+import desktopdial.view.units.texture : RectTextureDesign, draw;
 import sdlraii;
 import std.datetime : SysTime;
 import std.typecons : Tuple, tuple;
@@ -79,24 +79,14 @@ struct Hands
 /** Dezajnoj de horloĝaj manoj. */
 struct HandDesigns
 {
-    /** Dezajno de horoj manoj. */
-    RectTextureDesign hHand;
-
-    /** Dezajno de minutoj manoj. */
-    RectTextureDesign mHand;
-
-    /** Dezajno de sekundoj manoj. */
-    RectTextureDesign sHand;
+    RectTextureDesign hHand; /// Dezajno de horoj manoj.
+    RectTextureDesign mHand; /// Dezajno de minutoj manoj.
+    RectTextureDesign sHand; /// Dezajno de sekundoj manoj.
 }
 
-/** La angulo de manoj por horo. */
-private enum hUnitAngle = 30;
-
-/** La angulo de manoj por minuto. */
-private enum mUnitAngle = 6;
-
-/** La angulo de manoj por sekundo. */
-private enum sUnitAngle = 6;
+private enum hUnitAngle = 30; /// La angulo de manoj por horo.
+private enum mUnitAngle = 6;  /// La angulo de manoj por minuto.
+private enum sUnitAngle = 6;  /// La angulo de manoj por sekundo.
 
 /**
   Kalkuras angulojn de manoj, kiuj montras tempo donita.

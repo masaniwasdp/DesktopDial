@@ -5,9 +5,9 @@
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.ui.units.symbols;
+module desktopdial.view.units.symbols;
 
-import desktopdial.ui.units.shape : RectTextureDesign, draw;
+import desktopdial.view.units.texture : RectTextureDesign, draw;
 import sdlraii;
 import std.range : iota;
 
@@ -75,15 +75,9 @@ struct Symbols
 /** Dezajnoj de horloĝaj simboloj. */
 struct SymbolDesigns
 {
-    /** Dezajno de malgrandaj simboloj. */
-    RectTextureDesign small;
-
-    /** Dezajno de grandaj simboloj. */
-    RectTextureDesign large;
+    RectTextureDesign small; /// Dezajno de malgrandaj simboloj.
+    RectTextureDesign large; /// Dezajno de grandaj simboloj.
 }
 
-/** La angula interspaco de malgrandaj simboloj. */
-private enum smallInterval = 30;
-
-/** La angula interspaco de grandaj simboloj. */
-private enum largeInterval = 90;
+private enum smallInterval = 30; /// La angula interspaco de malgrandaj simboloj.
+private enum largeInterval = 90; /// La angula interspaco de grandaj simboloj.

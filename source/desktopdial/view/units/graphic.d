@@ -5,9 +5,9 @@
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.ui.units.graphic;
+module desktopdial.view.units.graphic;
 
-import desktopdial.ui.units.property : Color, Size;
+import desktopdial.view.units.property : Color, Size;
 import sdlraii;
 
 /**
@@ -74,17 +74,9 @@ struct Graphic
     private SDL_RAII_Renderer renderer_;
 }
 
-/** La komenca X pozicio de fenestro. */
-private enum windowInitX = SDL_WINDOWPOS_UNDEFINED;
+private enum windowInitX = SDL_WINDOWPOS_UNDEFINED;  /// La komenca X pozicio de fenestro.
+private enum windowInitY = SDL_WINDOWPOS_UNDEFINED;  /// La komenca Y pozicio de fenestro.
+private enum windowFlags = SDL_WINDOW_ALWAYS_ON_TOP; /// La flagoj por krei fenestron.
 
-/** La komenca Y pozicio de fenestro. */
-private enum windowInitY = SDL_WINDOWPOS_UNDEFINED;
-
-/** La flagoj por krei fenestron. */
-private enum windowFlags = SDL_WINDOW_ALWAYS_ON_TOP;
-
-/** La indekso de rendistoj. */
-private enum rendererIndex = -1;
-
-/** La flagoj por krei rendiston. */
-private enum rendererFlags = SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED;
+private enum rendererIndex = -1;                                                   /// La indekso de rendistoj.
+private enum rendererFlags = SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED; /// La flagoj por krei rendiston.

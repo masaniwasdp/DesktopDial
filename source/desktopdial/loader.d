@@ -5,27 +5,21 @@
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.util;
+module desktopdial.loader;
 
-import desktopdial.ui.dial : DialDesign;
+import desktopdial.except : LoaderException;
+import desktopdial.view.dial : DialDesign;
 import jsonserialized.deserialization : deserializeFromJSONValue;
 import sdlraii;
-import std.exception : basicExceptionCtors;
 import std.file : thisExePath, readText;
 import std.path : buildPath, dirName;
 import stdx.data.json : toJSONValue;
-
-/** Escepto de apliko. */
-package class AppException : Exception
-{
-    mixin basicExceptionCtors;
-}
 
 /**
   Komencas la SDL bibliotekon.
 
   Throws:
-    AppException Kiam malsukcesas komenci.
+    LoaderException Kiam malsukcesas komenci.
  */
 package void SDL_Initialize()
 {
@@ -41,7 +35,7 @@ package void SDL_Initialize()
     }
     catch (Exception e)
     {
-        throw new AppException(`Couldn't initialize the SDL library.`, e);
+        throw new LoaderException(`Couldn't initialize the SDL library.`, e);
     }
 }
 
@@ -55,7 +49,7 @@ package void SDL_Initialize()
     Enhava teksto de la agorda dosiero.
 
   Throws:
-    AppException Kiam malsukcesas legi.
+    LoaderException Kiam malsukcesas legi.
  */
 package string readDesignFile(in string path) @safe
 {
@@ -69,7 +63,7 @@ package string readDesignFile(in string path) @safe
     }
     catch (Exception e)
     {
-        throw new AppException(`Couldn't read the design file.`, e);
+        throw new LoaderException(`Couldn't read the design file.`, e);
     }
 }
 
@@ -83,7 +77,7 @@ package string readDesignFile(in string path) @safe
     Dezajno analizita de JSON.
 
   Throws:
-    AppException Kiam malsukcesas analizi.
+    LoaderException Kiam malsukcesas analizi.
  */
 package DialDesign parseDesign(in string text) @safe
 {
@@ -95,9 +89,8 @@ package DialDesign parseDesign(in string text) @safe
     }
     catch (Exception e)
     {
-        throw new AppException(`Couldn't parse the design.`, e);
+        throw new LoaderException(`Couldn't parse the design.`, e);
     }
 }
 
-/** La defaŭlta valoro de vojo al la agorda dosiero. */
-private enum filename = `asset/dialdesign.json`;
+private enum filename = `asset/dialdesign.json`; /// La defaŭlta valoro de vojo al la agorda dosiero.

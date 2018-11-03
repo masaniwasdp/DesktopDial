@@ -7,8 +7,9 @@
  */
 module desktopdial.app;
 
-import desktopdial.ui.dial : Dial;
-import desktopdial.util : AppException, SDL_Initialize, parseDesign, readDesignFile;
+import desktopdial.except : AppException, LoaderException;
+import desktopdial.loader : SDL_Initialize, parseDesign, readDesignFile;
+import desktopdial.view.dial : Dial;
 import sdlraii;
 import std.datetime : Clock;
 
@@ -22,7 +23,7 @@ struct App
         path = Vojo al la agorda dosiero. Kiam ĝi estas malpleno, elektas defaŭltan valoron.
 
       Throws:
-        AppException Kiam malsukcesas komenci la aplikon.
+        LoaderException Kiam malsukcesas komenci la aplikon.
      */
     this(in string path)
     {
@@ -34,7 +35,7 @@ struct App
         }
         catch (SDL_Exception e)
         {
-            throw new AppException(`Couldn't initialize graphic objects.`, e);
+            throw new LoaderException(`Couldn't initialize graphic objects.`, e);
         }
     }
 
@@ -110,5 +111,4 @@ struct App
     private Dial dial_;
 }
 
-/** La intertempo por ĝisdatigi aplikon. */
-private enum interval = 16;
+private enum interval = 16; /// La intertempo por ĝisdatigi aplikon.

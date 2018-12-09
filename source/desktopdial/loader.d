@@ -7,19 +7,24 @@
  */
 module desktopdial.loader;
 
-import desktopdial.except : LoaderException;
 import desktopdial.view.dial : DialDesign;
-import jsonserialized.deserialization : deserializeFromJSONValue;
+import jsonserialized : deserializeFromJSONValue;
 import sdlraii;
+import stdx.data.json : toJSONValue;
+import std.exception : basicExceptionCtors;
 import std.file : thisExePath, readText;
 import std.path : buildPath, dirName;
-import stdx.data.json : toJSONValue;
+
+/** Escepto de subtena funkcio. */
+package class LoaderException : Exception
+{
+    mixin basicExceptionCtors;
+}
 
 /**
   Komencas la SDL bibliotekon.
 
-  Throws:
-    LoaderException Kiam malsukcesas komenci.
+  Throws: LoaderException Kiam malsukcesas komenci.
  */
 package void SDL_Initialize()
 {
@@ -42,22 +47,17 @@ package void SDL_Initialize()
 /**
   Legas agordan dosieron de dezajno.
 
-  Params:
-    path = Vojo al la agorda dosiero. Kiam ĝi estas malpleno, elektas defaŭltan valoron.
+  Params: path = Vojo al la agorda dosiero. Kiam ĝi estas malpleno, elektas defaŭltan valoron.
 
-  Returns:
-    Enhava teksto de la agorda dosiero.
+  Returns: Enhava teksto de la agorda dosiero.
 
-  Throws:
-    LoaderException Kiam malsukcesas legi.
+  Throws: LoaderException Kiam malsukcesas legi.
  */
 package string readDesignFile(in string path) @safe
 {
     try
     {
-        immutable file = path
-            ? path
-            : buildPath(thisExePath.dirName, filename);
+        immutable file = path ? path : buildPath(thisExePath.dirName, filename);
 
         return file.readText;
     }
@@ -70,22 +70,17 @@ package string readDesignFile(in string path) @safe
 /**
   Analizas JSON kiel dezajno.
 
-  Params:
-    text = JSON teksto reprezentanta dezajno de dial-horloĝo.
+  Params: text = JSON teksto reprezentanta dezajno de dial-horloĝo.
 
-  Returns:
-    Dezajno analizita de JSON.
+  Returns: Dezajno analizita de JSON.
 
-  Throws:
-    LoaderException Kiam malsukcesas analizi.
+  Throws: LoaderException Kiam malsukcesas analizi.
  */
 package DialDesign parseDesign(in string text) @safe
 {
     try
     {
-        return text
-            .toJSONValue
-            .deserializeFromJSONValue!DialDesign;
+        return text.toJSONValue.deserializeFromJSONValue!DialDesign;
     }
     catch (Exception e)
     {

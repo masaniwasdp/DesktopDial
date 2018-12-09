@@ -7,11 +7,17 @@
  */
 module desktopdial.app;
 
-import desktopdial.except : AppException, LoaderException;
-import desktopdial.loader : SDL_Initialize, parseDesign, readDesignFile;
+import desktopdial.loader : LoaderException, SDL_Initialize, parseDesign, readDesignFile;
 import desktopdial.view.dial : Dial;
 import sdlraii;
 import std.datetime : Clock;
+import std.exception : basicExceptionCtors;
+
+/** Escepto de apliko. */
+class AppException : Exception
+{
+    mixin basicExceptionCtors;
+}
 
 /** Efektivigo de apliko. */
 struct App
@@ -19,11 +25,10 @@ struct App
     /**
       Komencas aplikon.
 
-      Params:
-        path = Vojo al la agorda dosiero. Kiam ĝi estas malpleno, elektas defaŭltan valoron.
+      Params: path = Vojo al la agorda dosiero.
+                     Kiam ĝi estas malpleno, elektas defaŭltan valoron.
 
-      Throws:
-        LoaderException Kiam malsukcesas komenci la aplikon.
+      Throws: LoaderException Kiam malsukcesas komenci la aplikon.
      */
     this(in string path)
     {
@@ -31,7 +36,7 @@ struct App
         {
             SDL_Initialize();
 
-            dial_ = Dial(path.readDesignFile.parseDesign);
+            dial = Dial(path.readDesignFile.parseDesign);
         }
         catch (SDL_Exception e)
         {
@@ -49,12 +54,11 @@ struct App
     /**
       Kuras la aplikon.
 
-      Throws:
-        AppException Kiam malsukcesas ĝisdatigi horloĝon.
+      Throws: AppException Kiam malsukcesas ĝisdatigi horloĝon.
      */
     void run()
     {
-        while (continuation_)
+        while (continuation)
         {
             adjust;
             handle;
@@ -65,11 +69,11 @@ struct App
     /** Alĝustigas FPS. */
     private void adjust() nothrow @nogc
     {
-        immutable elapsed = SDL_GetTicks() - last_;
+        immutable elapsed = SDL_GetTicks() - last;
 
         if (elapsed < interval) SDL_Delay(interval - elapsed);
 
-        last_ = SDL_GetTicks();
+        last = SDL_GetTicks();
     }
 
     /** Manipulas eventojn. */
@@ -79,21 +83,20 @@ struct App
 
         while (SDL_PollEvent(&event) == 1)
         {
-            if (event.type == SDL_QUIT) continuation_ = false;
+            if (event.type == SDL_QUIT) continuation = false;
         }
     }
 
     /**
       Ĝisdatigas horloĝon.
 
-      Throws:
-        AppException Kiam malsukcesas ĝisdatigi.
+      Throws: AppException Kiam malsukcesas ĝisdatigi.
      */
     private void update()
     {
         try
         {
-            dial_.render(Clock.currTime);
+            dial.render(Clock.currTime);
         }
         catch (Exception e)
         {
@@ -102,13 +105,13 @@ struct App
     }
 
     /** Flago indikanta ĉu daŭri. */
-    private auto continuation_ = true;
+    private auto continuation = true;
 
     /** Lasta ĝisdatigita tempo. */
-    private uint last_;
+    private uint last;
 
     /** Rendisto de dial-horloĝo. */
-    private Dial dial_;
+    private Dial dial;
 }
 
 private enum interval = 16; /// La intertempo por ĝisdatigi aplikon.

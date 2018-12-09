@@ -1,5 +1,5 @@
 /**
-  Rendas dial-horloĝon.
+  Rendas dial-horloĝon en la fenestro.
 
   Authors:   masaniwa
   Copyright: 2018 masaniwa
@@ -7,10 +7,10 @@
  */
 module desktopdial.view.dial;
 
-import desktopdial.view.units.graphic : Graphic;
-import desktopdial.view.units.hands : HandDesigns, Hands;
-import desktopdial.view.units.property : Color, Size;
-import desktopdial.view.units.symbols : SymbolDesigns, Symbols;
+import desktopdial.view.unit.graphic : Graphic;
+import desktopdial.view.unit.hand : HandDesigns, Hands;
+import desktopdial.view.unit.prop : Color, Size;
+import desktopdial.view.unit.sign : SignDesigns, Signs;
 import sdlraii;
 import std.datetime : SysTime;
 
@@ -24,19 +24,17 @@ struct Dial
     /**
       Konstruas dial-horloĝon.
 
-      Params:
-        design = Dezajno de dial-horloĝo.
+      Params: design = Dezajno de dial-horloĝo.
 
-      Throws:
-        SDL_Exception Kiam konstruado malsukcesas.
+      Throws: SDL_Exception Kiam konstruado malsukcesas.
      */
     this(in DialDesign design)
     {
-        graphic_ = Graphic(design.size, design.color);
+        graphic = Graphic(design.size, design.back);
 
-        hands_ = Hands(graphic_.context, design.hands);
+        hands = Hands(graphic.context, design.hands);
 
-        symbols_ = Symbols(graphic_.context, design.symbols);
+        signs = Signs(graphic.context, design.signs);
     }
 
     this(this) @disable;
@@ -44,29 +42,27 @@ struct Dial
     /**
       Rendas la dial-horloĝon en la fenestro.
 
-      Params:
-        time = Tempo montrota en la dial-horloĝo.
+      Params: time = Tempo montrota en la dial-horloĝo.
 
-      Throws:
-        SDL_Exception Kiam malsukcesas rendi la dial-horloĝon.
+      Throws: SDL_Exception Kiam malsukcesas rendi la dial-horloĝon.
      */
     void render(in SysTime time)
     {
-        graphic_.render({
-            symbols_.draw();
+        graphic.render({
+            signs.draw();
 
-            hands_.draw(time);
+            hands.draw(time);
         }());
     }
 
     /** Grafika kunteksto. */
-    private Graphic graphic_;
+    private Graphic graphic;
 
     /** Manoj de horloĝo. */
-    private Hands hands_;
+    private Hands hands;
 
     /** Simboloj de horloĝo. */
-    private Symbols symbols_;
+    private Signs signs;
 }
 
 /** Dezajno de dial-horloĝo. */
@@ -74,9 +70,9 @@ struct DialDesign
 {
     Size size; /// Grandeco de fenestro.
 
-    Color color; /// Korolo de fenestro.
+    Color back; /// Korolo de fenestro.
 
     HandDesigns hands; /// Dezajno de manoj.
 
-    SymbolDesigns symbols; /// Dezajno de simboloj.
+    SignDesigns signs; /// Dezajno de simboloj.
 }

@@ -30,7 +30,7 @@ $ cd ~
 $ DesktopDial/build/desktopdial [path]
 ```
 
-+ `path` estas la vojo al la agorda dosiero. La defaŭlta valoro estas `DesktopDial/build/asset/dialdesign.json`.
++ `path` estas la vojo al la agorda dosiero. La defaŭlta valoro estas `DesktopDial/build/asset/dial.json`.
 
 ## Permesiro
 © 2018, masaniwa

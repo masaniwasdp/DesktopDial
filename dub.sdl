@@ -1,6 +1,6 @@
 name        "desktopdial"
-authors     "masaniwa"
 description "A clock dial for the desktop."
+authors     "masaniwa"
 copyright   "Copyright © 2018, masaniwa"
 license     "MIT"
 

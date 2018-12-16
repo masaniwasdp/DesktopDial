@@ -7,8 +7,8 @@
  */
 module desktopdial.app;
 
-import desktopdial.loader : LoaderException, SDL_Initialize, parseDesign, readDesignFile;
-import desktopdial.view.dial : Dial;
+import desktopdial.loader : LoaderException, SDL_Initialize, parseText, readSettingFile;
+import desktopdial.view.dial : Dial, DialDesign;
 import sdlraii;
 import std.datetime : Clock;
 import std.exception : basicExceptionCtors;
@@ -36,7 +36,7 @@ struct App
         {
             SDL_Initialize();
 
-            dial = Dial(path.readDesignFile.parseDesign);
+            dial = Dial(path.readSettingFile.parseText!DialDesign);
         }
         catch (SDL_Exception e)
         {

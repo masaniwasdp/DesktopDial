@@ -7,7 +7,6 @@
  */
 module desktopdial.loader;
 
-import desktopdial.view.dial : DialDesign;
 import jsonserialized : deserializeFromJSONValue;
 import sdlraii;
 import stdx.data.json : toJSONValue;
@@ -16,7 +15,7 @@ import std.file : thisExePath, readText;
 import std.path : buildPath, dirName;
 
 /** Escepto de subtena funkcio. */
-package class LoaderException : Exception
+class LoaderException : Exception
 {
     mixin basicExceptionCtors;
 }
@@ -35,8 +34,6 @@ package void SDL_Initialize()
         SDL_Try(SDL_Init(SDL_INIT_EVERYTHING));
 
         SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, `liner`);
-
-        SDL_SetHint(SDL_HINT_VIDEO_ALLOW_SCREENSAVER, `1`);
     }
     catch (Exception e)
     {
@@ -45,7 +42,7 @@ package void SDL_Initialize()
 }
 
 /**
-  Legas agordan dosieron de dezajno.
+  Legas agordan dosieron.
 
   Params: path = Vojo al la agorda dosiero. Kiam ĝi estas malpleno, elektas defaŭltan valoron.
 
@@ -53,7 +50,7 @@ package void SDL_Initialize()
 
   Throws: LoaderException Kiam malsukcesas legi.
  */
-package string readDesignFile(in string path) @safe
+package string readSettingFile(in string path) @safe
 {
     try
     {
@@ -63,29 +60,29 @@ package string readDesignFile(in string path) @safe
     }
     catch (Exception e)
     {
-        throw new LoaderException(`Couldn't read the design file.`, e);
+        throw new LoaderException(`Couldn't read the setting file.`, e);
     }
 }
 
 /**
-  Analizas JSON kiel dezajno.
+  Analizas JSON kiel agordo.
 
-  Params: text = JSON teksto reprezentanta dezajno de dial-horloĝo.
+  Params: text = JSON teksto reprezentanta agordo.
 
-  Returns: Dezajno analizita de JSON.
+  Returns: Agordo analizita de JSON.
 
   Throws: LoaderException Kiam malsukcesas analizi.
  */
-package DialDesign parseDesign(in string text) @safe
+package T parseText(T)(in string text) @safe
 {
     try
     {
-        return text.toJSONValue.deserializeFromJSONValue!DialDesign;
+        return text.toJSONValue.deserializeFromJSONValue!T;
     }
     catch (Exception e)
     {
-        throw new LoaderException(`Couldn't parse the design.`, e);
+        throw new LoaderException(`Couldn't parse the setting.`, e);
     }
 }
 
-private enum filename = `asset/dialdesign.json`; /// La defaŭlta valoro de vojo al la agorda dosiero.
+private enum filename = `asset/dial.json`; /// La defaŭlta valoro de vojo al la agorda dosiero.

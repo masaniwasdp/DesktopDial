@@ -33,7 +33,6 @@ struct Dial
         graphic = Graphic(design.size, design.back);
 
         hands = Hands(graphic.context, design.hands);
-
         signs = Signs(graphic.context, design.signs);
     }
 
@@ -48,11 +47,7 @@ struct Dial
      */
     void render(in SysTime time)
     {
-        graphic.render({
-            signs.draw();
-
-            hands.draw(time);
-        }());
+        graphic.render({ signs.draw; hands.draw(time); }());
     }
 
     /** Grafika kunteksto. */

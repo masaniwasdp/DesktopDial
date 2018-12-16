@@ -3,11 +3,9 @@ import std.experimental.logger : critical;
 
 void main(string[] args)
 {
-    immutable path = args.length < 2 ? null : args[1];
-
     try
     {
-        App(path).run;
+        App(args.length < 2 ? null : args[1]).run;
     }
     catch (Throwable e)
     {

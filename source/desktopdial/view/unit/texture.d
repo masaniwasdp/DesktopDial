@@ -7,6 +7,7 @@
  */
 module desktopdial.view.unit.texture;
 
+import derelict.sdl2.sdl;
 import desktopdial.view.unit.prop : Color, Size;
 import sdlraii;
 
@@ -29,16 +30,18 @@ package struct TextureDesign
 
   Throws: SDL_Exception Kiam desegno malsukcesas.
  */
-package SDL_RAII_Texture draw(ref SDL_RAII_Renderer renderer, in TextureDesign design)
+package SDL_RAII!(SDL_Texture*) draw(SDL_Renderer* renderer, in TextureDesign design)
 {
-    immutable size = renderer.size;
+    Size size = void;
 
-    auto surface = SDL_RAII_Surface(SDL_CreateRGBSurface(0, size.w, size.h, 32, 0, 0, 0, 0));
+    SDL_Try(SDL_GetRendererOutputSize(renderer, &size.w, &size.h));
 
-    surface.drawBack(design);
-    surface.drawFore(design);
+    auto surface = SDL_RAIIHolder(SDL_CreateRGBSurface(0, size.w, size.h, 32, 0, 0, 0, 0));
 
-    return SDL_RAII_Texture(SDL_CreateTextureFromSurface(renderer.ptr, surface.ptr));
+    surface.ptr.drawBack(design);
+    surface.ptr.drawFore(design);
+
+    return SDL_RAIIHolder(SDL_CreateTextureFromSurface(renderer, surface.ptr));
 }
 
 /** Formo de rektanguloj. */
@@ -50,24 +53,6 @@ private struct Shape
 }
 
 /**
-  Akiras la eligon grandecon de rendisto.
-
-  Params: renderer = Rendisto de intereso.
-
-  Returns: La eligo grandeco de rendisto.
-
-  Throws: SDL_Exception Kiam malsukcesas akiri la grandecon.
- */
-private Size size(ref SDL_RAII_Renderer renderer)
-{
-    Size size = void;
-
-    SDL_Try(SDL_GetRendererOutputSize(renderer.ptr, &size.w, &size.h));
-
-    return size;
-}
-
-/**
   Desegnas rektangulon.
 
   Params: surface = Surfaco por desegni.
@@ -75,18 +60,18 @@ private Size size(ref SDL_RAII_Renderer renderer)
 
   Throws: SDL_Exception Kiam desegno malsukcesas.
  */
-private void drawFore(ref SDL_RAII_Surface surface, in TextureDesign design)
+private void drawFore(SDL_Surface* surface, in TextureDesign design)
 {
     immutable SDL_Rect rect = {
-        surface.ptr.w / 2 - design.shape.w / 2,
-        surface.ptr.h / 2 - design.shape.h - design.shape.d,
+        surface.w / 2 - design.shape.w / 2,
+        surface.h / 2 - design.shape.h - design.shape.d,
         design.shape.w,
         design.shape.h
     };
 
-    immutable pixel = SDL_MapRGB(surface.ptr.format, design.fore.r, design.fore.g, design.fore.b);
+    immutable pixel = SDL_MapRGB(surface.format, design.fore.r, design.fore.g, design.fore.b);
 
-    SDL_Try(SDL_FillRect(surface.ptr, &rect, pixel));
+    SDL_Try(SDL_FillRect(surface, &rect, pixel));
 }
 
 /**
@@ -97,11 +82,11 @@ private void drawFore(ref SDL_RAII_Surface surface, in TextureDesign design)
 
   Throws: SDL_Exception Kiam desegno malsukcesas.
  */
-private void drawBack(ref SDL_RAII_Surface surface, in TextureDesign design)
+private void drawBack(SDL_Surface* surface, in TextureDesign design)
 {
-    immutable pixel = SDL_MapRGB(surface.ptr.format, design.back.r, design.back.g, design.back.b);
+    immutable pixel = SDL_MapRGB(surface.format, design.back.r, design.back.g, design.back.b);
 
-    SDL_Try(SDL_SetColorKey(surface.ptr, true, pixel));
+    SDL_Try(SDL_SetColorKey(surface, true, pixel));
 
-    SDL_Try(SDL_FillRect(surface.ptr, null, pixel));
+    SDL_Try(SDL_FillRect(surface, null, pixel));
 }

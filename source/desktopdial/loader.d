@@ -7,6 +7,7 @@
  */
 module desktopdial.loader;
 
+import derelict.sdl2.sdl;
 import jsonserialized : deserializeFromJSONValue;
 import sdlraii;
 import stdx.data.json : toJSONValue;

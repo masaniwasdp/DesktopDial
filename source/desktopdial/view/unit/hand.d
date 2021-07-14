@@ -7,6 +7,7 @@
  */
 module desktopdial.view.unit.hand;
 
+import derelict.sdl2.sdl;
 import desktopdial.view.unit.texture : TextureDesign, draw;
 import sdlraii;
 import std.datetime : SysTime;
@@ -27,9 +28,9 @@ struct Hands
 
       Throws: SDL_Exception Kiam konstruado malsukcesas.
      */
-    this(ref SDL_RAII_Renderer renderer, in HandDesigns designs)
+    this(SDL_Renderer* renderer, in HandDesigns designs)
     {
-        this.renderer = renderer.ptr;
+        this.renderer = renderer;
 
         this.hHand = renderer.draw(designs.hHand);
         this.mHand = renderer.draw(designs.mHand);
@@ -58,13 +59,13 @@ struct Hands
     private SDL_Renderer* renderer;
 
     /** Teksturoj de h manoj. */
-    private SDL_RAII_Texture hHand;
+    private SDL_RAII!(SDL_Texture*) hHand;
 
     /** Teksturoj de m manoj. */
-    private SDL_RAII_Texture mHand;
+    private SDL_RAII!(SDL_Texture*) mHand;
 
     /** Teksturoj de s manoj. */
-    private SDL_RAII_Texture sHand;
+    private SDL_RAII!(SDL_Texture*) sHand;
 
     invariant
     {

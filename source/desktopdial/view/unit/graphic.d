@@ -7,6 +7,7 @@
  */
 module desktopdial.view.unit.graphic;
 
+import derelict.sdl2.sdl;
 import desktopdial.view.unit.prop : Color, Size;
 import sdlraii;
 
@@ -29,17 +30,17 @@ struct Graphic
     {
         this.back = back;
 
-        this.window = SDL_RAII_Window(SDL_CreateWindow(null, wInitX, wInitY, size.w, size.h, wFlags));
+        this.window = SDL_RAIIHolder(SDL_CreateWindow(null, wInitX, wInitY, size.w, size.h, wFlags));
 
-        this.renderer = SDL_RAII_Renderer(SDL_CreateRenderer(window.ptr, -1, rFlags));
+        this.renderer = SDL_RAIIHolder(SDL_CreateRenderer(window.ptr, -1, rFlags));
     }
 
     this(this) @disable;
 
     /** La rendisto de fenestro. */
-    ref SDL_RAII_Renderer context() @nogc nothrow @property pure @safe
+    SDL_Renderer* context() @nogc nothrow @property pure @safe
     {
-        return renderer;
+        return renderer.ptr;
     }
 
     /**
@@ -64,10 +65,10 @@ struct Graphic
     private immutable Color back;
 
     /** Fenestro por prezentas grafikon. */
-    private SDL_RAII_Window window;
+    private SDL_RAII!(SDL_Window*) window;
 
     /** Rendisto de la fenestro. */
-    private SDL_RAII_Renderer renderer;
+    private SDL_RAII!(SDL_Renderer*) renderer;
 }
 
 private enum wInitX = SDL_WINDOWPOS_UNDEFINED;  /// La komenca X pozicio de fenestro.

@@ -7,6 +7,7 @@
  */
 module desktopdial.view.unit.sign;
 
+import derelict.sdl2.sdl;
 import desktopdial.view.unit.texture : TextureDesign, draw;
 import sdlraii;
 import std.range : iota;
@@ -26,9 +27,9 @@ struct Signs
 
       Throws: SDL_Exception Kiam konstruado malsukcesas.
      */
-    this(ref SDL_RAII_Renderer renderer, in SignDesigns designs)
+    this(SDL_Renderer* renderer, in SignDesigns designs)
     {
-        this.renderer = renderer.ptr;
+        this.renderer = renderer;
 
         this.small = renderer.draw(designs.small);
         this.large = renderer.draw(designs.large);
@@ -58,10 +59,10 @@ struct Signs
     private SDL_Renderer* renderer;
 
     /** Teksturo de S horloĝaj simboloj. */
-    private SDL_RAII_Texture small;
+    private SDL_RAII!(SDL_Texture*) small;
 
     /** Teksturo de L horloĝaj simboloj. */
-    private SDL_RAII_Texture large;
+    private SDL_RAII!(SDL_Texture*) large;
 
     invariant
     {

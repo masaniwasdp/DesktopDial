@@ -7,7 +7,7 @@ void main(string[] args)
     {
         App(args.length < 2 ? null : args[1]).run;
     }
-    catch (Throwable e)
+    catch (Exception e)
     {
         e.msg.critical;
     }

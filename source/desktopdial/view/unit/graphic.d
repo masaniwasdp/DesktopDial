@@ -30,9 +30,9 @@ struct Graphic
     {
         this.back = back;
 
-        this.window = SDL_RAIIHolder(SDL_CreateWindow(null, wInitX, wInitY, size.w, size.h, wFlags));
+        this.window = SDL_RAII!(SDL_Window*)(SDL_CreateWindow(null, wInitX, wInitY, size.w, size.h, wFlags));
 
-        this.renderer = SDL_RAIIHolder(SDL_CreateRenderer(window.ptr, -1, rFlags));
+        this.renderer = SDL_RAII!(SDL_Renderer*)(SDL_CreateRenderer(window.ptr, -1, rFlags));
     }
 
     this(this) @disable;

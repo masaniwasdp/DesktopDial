@@ -36,12 +36,12 @@ package SDL_RAII!(SDL_Texture*) draw(SDL_Renderer* renderer, in TextureDesign de
 
     SDL_Try(SDL_GetRendererOutputSize(renderer, &size.w, &size.h));
 
-    auto surface = SDL_RAIIHolder(SDL_CreateRGBSurface(0, size.w, size.h, 32, 0, 0, 0, 0));
+    auto surface = SDL_RAII!(SDL_Surface*)(SDL_CreateRGBSurface(0, size.w, size.h, 32, 0, 0, 0, 0));
 
     surface.ptr.drawBack(design);
     surface.ptr.drawFore(design);
 
-    return SDL_RAIIHolder(SDL_CreateTextureFromSurface(renderer, surface.ptr));
+    return SDL_RAII!(SDL_Texture*)(SDL_CreateTextureFromSurface(renderer, surface.ptr));
 }
 
 /** Formo de rektanguloj. */

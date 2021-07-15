@@ -11,7 +11,6 @@ import desktopdial.view.unit.graphic : Graphic;
 import desktopdial.view.unit.hand : HandDesigns, Hands;
 import desktopdial.view.unit.prop : Color, Size;
 import desktopdial.view.unit.sign : SignDesigns, Signs;
-import sdlraii;
 import std.datetime : SysTime;
 
 /**

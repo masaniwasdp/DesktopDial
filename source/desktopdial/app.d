@@ -10,7 +10,7 @@ module desktopdial.app;
 import derelict.sdl2.sdl;
 import desktopdial.loader : LoaderException, SDL_Initialize, parseText, readSettingFile;
 import desktopdial.view.dial : Dial, DialDesign;
-import sdlraii;
+import sdlraii.except;
 import std.datetime : Clock;
 import std.exception : basicExceptionCtors;
 

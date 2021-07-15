@@ -9,7 +9,8 @@ module desktopdial.view.unit.hand;
 
 import derelict.sdl2.sdl;
 import desktopdial.view.unit.texture : TextureDesign, draw;
-import sdlraii;
+import sdlraii.except;
+import sdlraii.raii;
 import std.datetime : SysTime;
 import std.typecons : Tuple, tuple;
 

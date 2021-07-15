@@ -9,7 +9,7 @@ module desktopdial.loader;
 
 import derelict.sdl2.sdl;
 import jsonserialized : deserializeFromJSONValue;
-import sdlraii;
+import sdlraii.except;
 import stdx.data.json : toJSONValue;
 import std.exception : basicExceptionCtors;
 import std.file : thisExePath, readText;

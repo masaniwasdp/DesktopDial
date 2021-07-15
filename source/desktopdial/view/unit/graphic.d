@@ -9,7 +9,8 @@ module desktopdial.view.unit.graphic;
 
 import derelict.sdl2.sdl;
 import desktopdial.view.unit.prop : Color, Size;
-import sdlraii;
+import sdlraii.except;
+import sdlraii.raii;
 
 /**
   Grafika kunteksto.

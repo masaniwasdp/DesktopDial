@@ -9,7 +9,8 @@ module desktopdial.view.unit.texture;
 
 import derelict.sdl2.sdl;
 import desktopdial.view.unit.prop : Color, Size;
-import sdlraii;
+import sdlraii.except;
+import sdlraii.raii;
 
 /** Dezajno de rektanguloj. */
 package struct TextureDesign

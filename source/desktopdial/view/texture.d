@@ -8,7 +8,7 @@
 module desktopdial.view.texture;
 
 import derelict.sdl2.sdl;
-import desktopdial.view.data : Color, Size;
+import desktopdial.view.common : Color, Size;
 import sdlraii.except;
 import sdlraii.raii;
 
@@ -39,7 +39,7 @@ struct TextureShape
 
   Throws: SDL_Exception Kiam desegno malsukcesas.
  */
-SDL_Texture* create(SDL_Renderer* renderer, in TextureProperty property)
+SDL_RAII!(SDL_Texture*) create(SDL_Renderer* renderer, in TextureProperty property)
 {
     Size size = void;
 
@@ -50,7 +50,7 @@ SDL_Texture* create(SDL_Renderer* renderer, in TextureProperty property)
     surface.ptr.drawBackground(property);
     surface.ptr.drawForeground(property);
 
-    return SDL_CreateTextureFromSurface(renderer, surface.ptr);
+    return SDL_RAII!(SDL_Texture*)(SDL_CreateTextureFromSurface(renderer, surface.ptr));
 }
 
 /**

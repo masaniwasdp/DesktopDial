@@ -10,6 +10,7 @@ module desktopdial.view.signs_unit;
 import derelict.sdl2.sdl;
 import desktopdial.view.texture : TextureProperty, create;
 import sdlraii.except;
+import sdlraii.raii;
 import std.range : iota;
 
 /**
@@ -35,12 +36,6 @@ class SignsUnit
         large = renderer.create(property.large);
     }
 
-    ~this() @nogc nothrow
-    {
-        SDL_DestroyTexture(small);
-        SDL_DestroyTexture(large);
-    }
-
     /**
       Desegnas la simbolojn en fenestro.
 
@@ -50,12 +45,12 @@ class SignsUnit
     {
         foreach (angle; iota(0, 360, smallInterval))
         {
-            SDL_Try(SDL_RenderCopyEx(renderer, small, null, null, angle, null, SDL_FLIP_NONE));
+            SDL_Try(SDL_RenderCopyEx(renderer, small.ptr, null, null, angle, null, SDL_FLIP_NONE));
         }
 
         foreach (angle; iota(0, 360, largeInterval))
         {
-            SDL_Try(SDL_RenderCopyEx(renderer, large, null, null, angle, null, SDL_FLIP_NONE));
+            SDL_Try(SDL_RenderCopyEx(renderer, large.ptr, null, null, angle, null, SDL_FLIP_NONE));
         }
     }
 
@@ -63,16 +58,14 @@ class SignsUnit
     private SDL_Renderer* renderer;
 
     /** Teksturo de S horloĝaj simboloj. */
-    private SDL_Texture* small;
+    private SDL_RAII!(SDL_Texture*) small;
 
     /** Teksturo de L horloĝaj simboloj. */
-    private SDL_Texture* large;
+    private SDL_RAII!(SDL_Texture*) large;
 
     invariant
     {
         assert(renderer !is null);
-        assert(small !is null);
-        assert(large !is null);
     }
 }
 

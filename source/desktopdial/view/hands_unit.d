@@ -10,6 +10,7 @@ module desktopdial.view.hands_unit;
 import derelict.sdl2.sdl;
 import desktopdial.view.texture : TextureProperty, create;
 import sdlraii.except;
+import sdlraii.raii;
 import std.datetime : SysTime;
 import std.typecons : Tuple, tuple;
 
@@ -37,13 +38,6 @@ class HandsUnit
         sHand = renderer.create(property.sHand);
     }
 
-    ~this() @nogc nothrow
-    {
-        SDL_DestroyTexture(hHand);
-        SDL_DestroyTexture(mHand);
-        SDL_DestroyTexture(sHand);
-    }
-
     /**
       Desegnas la manojn en fenestro.
 
@@ -55,29 +49,26 @@ class HandsUnit
     {
         immutable angles = time.calcAngles;
 
-        SDL_Try(SDL_RenderCopyEx(renderer, hHand, null, null, angles[0], null, SDL_FLIP_NONE));
-        SDL_Try(SDL_RenderCopyEx(renderer, mHand, null, null, angles[1], null, SDL_FLIP_NONE));
-        SDL_Try(SDL_RenderCopyEx(renderer, sHand, null, null, angles[2], null, SDL_FLIP_NONE));
+        SDL_Try(SDL_RenderCopyEx(renderer, hHand.ptr, null, null, angles[0], null, SDL_FLIP_NONE));
+        SDL_Try(SDL_RenderCopyEx(renderer, mHand.ptr, null, null, angles[1], null, SDL_FLIP_NONE));
+        SDL_Try(SDL_RenderCopyEx(renderer, sHand.ptr, null, null, angles[2], null, SDL_FLIP_NONE));
     }
 
     /** Rendisto por desegni manojn. */
     private SDL_Renderer* renderer;
 
     /** Teksturo de h manoj. */
-    private SDL_Texture* hHand;
+    private SDL_RAII!(SDL_Texture*) hHand;
 
     /** Teksturo de m manoj. */
-    private SDL_Texture* mHand;
+    private SDL_RAII!(SDL_Texture*) mHand;
 
     /** Teksturo de s manoj. */
-    private SDL_Texture* sHand;
+    private SDL_RAII!(SDL_Texture*) sHand;
 
     invariant
     {
         assert(renderer !is null);
-        assert(hHand !is null);
-        assert(mHand !is null);
-        assert(sHand !is null);
     }
 }
 

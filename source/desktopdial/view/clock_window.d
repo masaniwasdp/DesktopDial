@@ -8,10 +8,11 @@
 module desktopdial.view.clock_window;
 
 import derelict.sdl2.sdl;
-import desktopdial.view.data : Color, Size;
+import desktopdial.view.common : Color, Size;
 import desktopdial.view.hands_unit : HandsUnit, HandsUnitProperty;
 import desktopdial.view.signs_unit : SignsUnit, SignsUnitProperty;
 import sdlraii.except;
+import sdlraii.raii;
 import std.datetime : SysTime;
 
 /**
@@ -32,27 +33,30 @@ class ClockWindow
     {
         bgColor = property.bgColor;
 
-        window = SDL_CreateWindow(
+        window = new SDL_RAII!(SDL_Window*)(SDL_CreateWindow(
             null,
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
             property.size.w,
             property.size.h,
-            SDL_WINDOW_ALWAYS_ON_TOP);
+            SDL_WINDOW_ALWAYS_ON_TOP));
 
-        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+        renderer = new SDL_RAII!(SDL_Renderer*)(SDL_CreateRenderer(
+            window.ptr, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED));
 
-        handsUnit = new HandsUnit(renderer, property.handsUnit);
-        signsUnit = new SignsUnit(renderer, property.signsUnit);
+        handsUnit = new HandsUnit(renderer.ptr, property.handsUnit);
+        signsUnit = new SignsUnit(renderer.ptr, property.signsUnit);
     }
 
-    ~this() nothrow
+    ~this()
     {
+        /* Indiku la ordon de detruo. */
         handsUnit.destroy;
         signsUnit.destroy;
 
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
+        renderer.destroy;
+
+        window.destroy;
     }
 
     /**
@@ -64,23 +68,23 @@ class ClockWindow
      */
     void render(in SysTime time)
     {
-        SDL_Try(SDL_SetRenderDrawColor(renderer, bgColor.r, bgColor.g, bgColor.b, SDL_ALPHA_OPAQUE));
-        SDL_Try(SDL_RenderClear(renderer));
+        SDL_Try(SDL_SetRenderDrawColor(renderer.ptr, bgColor.r, bgColor.g, bgColor.b, SDL_ALPHA_OPAQUE));
+        SDL_Try(SDL_RenderClear(renderer.ptr));
 
         signsUnit.draw;
         handsUnit.draw(time);
 
-        SDL_RenderPresent(renderer);
+        SDL_RenderPresent(renderer.ptr);
     }
 
     /** La koloro de la fenestro. */
     private immutable Color bgColor;
 
     /** Fenestro por prezentas grafikon. */
-    private SDL_Window* window;
+    private SDL_RAII!(SDL_Window*)* window;
 
     /** Rendisto de la fenestro. */
-    private SDL_Renderer* renderer;
+    private SDL_RAII!(SDL_Renderer*)* renderer;
 
     /** Unueco de manoj de horloĝo. */
     private HandsUnit handsUnit;
@@ -92,6 +96,8 @@ class ClockWindow
     {
         assert(window !is null);
         assert(renderer !is null);
+        assert(handsUnit !is null);
+        assert(signsUnit !is null);
     }
 }
 

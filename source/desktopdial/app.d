@@ -9,7 +9,7 @@ module desktopdial.app;
 
 import derelict.sdl2.sdl;
 import desktopdial.loader : LoaderException, SDL_Initialize, parseText, readSettingFile;
-import desktopdial.view.dial : Dial, DialDesign;
+import desktopdial.view.clock_window : ClockWindow, ClockWindowProperty;
 import sdlraii.except;
 import std.datetime : Clock;
 import std.exception : basicExceptionCtors;
@@ -21,7 +21,7 @@ class AppException : Exception
 }
 
 /** Efektivigo de apliko. */
-struct App
+class App
 {
     /**
       Komencas aplikon.
@@ -37,18 +37,18 @@ struct App
         {
             SDL_Initialize();
 
-            dial = Dial(path.readSettingFile.parseText!DialDesign);
+            clockWindow = new ClockWindow(path.readSettingFile.parseText!ClockWindowProperty);
         }
         catch (SDL_Exception e)
         {
-            throw new LoaderException(`Couldn't initialize graphic objects.`, e);
+            throw new LoaderException(`Couldn't initialize a window.`, e);
         }
     }
 
-    this(this) @disable;
-
     ~this()
     {
+        clockWindow.destroy;
+
         SDL_Quit();
     }
 
@@ -84,7 +84,19 @@ struct App
 
         while (SDL_PollEvent(&event) == 1)
         {
-            if (event.type == SDL_QUIT) continuation = false;
+            if (event.type == SDL_WINDOWEVENT)
+            {
+                switch (event.window.event)
+                {
+                    case SDL_WINDOWEVENT_MINIMIZED:
+                    case SDL_WINDOWEVENT_CLOSE:
+                        continuation = false;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
         }
     }
 
@@ -97,7 +109,7 @@ struct App
     {
         try
         {
-            dial.render(Clock.currTime);
+            clockWindow.render(Clock.currTime);
         }
         catch (Exception e)
         {
@@ -111,8 +123,8 @@ struct App
     /** Lasta ĝisdatigita tempo. */
     private uint last;
 
-    /** Rendisto de dial-horloĝo. */
-    private Dial dial;
+    /** Fenestro por prezentas ciferdiska horloĝo. */
+    private ClockWindow clockWindow;
 }
 
 private enum interval = 16; /// La intertempo por ĝisdatigi aplikon.

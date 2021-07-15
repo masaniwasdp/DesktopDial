@@ -5,7 +5,9 @@ void main(string[] args)
 {
     try
     {
-        App(args.length < 2 ? null : args[1]).run;
+        scope app = new App(args.length < 2 ? null : args[1]);
+
+        app.run;
     }
     catch (Exception e)
     {

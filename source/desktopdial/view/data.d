@@ -5,7 +5,7 @@
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.view.unit.prop;
+module desktopdial.view.data;
 
 /** Strukturo de grandeco. */
 struct Size

@@ -5,10 +5,10 @@ DesktopDial
 
 ![DesktopDial](https://masaniwasdp.github.io/DesktopDial/Screenshot.png)
 
-Montras la aktualan tempon en dial-horloĝo.
+Montras la aktualan tempon en ciferdiska horloĝo.
 
 ## Priskribo
-La apliko montras la aktualan tempon en dial-horloĝo.
+La apliko montras la aktualan tempon en ciferdiska horloĝo.
 Ĉi tio ĉiam montriĝos en la fronto se vi uzas X11 medio.
 
 ## Dependeco

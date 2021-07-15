@@ -1,44 +1,48 @@
 /**
-  Provizas manojn de horloĝo.
+  Provizas unuecon de manoj de horloĝo.
 
   Authors:   masaniwa
   Copyright: 2018 masaniwa
   License:   MIT
  */
-module desktopdial.view.unit.hand;
+module desktopdial.view.hands_unit;
 
 import derelict.sdl2.sdl;
-import desktopdial.view.unit.texture : TextureDesign, draw;
+import desktopdial.view.texture : TextureProperty, create;
 import sdlraii.except;
-import sdlraii.raii;
 import std.datetime : SysTime;
 import std.typecons : Tuple, tuple;
 
 /**
-  Manoj de horloĝo.
+  Unueco de manoj de horloĝo.
 
   Uzi tiojn postulas la SDL bibliotekon.
  */
-struct Hands
+class HandsUnit
 {
     /**
-      Konstruas manojn.
+      Konstruas unuecon.
 
       Params: renderer = Rendisto uzota por desegni manojn.
-              designs  = Dezajnoj de manoj.
+              property = Proprieto de unueco.
 
       Throws: SDL_Exception Kiam konstruado malsukcesas.
      */
-    this(SDL_Renderer* renderer, in HandDesigns designs)
+    this(SDL_Renderer* renderer, in HandsUnitProperty property)
     {
         this.renderer = renderer;
 
-        this.hHand = renderer.draw(designs.hHand);
-        this.mHand = renderer.draw(designs.mHand);
-        this.sHand = renderer.draw(designs.sHand);
+        hHand = renderer.create(property.hHand);
+        mHand = renderer.create(property.mHand);
+        sHand = renderer.create(property.sHand);
     }
 
-    this(this) @disable;
+    ~this() @nogc nothrow
+    {
+        SDL_DestroyTexture(hHand);
+        SDL_DestroyTexture(mHand);
+        SDL_DestroyTexture(sHand);
+    }
 
     /**
       Desegnas la manojn en fenestro.
@@ -51,35 +55,38 @@ struct Hands
     {
         immutable angles = time.calcAngles;
 
-        SDL_Try(SDL_RenderCopyEx(renderer, hHand.ptr, null, null, angles[0], null, SDL_FLIP_NONE));
-        SDL_Try(SDL_RenderCopyEx(renderer, mHand.ptr, null, null, angles[1], null, SDL_FLIP_NONE));
-        SDL_Try(SDL_RenderCopyEx(renderer, sHand.ptr, null, null, angles[2], null, SDL_FLIP_NONE));
+        SDL_Try(SDL_RenderCopyEx(renderer, hHand, null, null, angles[0], null, SDL_FLIP_NONE));
+        SDL_Try(SDL_RenderCopyEx(renderer, mHand, null, null, angles[1], null, SDL_FLIP_NONE));
+        SDL_Try(SDL_RenderCopyEx(renderer, sHand, null, null, angles[2], null, SDL_FLIP_NONE));
     }
 
     /** Rendisto por desegni manojn. */
     private SDL_Renderer* renderer;
 
-    /** Teksturoj de h manoj. */
-    private SDL_RAII!(SDL_Texture*) hHand;
+    /** Teksturo de h manoj. */
+    private SDL_Texture* hHand;
 
-    /** Teksturoj de m manoj. */
-    private SDL_RAII!(SDL_Texture*) mHand;
+    /** Teksturo de m manoj. */
+    private SDL_Texture* mHand;
 
-    /** Teksturoj de s manoj. */
-    private SDL_RAII!(SDL_Texture*) sHand;
+    /** Teksturo de s manoj. */
+    private SDL_Texture* sHand;
 
     invariant
     {
-        assert(renderer);
+        assert(renderer !is null);
+        assert(hHand !is null);
+        assert(mHand !is null);
+        assert(sHand !is null);
     }
 }
 
-/** Dezajnoj de horloĝaj manoj. */
-struct HandDesigns
+/** Proprieto de unueco de horloĝaj manoj. */
+struct HandsUnitProperty
 {
-    TextureDesign hHand; /// Dezajno de h manoj.
-    TextureDesign mHand; /// Dezajno de m manoj.
-    TextureDesign sHand; /// Dezajno de s manoj.
+    TextureProperty hHand; /// Proprieto de h manoj.
+    TextureProperty mHand; /// Proprieto de m manoj.
+    TextureProperty sHand; /// Proprieto de s manoj.
 }
 
 private enum hUnitAngle = 30; /// La angulo de h manoj por horo.
@@ -96,9 +103,7 @@ private enum sUnitAngle = 6;  /// La angulo de s manoj por sekundo.
 private Tuple!(double, double, double) calcAngles(in SysTime time) nothrow @safe
 {
     immutable sHand = cast(double) time.second;
-
     immutable mHand = time.minute + sHand / 60;
-
     immutable hHand = time.hour + mHand / 60;
 
     return tuple(hUnitAngle * hHand, mUnitAngle * mHand, sUnitAngle * sHand);

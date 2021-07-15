@@ -33,7 +33,7 @@ class ClockWindow
     {
         bgColor = property.bgColor;
 
-        window = new SDL_RAII!(SDL_Window*)(SDL_CreateWindow(
+        window = SDL_RAII!(SDL_Window*)(SDL_CreateWindow(
             null,
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
@@ -55,8 +55,6 @@ class ClockWindow
         signsUnit.destroy;
 
         renderer.destroy;
-
-        window.destroy;
     }
 
     /**
@@ -81,7 +79,7 @@ class ClockWindow
     private immutable Color bgColor;
 
     /** Fenestro por prezentas grafikon. */
-    private SDL_RAII!(SDL_Window*)* window;
+    private SDL_RAII!(SDL_Window*) window;
 
     /** Rendisto de la fenestro. */
     private SDL_RAII!(SDL_Renderer*)* renderer;
@@ -94,7 +92,6 @@ class ClockWindow
 
     invariant
     {
-        assert(window !is null);
         assert(renderer !is null);
         assert(handsUnit !is null);
         assert(signsUnit !is null);

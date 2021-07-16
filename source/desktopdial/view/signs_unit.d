@@ -29,6 +29,11 @@ class SignsUnit
       Throws: SDL_Exception Kiam konstruado malsukcesas.
      */
     this(SDL_Renderer* renderer, in SignsUnitProperty property)
+    in
+    {
+        assert(renderer !is null, `The renderer should not be null.`);
+    }
+    do
     {
         this.renderer = renderer;
 
@@ -65,7 +70,7 @@ class SignsUnit
 
     invariant
     {
-        assert(renderer !is null);
+        assert(renderer !is null, `The renderer should not be null.`);
     }
 }
 

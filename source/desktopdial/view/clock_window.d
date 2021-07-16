@@ -92,9 +92,9 @@ class ClockWindow
 
     invariant
     {
-        assert(renderer !is null);
-        assert(handsUnit !is null);
-        assert(signsUnit !is null);
+        assert(renderer !is null, `The renderer should not be null.`);
+        assert(handsUnit !is null, `The handsUnit should not be null.`);
+        assert(signsUnit !is null, `The signsUnit should not be null.`);
     }
 }
 

@@ -30,6 +30,11 @@ class HandsUnit
       Throws: SDL_Exception Kiam konstruado malsukcesas.
      */
     this(SDL_Renderer* renderer, in HandsUnitProperty property)
+    in
+    {
+        assert(renderer !is null, `The renderer should not be null.`);
+    }
+    do
     {
         this.renderer = renderer;
 
@@ -68,7 +73,7 @@ class HandsUnit
 
     invariant
     {
-        assert(renderer !is null);
+        assert(renderer !is null, `The renderer should not be null.`);
     }
 }
 

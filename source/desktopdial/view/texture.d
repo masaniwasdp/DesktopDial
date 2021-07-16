@@ -40,6 +40,11 @@ struct TextureShape
   Throws: SDL_Exception Kiam desegno malsukcesas.
  */
 SDL_RAII!(SDL_Texture*) create(SDL_Renderer* renderer, in TextureProperty property)
+in
+{
+    assert(renderer !is null, `The renderer should not be null.`);
+}
+do
 {
     Size size = void;
 
@@ -62,6 +67,11 @@ SDL_RAII!(SDL_Texture*) create(SDL_Renderer* renderer, in TextureProperty proper
   Throws: SDL_Exception Kiam desegno malsukcesas.
  */
 private void drawForeground(SDL_Surface* surface, in TextureProperty property)
+in
+{
+    assert(surface !is null, `The surface should not be null.`);
+}
+do
 {
     immutable SDL_Rect rect = {
         surface.w / 2 - property.shape.w / 2,
@@ -84,6 +94,11 @@ private void drawForeground(SDL_Surface* surface, in TextureProperty property)
   Throws: SDL_Exception Kiam desegno malsukcesas.
  */
 private void drawBackground(SDL_Surface* surface, in TextureProperty property)
+in
+{
+    assert(surface !is null, `The surface should not be null.`);
+}
+do
 {
     immutable pixel = SDL_MapRGB(surface.format, property.background.r, property.background.g, property.background.b);
 

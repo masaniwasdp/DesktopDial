@@ -8,7 +8,7 @@
 module desktopdial.view.texture;
 
 import derelict.sdl2.sdl;
-import desktopdial.view.common : Color, Size;
+import desktopdial.view.types : Color, Size;
 import sdlraii.except;
 import sdlraii.raii;
 

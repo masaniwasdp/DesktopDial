@@ -8,9 +8,9 @@
 module desktopdial.view.clock_window;
 
 import derelict.sdl2.sdl;
-import desktopdial.view.common : Color, Size;
 import desktopdial.view.hands_unit : HandsUnit, HandsUnitProperty;
 import desktopdial.view.signs_unit : SignsUnit, SignsUnitProperty;
+import desktopdial.view.types : Color, Size;
 import sdlraii.except;
 import sdlraii.raii;
 import std.datetime : SysTime;

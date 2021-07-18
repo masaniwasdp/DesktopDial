@@ -7,6 +7,7 @@
  */
 module desktopdial.view.clock_window;
 
+import automem.unique : Unique;
 import derelict.sdl2.sdl;
 import desktopdial.view.hands_unit : HandsUnit, HandsUnitProperty;
 import desktopdial.view.signs_unit : SignsUnit, SignsUnitProperty;
@@ -33,7 +34,7 @@ class ClockWindow
     {
         bgColor = property.bgColor;
 
-        window = SDL_RAII!(SDL_Window*)(SDL_CreateWindow(
+        window = typeof(window).construct(SDL_CreateWindow(
             null,
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
@@ -41,20 +42,23 @@ class ClockWindow
             property.size.h,
             SDL_WINDOW_ALWAYS_ON_TOP));
 
-        renderer = new SDL_RAII!(SDL_Renderer*)(SDL_CreateRenderer(
+        renderer = typeof(renderer).construct(SDL_CreateRenderer(
             window.ptr, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED));
 
-        handsUnit = new HandsUnit(renderer.ptr, property.handsUnit);
-        signsUnit = new SignsUnit(renderer.ptr, property.signsUnit);
+        handsUnit = typeof(handsUnit).construct(renderer.ptr, property.handsUnit);
+        signsUnit = typeof(signsUnit).construct(renderer.ptr, property.signsUnit);
     }
 
     ~this()
     {
-        /* Indiku la ordon de detruo. */
-        handsUnit.destroy;
-        signsUnit.destroy;
+        if (_dtorFlag) { return; }
 
-        renderer.destroy;
+        handsUnit.unique;
+        signsUnit.unique;
+        renderer.unique;
+        window.unique;
+
+        _dtorFlag = true;
     }
 
     /**
@@ -75,26 +79,29 @@ class ClockWindow
         SDL_RenderPresent(renderer.ptr);
     }
 
+    private bool _dtorFlag = false;
+
     /** La koloro de la fenestro. */
     private immutable Color bgColor;
 
     /** Fenestro por prezentas grafikon. */
-    private SDL_RAII!(SDL_Window*) window;
+    private Unique!(SDL_RAII!(SDL_Window*)) window;
 
     /** Rendisto de la fenestro. */
-    private SDL_RAII!(SDL_Renderer*)* renderer;
+    private Unique!(SDL_RAII!(SDL_Renderer*)) renderer;
 
     /** Unueco de manoj de horloĝo. */
-    private HandsUnit handsUnit;
+    private Unique!HandsUnit handsUnit;
 
     /** Unueco de simboloj de horloĝo. */
-    private SignsUnit signsUnit;
+    private Unique!SignsUnit signsUnit;
 
     invariant
     {
-        assert(renderer !is null, `The renderer should not be null.`);
-        assert(handsUnit !is null, `The handsUnit should not be null.`);
-        assert(signsUnit !is null, `The signsUnit should not be null.`);
+        assert(_dtorFlag || window, `The window should not be empty.`);
+        assert(_dtorFlag || renderer, `The renderer should not be empty.`);
+        assert(_dtorFlag || handsUnit, `The handsUnit should not be empty.`);
+        assert(_dtorFlag || signsUnit, `The signsUnit should not be empty.`);
     }
 }
 

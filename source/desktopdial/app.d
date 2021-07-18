@@ -7,6 +7,7 @@
  */
 module desktopdial.app;
 
+import automem.unique : Unique;
 import derelict.sdl2.sdl;
 import desktopdial.loader : LoaderException, SDL_Initialize, parseText, readSettingFile;
 import desktopdial.view.clock_window : ClockWindow, ClockWindowProperty;
@@ -37,7 +38,8 @@ class App
         {
             SDL_Initialize();
 
-            clockWindow = new ClockWindow(path.readSettingFile.parseText!ClockWindowProperty);
+            clockWindow = typeof(clockWindow)
+                .construct(path.readSettingFile.parseText!ClockWindowProperty);
         }
         catch (SDL_Exception e)
         {
@@ -47,9 +49,13 @@ class App
 
     ~this()
     {
-        clockWindow.destroy;
+        if (_dtorFlag) { return; }
+
+        clockWindow.unique;
 
         SDL_Quit();
+
+        _dtorFlag = true;
     }
 
     /**
@@ -80,7 +86,7 @@ class App
     /** Manipulas eventojn. */
     private void handle() nothrow @nogc
     {
-        SDL_Event event = void;
+        SDL_Event event;
 
         while (SDL_PollEvent(&event) == 1)
         {
@@ -117,6 +123,8 @@ class App
         }
     }
 
+    private bool _dtorFlag = false;
+
     /** Flago indikanta ĉu daŭri. */
     private auto continuation = true;
 
@@ -124,7 +132,12 @@ class App
     private uint last;
 
     /** Fenestro por prezentas ciferdiska horloĝo. */
-    private ClockWindow clockWindow;
+    private Unique!ClockWindow clockWindow;
+
+    invariant
+    {
+        assert(_dtorFlag || clockWindow, `The clockWindow should not be empty.`);
+    }
 }
 
 private enum interval = 16; /// La intertempo por ĝisdatigi aplikon.

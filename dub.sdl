@@ -4,9 +4,10 @@ authors     "masaniwa"
 copyright   "Copyright © 2018, masaniwa"
 license     "MIT"
 
+dependency "automem"        version="~>0.6.6"
 dependency "derelict-sdl2"  version="~>3.1.0-alpha.6"
 dependency "jsonserialized" version="~>0.2.1"
-dependency "sdlraii"        version="~>2.3.0"
+dependency "sdlraii"        version="~>2.4.0"
 
 targetPath     "$PACKAGE_DIR/build/"
 copyFiles      "$PACKAGE_DIR/asset"
